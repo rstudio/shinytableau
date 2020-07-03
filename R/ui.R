@@ -14,9 +14,15 @@ tableau_ui <- function(manifest, ui) {
     mode <- qs[["mode"]]
     if (identical(mode, "embed")) {
       if (is.function(ui)) {
-        return(ui(req))
+        return(htmltools::tagList(
+          shinytableau::shinytableau_lib(),
+          ui(req)
+        ))
       } else {
-        return(ui)
+        return(htmltools::tagList(
+          shinytableau::shinytableau_lib(),
+          ui
+        ))
       }
     } else {
       welcome_ui(manifest)
