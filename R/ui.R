@@ -60,10 +60,8 @@ welcome_ui <- function(manifest) {
   trexfilename <- paste0(manifest[["name"]], ".trex")
 
   htmltools::tagList(
-    htmltools::div(id = "welcome", style = "display: none;"),
-    # TODO
-    includeCSS("../inst/welcome/welcome.css"),
-    htmlTemplate("../inst/welcome/welcome.html",
+    includeCSS(system.file("welcome/welcome.css", package = "shinytableau")),
+    htmlTemplate(system.file("welcome/welcome.html", package = "shinytableau"),
       manifest = manifest,
       trexfilename = trexfilename,
       author = author_html(manifest),
