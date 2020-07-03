@@ -23,7 +23,7 @@ tableau_manifest <- function(
   icon = system.file("default_icon.png", package = "shinytableau"),
   permissions = c("full data"),
   # TODO: `configure` context menu
-  min_api_version = "1.4.0"
+  min_api_version = "1.4"
 ) {
   if (missing(extension_id)) { stop("`extension_id` is a required argument") }
   if (missing(extension_version)) { stop("`extension_version` is a required argument") }
@@ -74,6 +74,7 @@ render_manifest <- function(manifest) {
         id = extension_id,
         `extension-version` = extension_version,
 
+        x("default-locale", "en_US"),
         x("name", name),
         if (!is.null(description)) x("description", description),
         x("author",

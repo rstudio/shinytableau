@@ -30,6 +30,10 @@ initialize_trex <- function(manifest, req) {
     if (is.null(host)) {
       host <- paste0(req[["SERVER_NAME"]], ":", req[["SERVER_PORT"]])
     }
+
+    # Tableau hates 127.0.0.1 (and presumably [::1])
+    host <- sub("^(\\[::1\\]|127\\.0\\.0\\.1)(:|$)", "localhost\\2", host)
+
     manifest$source_location <- paste0(
       req[["rook.url_scheme"]],
       "://",
