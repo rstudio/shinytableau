@@ -1,0 +1,19 @@
+<div id="container">
+  <header>
+    <img src="data:image/png;base64,{{manifest[['icon']]}}" alt="" style="width: 70px; height: 70px;"/>
+    <h1 id="name">{{manifest[['name']]}} <small>{{manifest[['extension_version']]}}</small></h1>
+    <div id="author">by {{author}}</div>
+  </header>
+  <main>
+    <div id="description">{{manifest[['extended_description']]}}</div>
+    <p id="instructions">
+      For help installing Tableau dashboard extensions, <a href="https://help.tableau.com/current/pro/desktop/en-us/dashboard_extensions.htm">see this article</a>.
+    </p>
+  </main>
+  <footer>
+    <div id="action">
+      <a id="learn-more" class="btn-outline" href="{{manifest[['website']]}}">Learn more</a>
+      <a id="download" class="btn-primary" href="shinytableau-trex/generated.trex" download="{{trexfilename}}">Download</a>
+    </div>
+  </footer>
+</div>

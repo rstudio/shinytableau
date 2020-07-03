@@ -1,0 +1,20 @@
+Package: shinytableau
+Type: Package
+Title: Tableau integration for Shiny
+Version: 0.1.0
+Authors@R: c(
+    person("Joe", "Cheng", , "joe@rstudio.com", c("aut", "cre")),
+    person("Richard", "Iannone", , "rich@rstudio.com", "aut",
+           comment = c(ORCID = "0000-0003-3925-190X")),
+    person("Javier", "Luraschi", , "javier@rstudio.com", "aut"),
+    person(family = "RStudio", role = c("cph", "fnd")),
+    person(family = "Tableau", role = c("cph"))
+    )
+Description: Create Shiny applications that can be embedded into Tableau
+    dashboards as extensions. Embedded Shiny apps have the ability to access
+    data from worksheets, participate in selection and filtering, and more.
+License: MIT + file LICENSE
+Imports: htmltools
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.0

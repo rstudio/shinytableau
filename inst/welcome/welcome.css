@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+body {
+	font-family: "Open Sans", sans-serif;
+	font-size: 10pt;
+}
+
+#container {
+	max-width: 400px;
+	margin: 24px auto;
+}
+
+#name, #author {
+	margin-bottom: 0;
+}
+header {
+	padding-bottom: 12px;
+}
+footer {
+	padding-top: 12px;
+}
+
+#name > small {
+	color: #666;
+	font-size: 0.75em;
+}
+
+p#instructions {
+	border-top: 1px solid #CCC;
+	padding-top: 12px;
+	font-size: 0.85em;
+}
+
+a.btn-primary {
+  text-decoration: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-user-select: none;
+  background-color: #1a699e;
+  border: 1px solid transparent;
+  border-color: #1a699e;
+  border-radius: 2px;
+  box-sizing: border-box;
+  color: white;
+  cursor: default;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: bold;
+  height: 24px;
+  min-width: 96px;
+  padding: 3px 24px 3px 24px;
+  user-select: none;
+  white-space: nowrap;
+}
+a.btn-primary:hover {
+	background-color: #2a79af;
+	border-color: #2a79af;
+}
+a.btn-primary:active {
+	background-color: #15557f;
+	border-color: #15557f;
+}
+
+a.btn-outline {
+  text-decoration: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	-webkit-user-select: none;
+	background-color: transparent;
+	border: 1px solid transparent;
+	border-color: #666;
+	border-radius: 2px;
+	box-sizing: border-box;
+	color: #666;
+	cursor: default;
+	font-family: inherit;
+	font-size: 12px;
+	font-weight: bold;
+	height: 24px;
+	min-width: 96px;
+  padding: 3px 24px 3px 24px;
+	user-select: none;
+	white-space: nowrap
+}
+a.btn-outline:hover {
+	background-color: #ebebeb
+}
+a.btn-outline:active {
+	background-color: #ccc;
+	border-color: #333;
+	color: #333
+}
