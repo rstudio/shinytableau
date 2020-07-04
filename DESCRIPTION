@@ -14,7 +14,7 @@ Description: Create Shiny applications that can be embedded into Tableau
     dashboards as extensions. Embedded Shiny apps have the ability to access
     data from worksheets, participate in selection and filtering, and more.
 License: MIT + file LICENSE
-Imports: htmltools
+Imports: htmltools, shiny
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.0
