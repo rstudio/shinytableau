@@ -22,7 +22,7 @@ tableau_manifest <- function(
   source_location = NULL,
   icon = system.file("default_icon.png", package = "shinytableau"),
   permissions = c("full data"),
-  # TODO: `configure` context menu
+  configure = NULL,
   min_api_version = "1.4"
 ) {
   if (missing(extension_id)) { stop("`extension_id` is a required argument") }
@@ -51,6 +51,7 @@ tableau_manifest <- function(
       source_location = source_location,
       icon = base64enc::base64encode(icon),
       permissions = permissions,
+      configure = configure,
       min_api_version = min_api_version
     ),
     class = "tableau_manifest"
@@ -93,8 +94,10 @@ render_manifest <- function(manifest) {
         x("permissions",
           lapply(permissions, x, tagname = "permission")
         ),
-        x("context-menu"
-          # TODO: `configure` context menu
+        x("context-menu",
+          if (configure) {
+            x("configure-context-menu-item")
+          }
         )
       )
     )

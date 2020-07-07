@@ -37,21 +37,49 @@
           role: field.role
         }))
       }));
+      /*
+      const logicalTables = await worksheet.getUnderlyingTablesAsync();
+      for (const table of logicalTables) {
+        console.log(`${table.id} - ${table.caption}`);
+        const tableData = await worksheet.getUnderlyingTableDataAsync(table.id, {maxRows: 3});
+        console.log(tableData);
+      }
+      */
     }
     Shiny.setInputValue("shinytableau-worksheets", worksheets);
     Shiny.setInputValue("shinytableau-datasources", dataSourceInfoByWorksheet);
 
-    // console.log(dataSourceInfoByWorksheet);
-    // const dt = await dataSourcesByWorksheet["Sheet 1"][0].getUnderlyingDataAsync({columnsToInclude: ["Category", "Profit Ratio"]});
-    // Shiny.setInputValue("shinytableau-testdata:tableau_datatable", serializeDataTable(dt));
+    console.log(dataSourceInfoByWorksheet);
+    const dt = await dataSourcesByWorksheet["Sheet 1"][0].getUnderlyingDataAsync({columnsToInclude: ["Category", "Profit Ratio"]});
+    Shiny.setInputValue("shinytableau-testdata:tableau_datatable", serializeDataTable(dt));
+
+    trackSettings();
 
     console.timeEnd("shinytableau startup");
   }
 
-  initShinyTableau();
+  $(document).on("shiny:sessioninitialized", () => {
+    initShinyTableau().catch(err => {
+      console.error(err);
+    });
+  });
 
   function configure() {
-    window.alert("Not implemented yet");
+    (async function() {
+      try {
+        const url = new URL("?mode=configure", document.baseURI).href;
+        console.log("Opening configure");
+        const payload = "";
+        const result = await tableau.extensions.ui.displayDialogAsync(url, payload, {
+          // TODO: Make configurable
+          width: 600,
+          height: 400
+        });
+      } catch (err) {
+        // TODO
+        console.error(err);
+      }
+    })();
   }
 
   function serializeDataTable(dt) {
@@ -69,5 +97,42 @@
       result[names[i]] = array[i];
     }
     return result;
+  }
+
+  function trackSettings() {
+    const settings = {};
+    function updateSettings(newSettings) {
+      const unsetKeys = [];
+      for (const oldKey of Object.keys(settings)) {
+        if (!newSettings.hasOwnProperty(oldKey)) {
+          Shiny.setInputValue("shinytableau-setting-" + oldKey, null);
+        }
+      }
+      for (const [key, value] of Object.entries(newSettings)) {
+        Shiny.setInputValue("shinytableau-setting-" + key, value);
+      }
+    }
+
+    updateSettings(tableau.extensions.settings.getAll());
+    tableau.extensions.settings.addEventListener(tableau.TableauEventType.SettingsChanged, evt => {
+      updateSettings(evt.newSettings);
+    });
+
+    Shiny.addCustomMessageHandler("shinytableau-setting-update", ({settings, save}) => {
+      for (const [key, value] of Object.entries(settings)) {
+        tableau.extensions.settings.set(key, value);
+      }
+      if (save) {
+        tableau.extensions.settings.saveAsync().then(
+          result => {
+            console.log("Tableau extension settings saved");
+          },
+          error => {
+            console.error("Error saving extension settings");
+            console.error(error);
+          }
+        );
+      }
+    });
   }
 })();

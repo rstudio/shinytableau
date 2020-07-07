@@ -3,4 +3,6 @@
 S3method(print,tableau_manifest)
 export(shinytableau_lib)
 export(tableau_manifest)
+export(tableau_setting)
 export(tableau_ui)
+export(update_tableau_settings)

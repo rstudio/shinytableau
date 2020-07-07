@@ -1,28 +1,25 @@
 #' @export
-tableau_ui <- function(manifest, ui) {
+tableau_ui <- function(manifest, ui, config_ui) {
   force(manifest)
   force(ui)
+  force(config_ui)
 
   trex_initialized <- FALSE
 
   function(req) {
     if (!trex_initialized) {
-      initialize_trex(manifest, req)
+      initialize_trex(manifest, !is.null(config_ui), req)
     }
 
     qs <- parseQueryString(req[["QUERY_STRING"]])
     mode <- qs[["mode"]]
     if (identical(mode, "embed")) {
-      if (is.function(ui)) {
-        return(htmltools::tagList(
-          shinytableau::shinytableau_lib(),
-          ui(req)
-        ))
+      display_with_deps(ui, req)
+    } else if (identical(mode, "configure")) {
+      if (!is.null(config_ui)) {
+        display_with_deps(config_ui, req)
       } else {
-        return(htmltools::tagList(
-          shinytableau::shinytableau_lib(),
-          ui
-        ))
+        "This extension has no settings to configure"
       }
     } else {
       welcome_ui(manifest)
@@ -30,7 +27,21 @@ tableau_ui <- function(manifest, ui) {
   }
 }
 
-initialize_trex <- function(manifest, req) {
+display_with_deps <- function(x, req) {
+  if (is.function(x)) {
+    return(htmltools::tagList(
+      shinytableau::shinytableau_lib(),
+      x(req)
+    ))
+  } else {
+    return(htmltools::tagList(
+      shinytableau::shinytableau_lib(),
+      x
+    ))
+  }
+}
+
+initialize_trex <- function(manifest, has_config, req) {
   if (is.null(manifest[["source_location"]])) {
     host <- req[["HTTP_HOST"]]
     if (is.null(host)) {
@@ -49,6 +60,11 @@ initialize_trex <- function(manifest, req) {
       "?mode=embed"
     )
   }
+
+  if (is.null(manifest[["configure"]])) {
+    manifest$configure <- isTRUE(has_config)
+  }
+
   str <- render_manifest(manifest)
   trexdir <- tempfile(pattern = "trex")
   dir.create(trexdir)
