@@ -1,6 +1,7 @@
 #' @export
 tableau_setting <- function(name, default = NULL, session = getDefaultReactiveDomain()) {
-  session$input[[paste0("shinytableau-setting-", name)]]
+  value <- session$input[[paste0("shinytableau-setting-", name)]]
+  if (is.null(value)) default else value
 }
 
 #' @export
@@ -11,6 +12,11 @@ update_tableau_settings <- function(..., save. = FALSE, session = getDefaultReac
       save = save.
     )
   )
+}
+
+#' @export
+tableau_settings_all <- function(session = getDefaultReactiveDomain()) {
+  session$input[["shinytableau-settings"]]
 }
 
 #' @export

@@ -6,11 +6,6 @@
 
     console.time("shinytableau startup");
 
-    Shiny.setInputValue(
-      "shinytableau-settings",
-      tableau.extensions.settings.getAll()
-    );
-
     const dashboard = tableau.extensions.dashboardContent.dashboard;
 
     const worksheets = [];
@@ -46,6 +41,7 @@
       }
       */
     }
+
     Shiny.setInputValue("shinytableau-worksheets", worksheets);
     Shiny.setInputValue("shinytableau-datasources", dataSourceInfoByWorksheet);
 
@@ -100,7 +96,7 @@
   }
 
   function trackSettings() {
-    const settings = {};
+    let settings = {};
     function updateSettings(newSettings) {
       const unsetKeys = [];
       for (const oldKey of Object.keys(settings)) {
@@ -111,6 +107,8 @@
       for (const [key, value] of Object.entries(newSettings)) {
         Shiny.setInputValue("shinytableau-setting-" + key, value);
       }
+      Shiny.setInputValue("shinytableau-settings", newSettings);
+      settings = newSettings;
     }
 
     updateSettings(tableau.extensions.settings.getAll());
@@ -135,4 +133,26 @@
       }
     });
   }
+
+  const chooseDataInputBinding = new Shiny.InputBinding();
+  Object.assign(chooseDataInputBinding, {
+    find: function(scope) {
+      return $(scope).find(".shinytableau-choose-data");
+    },
+    initialize: function(el) {
+
+    },
+    getValue: function(el) {
+      // TODO: implement
+      return null;
+    },
+    setValue: function(el, value) {
+      // TODO: implement
+    },
+    subscribe: function(el, callback) {
+    },
+    unsubscribe: function(el) {
+    }
+  });
+  Shiny.inputBindings.register(chooseDataInputBinding, "shinytableau.chooseDataInputBinding");
 })();
