@@ -17,7 +17,7 @@ tableau_ui <- function(manifest, ui, config_ui) {
       display_with_deps(ui, req)
     } else if (identical(mode, "configure")) {
       if (!is.null(config_ui)) {
-        display_with_deps(config_ui, req)
+        display_with_deps(config_ui, req, TRUE)
       } else {
         "This extension has no settings to configure"
       }
@@ -27,14 +27,16 @@ tableau_ui <- function(manifest, ui, config_ui) {
   }
 }
 
-display_with_deps <- function(x, req) {
+display_with_deps <- function(x, req, react = FALSE) {
   if (is.function(x)) {
     return(htmltools::tagList(
+      if (react) reactR::html_dependency_react(),
       shinytableau::shinytableau_lib(),
       x(req)
     ))
   } else {
     return(htmltools::tagList(
+      if (react) reactR::html_dependency_react(),
       shinytableau::shinytableau_lib(),
       x
     ))

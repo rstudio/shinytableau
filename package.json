@@ -1,0 +1,35 @@
+{
+  "name": "shinytableau",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "browser": "srcjs/index.ts",
+  "browserify": {
+    "transform": [
+      "browserify-global-shim"
+    ]
+  },
+  "browserify-global-shim": {
+    "react": "React",
+    "react-dom": "ReactDOM"
+  },
+  "scripts": {
+    "build": "tsc && yarn bundle",
+    "watch": "tsc-watch --onSuccess \"yarn bundle\"",
+    "bundle": "browserify build/index.js -o inst/assets/js/shinytableau.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@tableau/extensions-api-types": "^1.4.0",
+    "@types/jquery": "^3.5.0",
+    "@types/react": "^16.9.41",
+    "@types/react-dom": "^16.9.8",
+    "browserify": "^16.5.1",
+    "browserify-global-shim": "^1.0.3",
+    "react": "16.12.0",
+    "react-dom": "16.12.0",
+    "tsc-watch": "^4.2.9",
+    "typescript": "^3.9.6"
+  }
+}
