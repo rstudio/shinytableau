@@ -1,6 +1,7 @@
 import { SettingsChangedEvent, DataSource, DataTable } from "@tableau/extensions-api-types";
 import chooseDataInputBinding from "./choosedata";
 import { rejectInit, resolveInit } from "./init";
+import { collectSchema } from "./schema";
 
 async function initShinyTableau() {
   console.time("tableau.extensions.initializeAsync");
@@ -15,48 +16,14 @@ async function initShinyTableau() {
 
   console.time("shinytableau startup");
 
-  const dashboard = tableau.extensions.dashboardContent.dashboard;
+  console.time("shinytableau collectSchema");
+  const schema = await collectSchema();
+  console.timeEnd("shinytableau collectSchema")
 
-  const worksheets = [];
-  const dataSourcesByWorksheet: {[key: string]: DataSource[]} = {};
-  const dataSourceInfoByWorksheet: {[key: string]: any} = {};
-  for (const worksheet of dashboard.worksheets) {
-    worksheets.push(worksheet.name);
-    const dataSources = await worksheet.getDataSourcesAsync();
-    dataSourcesByWorksheet[worksheet.name] = dataSources;
-    dataSourceInfoByWorksheet[worksheet.name] = dataSources.map(ds => ({
-      id: ds.id,
-      name: ds.name,
-      fields: ds.fields.map(field => ({
-        aggregation: field.aggregation,
-        // Tableau errors with "Not yet implemented"
-        // columnType: field.columnType,
-        description: field.description,
-        id: field.id,
-        isCalculatedField: field.isCalculatedField,
-        isCombinedField: field.isCombinedField,
-        isGenerated: field.isGenerated,
-        isHidden: field.isHidden,
-        name: field.name,
-        role: field.role
-      }))
-    }));
-    /*
-    const logicalTables = await worksheet.getUnderlyingTablesAsync();
-    for (const table of logicalTables) {
-      console.log(`${table.id} - ${table.caption}`);
-      const tableData = await worksheet.getUnderlyingTableDataAsync(table.id, {maxRows: 3});
-      console.log(tableData);
-    }
-    */
-  }
-
-  Shiny.setInputValue("shinytableau-worksheets", worksheets);
-  Shiny.setInputValue("shinytableau-datasources", dataSourceInfoByWorksheet);
-
-  console.log(dataSourceInfoByWorksheet);
-  const dt = await dataSourcesByWorksheet["Sheet 1"][0].getUnderlyingDataAsync({columnsToInclude: ["Category", "Profit Ratio"]});
-  Shiny.setInputValue("shinytableau-testdata:tableau_datatable", serializeDataTable(dt));
+  // console.log(dataSourceInfoByWorksheet);
+  // const dt = await dataSourcesByWorksheet["Sheet 1"][0].getUnderlyingDataAsync({columnsToInclude: ["Category", "Profit Ratio"]});
+  // Shiny.setInputValue("shinytableau-testdata:tableau_datatable", serializeDataTable(dt));
+  Shiny.setInputValue("shinytableau-schema:tableau_schema", schema);
 
   trackSettings();
 

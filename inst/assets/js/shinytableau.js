@@ -92,6 +92,7 @@ exports.default = new ChooseDataInputBinding();
 Object.defineProperty(exports, "__esModule", { value: true });
 const choosedata_1 = require("./choosedata");
 const init_1 = require("./init");
+const schema_1 = require("./schema");
 async function initShinyTableau() {
     console.time("tableau.extensions.initializeAsync");
     try {
@@ -104,45 +105,13 @@ async function initShinyTableau() {
     }
     console.timeEnd("tableau.extensions.initializeAsync");
     console.time("shinytableau startup");
-    const dashboard = tableau.extensions.dashboardContent.dashboard;
-    const worksheets = [];
-    const dataSourcesByWorksheet = {};
-    const dataSourceInfoByWorksheet = {};
-    for (const worksheet of dashboard.worksheets) {
-        worksheets.push(worksheet.name);
-        const dataSources = await worksheet.getDataSourcesAsync();
-        dataSourcesByWorksheet[worksheet.name] = dataSources;
-        dataSourceInfoByWorksheet[worksheet.name] = dataSources.map(ds => ({
-            id: ds.id,
-            name: ds.name,
-            fields: ds.fields.map(field => ({
-                aggregation: field.aggregation,
-                // Tableau errors with "Not yet implemented"
-                // columnType: field.columnType,
-                description: field.description,
-                id: field.id,
-                isCalculatedField: field.isCalculatedField,
-                isCombinedField: field.isCombinedField,
-                isGenerated: field.isGenerated,
-                isHidden: field.isHidden,
-                name: field.name,
-                role: field.role
-            }))
-        }));
-        /*
-        const logicalTables = await worksheet.getUnderlyingTablesAsync();
-        for (const table of logicalTables) {
-          console.log(`${table.id} - ${table.caption}`);
-          const tableData = await worksheet.getUnderlyingTableDataAsync(table.id, {maxRows: 3});
-          console.log(tableData);
-        }
-        */
-    }
-    Shiny.setInputValue("shinytableau-worksheets", worksheets);
-    Shiny.setInputValue("shinytableau-datasources", dataSourceInfoByWorksheet);
-    console.log(dataSourceInfoByWorksheet);
-    const dt = await dataSourcesByWorksheet["Sheet 1"][0].getUnderlyingDataAsync({ columnsToInclude: ["Category", "Profit Ratio"] });
-    Shiny.setInputValue("shinytableau-testdata:tableau_datatable", serializeDataTable(dt));
+    console.time("shinytableau collectSchema");
+    const schema = await schema_1.collectSchema();
+    console.timeEnd("shinytableau collectSchema");
+    // console.log(dataSourceInfoByWorksheet);
+    // const dt = await dataSourcesByWorksheet["Sheet 1"][0].getUnderlyingDataAsync({columnsToInclude: ["Category", "Profit Ratio"]});
+    // Shiny.setInputValue("shinytableau-testdata:tableau_datatable", serializeDataTable(dt));
+    Shiny.setInputValue("shinytableau-schema:tableau_schema", schema);
     trackSettings();
     console.timeEnd("shinytableau startup");
 }
@@ -229,7 +198,7 @@ function trackSettings() {
 }
 Shiny.inputBindings.register(choosedata_1.default, "shinytableau.chooseDataInputBinding");
 
-},{"./choosedata":1,"./init":3}],3:[function(require,module,exports){
+},{"./choosedata":1,"./init":3,"./schema":4}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tableauInitialized = exports.rejectInit = exports.resolveInit = void 0;
@@ -242,4 +211,98 @@ async function tableauInitialized() {
 }
 exports.tableauInitialized = tableauInitialized;
 
-},{}]},{},[2]);
+},{}],4:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.collectSchema = void 0;
+const init_1 = require("./init");
+async function collectSchema() {
+    await init_1.tableauInitialized();
+    const dataSourcePromises = {};
+    const promises = tableau.extensions.dashboardContent.dashboard.worksheets.map(ws => collectWorksheet(ws, dataSourcePromises));
+    const worksheets = {};
+    for (const ws of await Promise.all(promises)) {
+        worksheets[ws.name] = ws;
+    }
+    const dataSources = {};
+    for (const id of Object.keys(dataSourcePromises)) {
+        dataSources[id] = await dataSourcePromises[id];
+    }
+    return {
+        worksheets,
+        dataSources
+    };
+}
+exports.collectSchema = collectSchema;
+async function collectWorksheet(ws, dsMap) {
+    const pDataSources = ws.getDataSourcesAsync();
+    const pSummaryData = ws.getSummaryDataAsync({ ignoreSelection: true });
+    const dataSources = await pDataSources;
+    const summaryData = await pSummaryData;
+    const dataSourceIds = [];
+    for (const ds of dataSources) {
+        dataSourceIds.push(ds.id);
+        if (!dsMap[ds.id]) {
+            dsMap[ds.id] = collectDataSource(ds);
+        }
+    }
+    const worksheetInfo = {
+        name: ws.name,
+        summary: dataTableToInfo(summaryData),
+        dataSourceIds,
+        underlyingTables: await Promise.all((await ws.getUnderlyingTablesAsync()).map(async (tbl) => {
+            return dataTableToInfo(await ws.getUnderlyingTableDataAsync(tbl.id, {
+                ignoreAliases: false,
+                ignoreSelection: true,
+                includeAllColumns: true,
+                maxRows: 1
+            }));
+        }))
+    };
+    return worksheetInfo;
+}
+function dataTableToInfo(dt) {
+    var _a;
+    return {
+        name: dt.name,
+        columns: dt.columns.map(col => ({
+            dataType: col.dataType,
+            fieldName: col.fieldName,
+            index: col.index,
+            isReferenced: col.isReferenced
+        })),
+        marksInfo: (_a = dt.marksInfo) === null || _a === void 0 ? void 0 : _a.map(mark => ({
+            color: mark.color,
+            tupleId: mark.tupleId.valueOf(),
+            type: mark.type
+        })),
+    };
+}
+async function collectDataSource(ds) {
+    return {
+        id: ds.id,
+        fields: ds.fields.map(f => ({
+            aggregation: f.aggregation,
+            dataSourceId: f.dataSource.id,
+            id: f.id,
+            isCalculatedField: f.isCalculatedField,
+            isCombinedField: f.isCombinedField,
+            isGenerated: f.isGenerated,
+            isHidden: f.isHidden,
+            name: f.name,
+            role: f.role,
+            description: f.description
+        })),
+        isExtract: ds.isExtract,
+        name: ds.name,
+        extractUpdateTime: ds.extractUpdateTime,
+        logicalTables: await Promise.all((await ds.getLogicalTablesAsync()).map(async (tbl) => {
+            return dataTableToInfo(await ds.getLogicalTableDataAsync(tbl.id, {
+                ignoreAliases: false,
+                maxRows: 1
+            }));
+        }))
+    };
+}
+
+},{"./init":3}]},{},[2]);
