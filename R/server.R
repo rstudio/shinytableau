@@ -9,6 +9,9 @@ tableau_server <- function(server, config_server) {
   }
 
   tableau_server_router <- function(input, output, session) {
+    wrap_session(session)
+    init_rpc(session)
+
     qs <- parseQueryString(isolate(session$clientData$url_search))
     if (identical(qs$mode, "embed")) {
       o <- observe({

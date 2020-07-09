@@ -30,6 +30,8 @@ interface MarkInfo {
 }
 
 interface DataTableInfo {
+  readonly id: string;
+  readonly caption: string;
   readonly name: string;
   readonly columns: readonly ColumnInfo[];
   readonly marksInfo?: readonly MarkInfo[];
@@ -105,15 +107,17 @@ async function collectWorksheet(ws: Worksheet, dsMap: {[id: string]: Promise<Dat
         ignoreSelection: true,
         includeAllColumns: true,
         maxRows: 1
-      }));
+      }), tbl.id, tbl.caption);
     }))
   };
 
   return worksheetInfo;
 }
 
-function dataTableToInfo(dt: DataTable): DataTableInfo {
+export function dataTableToInfo(dt: DataTable, id?: string, caption?: string): DataTableInfo {
   return {
+    id,
+    caption,
     name: dt.name,
     columns: dt.columns.map(col => ({
       dataType: col.dataType,
@@ -151,7 +155,7 @@ async function collectDataSource(ds: DataSource): Promise<DataSourceInfo> {
       return dataTableToInfo(await ds.getLogicalTableDataAsync(tbl.id, {
         ignoreAliases: false,
         maxRows: 1
-      }));
+      }), tbl.id, tbl.caption);
     }))
   };
 }

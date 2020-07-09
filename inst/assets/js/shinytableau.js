@@ -87,12 +87,67 @@ function AggregationChoice(props) {
 }
 exports.default = new ChooseDataInputBinding();
 
-},{"./init":3}],2:[function(require,module,exports){
+},{"./init":4}],2:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getData = void 0;
+async function getData(spec, options) {
+    if (isSummaryDataSpec(spec)) {
+        return await getSummaryData(spec, options);
+    }
+    else if (isUnderlyingDataSpec(spec)) {
+        return await getUnderlyingData(spec, options);
+    }
+    else if (isDataSourceDataSpec(spec)) {
+        return await getDataSourceData(spec, options);
+    }
+    else {
+        throw new Error("Unexpected data spec format");
+    }
+}
+exports.getData = getData;
+function isSummaryDataSpec(spec) {
+    return spec.source === "summary";
+}
+async function getSummaryData(spec, options) {
+    const ws = tableau.extensions.dashboardContent.dashboard.worksheets.find(ws => ws.name === spec.worksheet);
+    if (!ws) {
+        return null;
+    }
+    return await ws.getSummaryDataAsync(options);
+}
+function isUnderlyingDataSpec(spec) {
+    return spec.source === "underlying";
+}
+async function getUnderlyingData(spec, options) {
+    const ws = tableau.extensions.dashboardContent.dashboard.worksheets.find(ws => ws.name === spec.worksheet);
+    if (!ws) {
+        return null;
+    }
+    return await ws.getUnderlyingTableDataAsync(spec.table, options);
+}
+function isDataSourceDataSpec(spec) {
+    return spec.source === "datasource";
+}
+async function getDataSourceData(spec, options) {
+    const ws = tableau.extensions.dashboardContent.dashboard.worksheets.find(ws => ws.name === spec.worksheet);
+    if (!ws) {
+        return null;
+    }
+    const ds = (await ws.getDataSourcesAsync()).find(ds => ds.id === spec.ds);
+    if (!ds) {
+        return null;
+    }
+    return await ds.getLogicalTableDataAsync(spec.table, options);
+}
+
+},{}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const choosedata_1 = require("./choosedata");
 const init_1 = require("./init");
 const schema_1 = require("./schema");
+const rpchandler_1 = require("./rpchandler");
 async function initShinyTableau() {
     console.time("tableau.extensions.initializeAsync");
     try {
@@ -113,6 +168,11 @@ async function initShinyTableau() {
     // Shiny.setInputValue("shinytableau-testdata:tableau_datatable", serializeDataTable(dt));
     Shiny.setInputValue("shinytableau-schema:tableau_schema", schema);
     trackSettings();
+    for (const ws of tableau.extensions.dashboardContent.dashboard.worksheets) {
+        ws.addEventListener(tableau.TableauEventType.MarkSelectionChanged, () => {
+            Shiny.setInputValue("shinytableau-selection", true, { priority: "event" });
+        });
+    }
     console.timeEnd("shinytableau startup");
 }
 $(document).on("shiny:sessioninitialized", () => {
@@ -196,9 +256,39 @@ function trackSettings() {
         }
     });
 }
+let responseUrl;
+Shiny.addCustomMessageHandler("shinytableau-rpc-init", ({ url }) => {
+    responseUrl = url;
+});
+const rpcHandler = new rpchandler_1.RPCHandler();
+Shiny.addCustomMessageHandler("shinytableau-rpc", async (req) => {
+    if (!responseUrl) {
+        throw new Error("shinytableau-rpc has not been initialized");
+    }
+    console.log("request:", req);
+    let payload = {};
+    try {
+        if (!rpcHandler[req.method]) {
+            throw new Error(`Method '${req.method}' does not exist`);
+        }
+        payload.result = await rpcHandler[req.method](...req.args);
+    }
+    catch (err) {
+        payload.error = err.message;
+    }
+    console.log("response:", payload);
+    await fetch(responseUrl + (/\?/.test(responseUrl) ? "&" : "?") + "id=" + encodeURIComponent(req.id), {
+        body: JSON.stringify(payload),
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json; charset=utf-8"
+        }
+    });
+});
 Shiny.inputBindings.register(choosedata_1.default, "shinytableau.chooseDataInputBinding");
 
-},{"./choosedata":1,"./init":3,"./schema":4}],3:[function(require,module,exports){
+},{"./choosedata":1,"./init":4,"./rpchandler":5,"./schema":6}],4:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tableauInitialized = exports.rejectInit = exports.resolveInit = void 0;
@@ -211,10 +301,32 @@ async function tableauInitialized() {
 }
 exports.tableauInitialized = tableauInitialized;
 
-},{}],4:[function(require,module,exports){
+},{}],5:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.collectSchema = void 0;
+exports.RPCHandler = void 0;
+const schema_1 = require("./schema");
+const dataspec_1 = require("./dataspec");
+class RPCHandler {
+    async getData(spec, options) {
+        const dt = await dataspec_1.getData(spec, options);
+        return Object.assign(Object.assign({}, schema_1.dataTableToInfo(dt)), { data: dataTableData(dt), isTotalRowCountLimited: dt.isTotalRowCountLimited, isSummaryData: dt.isSummaryData });
+    }
+}
+exports.RPCHandler = RPCHandler;
+function dataTableData(dt) {
+    const data = dt.data;
+    const results = {};
+    dt.columns.forEach((col, idx) => {
+        results[col.fieldName] = dt.data.map(row => row[col.index].nativeValue);
+    });
+    return results;
+}
+
+},{"./dataspec":2,"./schema":6}],6:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.dataTableToInfo = exports.collectSchema = void 0;
 const init_1 = require("./init");
 async function collectSchema() {
     await init_1.tableauInitialized();
@@ -256,14 +368,16 @@ async function collectWorksheet(ws, dsMap) {
                 ignoreSelection: true,
                 includeAllColumns: true,
                 maxRows: 1
-            }));
+            }), tbl.id, tbl.caption);
         }))
     };
     return worksheetInfo;
 }
-function dataTableToInfo(dt) {
+function dataTableToInfo(dt, id, caption) {
     var _a;
     return {
+        id,
+        caption,
         name: dt.name,
         columns: dt.columns.map(col => ({
             dataType: col.dataType,
@@ -278,6 +392,7 @@ function dataTableToInfo(dt) {
         })),
     };
 }
+exports.dataTableToInfo = dataTableToInfo;
 async function collectDataSource(ds) {
     return {
         id: ds.id,
@@ -300,9 +415,9 @@ async function collectDataSource(ds) {
             return dataTableToInfo(await ds.getLogicalTableDataAsync(tbl.id, {
                 ignoreAliases: false,
                 maxRows: 1
-            }));
+            }), tbl.id, tbl.caption);
         }))
     };
 }
 
-},{"./init":3}]},{},[2]);
+},{"./init":4}]},{},[3]);

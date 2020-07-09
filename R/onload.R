@@ -21,7 +21,7 @@
     })
 
     value
-  })
+  }, force = TRUE)
 }
 
 long_to_wide <- function(lst) {

@@ -1,7 +1,8 @@
-import { SettingsChangedEvent, DataSource, DataTable } from "@tableau/extensions-api-types";
+import { SettingsChangedEvent, DataTable } from "@tableau/extensions-api-types";
 import chooseDataInputBinding from "./choosedata";
 import { rejectInit, resolveInit } from "./init";
 import { collectSchema } from "./schema";
+import { RPCHandler } from "./rpchandler";
 
 async function initShinyTableau() {
   console.time("tableau.extensions.initializeAsync");
@@ -24,8 +25,13 @@ async function initShinyTableau() {
   // const dt = await dataSourcesByWorksheet["Sheet 1"][0].getUnderlyingDataAsync({columnsToInclude: ["Category", "Profit Ratio"]});
   // Shiny.setInputValue("shinytableau-testdata:tableau_datatable", serializeDataTable(dt));
   Shiny.setInputValue("shinytableau-schema:tableau_schema", schema);
-
   trackSettings();
+
+  for (const ws of tableau.extensions.dashboardContent.dashboard.worksheets) {
+    ws.addEventListener(tableau.TableauEventType.MarkSelectionChanged, () => {
+      Shiny.setInputValue("shinytableau-selection", true, {priority: "event"});
+    });
+  }
 
   console.timeEnd("shinytableau startup");
 }
@@ -118,5 +124,44 @@ function trackSettings() {
     }
   });
 }
+
+interface RPCRequest {
+  method: string;
+  args: any[];
+  id: string;
+}
+
+let responseUrl: string | undefined;
+Shiny.addCustomMessageHandler("shinytableau-rpc-init", ({url}: {url: string}) => {
+  responseUrl = url;
+});
+
+const rpcHandler: {[method: string]: any} = new RPCHandler();
+Shiny.addCustomMessageHandler("shinytableau-rpc", async (req: RPCRequest) => {
+  if (!responseUrl) {
+    throw new Error("shinytableau-rpc has not been initialized");
+  }
+  console.log("request:", req);
+
+  let payload: {result?: string, error?: string} = {};
+  try {
+    if (!rpcHandler[req.method]) {
+      throw new Error(`Method '${req.method}' does not exist`)
+    }
+    payload.result = await rpcHandler[req.method](...req.args);
+  } catch(err) {
+    payload.error = err.message;
+  }
+  console.log("response:", payload);
+
+  await fetch(responseUrl + (/\?/.test(responseUrl) ? "&" : "?") + "id=" + encodeURIComponent(req.id), {
+    body: JSON.stringify(payload),
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json; charset=utf-8"
+    }
+  })
+});
 
 Shiny.inputBindings.register(chooseDataInputBinding, "shinytableau.chooseDataInputBinding");
