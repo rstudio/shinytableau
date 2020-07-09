@@ -218,6 +218,15 @@ function setNames(array, names) {
 function trackSettings() {
     let settings = {};
     function updateSettings(newSettings) {
+        // Parse all values
+        for (const [key, value] of Object.entries(newSettings)) {
+            try {
+                newSettings[key] = JSON.parse(value);
+            }
+            catch (_a) {
+                delete newSettings[key];
+            }
+        }
         const unsetKeys = [];
         for (const oldKey of Object.keys(settings)) {
             if (!newSettings.hasOwnProperty(oldKey)) {
@@ -236,14 +245,11 @@ function trackSettings() {
     });
     Shiny.addCustomMessageHandler("shinytableau-setting-update", ({ settings, save }) => {
         for (const [key, value] of Object.entries(settings)) {
-            if (typeof (value) === "string") {
-                tableau.extensions.settings.set(key, value);
-            }
-            else if (value === null || typeof (value) === "undefined") {
+            if (value === null || typeof (value) === "undefined") {
                 tableau.extensions.settings.erase(key);
             }
             else {
-                tableau.extensions.settings.set(key, value.toString());
+                tableau.extensions.settings.set(key, JSON.stringify(value));
             }
         }
         if (save) {

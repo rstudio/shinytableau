@@ -1,3 +1,5 @@
+# TODO: Validation of config settings
+
 #' @export
 tableau_ui <- function(manifest, ui, config_ui) {
   force(manifest)
