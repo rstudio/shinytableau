@@ -25,6 +25,8 @@ reactive_tableau_data <- function(spec, options = list(), session = getDefaultRe
   }
 
   reactive({
+    req(spec())
+
     if (!isTRUE(options[["ignoreSelection"]])) {
       # Take dependency
       session$input[["shinytableau-selection"]]
