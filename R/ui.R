@@ -1,4 +1,5 @@
 # TODO: Validation of config settings
+# TODO: Config settings do not default to currently-saved state
 
 #' @export
 tableau_ui <- function(manifest, ui, config_ui) {

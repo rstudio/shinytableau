@@ -1,6 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-testapps
+^examples$
 ^LICENSE\.md$
 ^srcjs$
 ^yarn\.lock$
