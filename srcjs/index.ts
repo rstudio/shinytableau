@@ -171,4 +171,8 @@ Shiny.addCustomMessageHandler("shinytableau-rpc", async (req: RPCRequest) => {
   })
 });
 
+Shiny.addCustomMessageHandler("shinytableau-close-dialog", value => {
+  tableau.extensions.ui.closeDialog(value.payload);
+});
+
 Shiny.inputBindings.register(chooseDataInputBinding, "shinytableau.chooseDataInputBinding");

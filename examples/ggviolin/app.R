@@ -105,11 +105,10 @@ config_server <- function(input, output, session) {
 
   observeEvent(input$ok, {
     save_settings()
-    tableau_close_dialog(TRUE)
+    tableau_close_dialog()
   })
   observeEvent(input$cancel, {
-    session$close()
-    tableau_close_dialog(FALSE)
+    tableau_close_dialog()
   })
   observeEvent(input$apply, {
     save_settings()

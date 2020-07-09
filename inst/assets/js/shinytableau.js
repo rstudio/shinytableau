@@ -292,6 +292,9 @@ Shiny.addCustomMessageHandler("shinytableau-rpc", async (req) => {
         }
     });
 });
+Shiny.addCustomMessageHandler("shinytableau-close-dialog", value => {
+    tableau.extensions.ui.closeDialog(value.payload);
+});
 Shiny.inputBindings.register(choosedata_1.default, "shinytableau.chooseDataInputBinding");
 
 },{"./choosedata":1,"./init":4,"./rpchandler":5,"./schema":6}],4:[function(require,module,exports){

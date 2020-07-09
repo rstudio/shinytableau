@@ -110,3 +110,9 @@ author_html <- function(manifest) {
   }
   author
 }
+
+#' @export
+tableau_close_dialog <- function(payload = "", session = getDefaultReactiveDomain()) {
+  session <- unwrap_session(session)
+  session$sendCustomMessage("shinytableau-close-dialog", list(payload = payload))
+}
