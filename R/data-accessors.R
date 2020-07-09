@@ -21,7 +21,7 @@ reactive_tableau_data <- function(spec, options = list(), session = getDefaultRe
 
   if (!is.function(spec)) {
     value <- spec
-    spec <- function() spec
+    spec <- function() value
   }
 
   reactive({

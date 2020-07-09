@@ -45,28 +45,35 @@ ui <- function(req) {
 }
 
 server <- function(input, output, session) {
+  df <- reactive_tableau_data(reactive(tableau_setting("data_spec")))
+
   output$plot <- renderPlot({
     plot_title <- tableau_setting("plot_title")
-    data_spec <- tableau_setting("data_spec")
     xvar <- tableau_setting("xvar")
     yvar <- tableau_setting("yvar")
 
-    tableau_get_data_async(data_spec) %...>% (function(df) {
-      ggplot(df$data, aes_string(x = as.symbol(xvar), y = as.symbol(yvar))) +
+    df() %...>% {
+      ggplot(., aes_string(x = as.symbol(xvar), y = as.symbol(yvar))) +
         geom_violin() +
         ggtitle(plot_title)
-    })
+    }
   })
 }
 
-config_ui <- fluidPage(
-  textInput("title", "Title", ""),
-  choose_data_ui("data", "Choose data"),
-  uiOutput("x_ui"),
-  uiOutput("y_ui"),
-  actionButton("ok", "OK", class = "btn-primary"),
-  actionButton("cancel", "Cancel"),
-  actionButton("apply", "Apply")
+config_ui <- fillPage(
+  fillCol(flex = c(1, NA),
+    miniUI::miniContentPanel(
+      textInput("title", "Title", ""),
+      choose_data_ui("data", "Choose data"),
+      uiOutput("x_ui"),
+      uiOutput("y_ui")
+    ),
+    htmltools::tags$div(style = "text-align: right; padding: 8px 15px; height: 50px; border-top: 1px solid #DDD;",
+      actionButton("ok", "OK", class = "btn-primary"),
+      actionButton("cancel", "Cancel"),
+      actionButton("apply", "Apply")
+    )
+  )
 )
 
 config_server <- function(input, output, session) {
