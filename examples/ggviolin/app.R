@@ -5,20 +5,6 @@ library(shinytableau)
 library(ggplot2)
 library(promises)
 
-timestamp <- function() {
-  absolutePanel(bottom = 0, right = 0,
-    style = htmltools::css(
-      opacity = 0.6,
-      background_color = "black",
-      color = "white",
-      font_size = "10px",
-      padding = "3px 6px"
-    ),
-    "This page was loaded at ",
-    Sys.time()
-  )
-}
-
 # TODO: yaml file?
 manifest <- tableau_manifest(
   #source_location = "https://jcheng.shinyapps.io/tableautest/?mode=embed",
@@ -40,7 +26,6 @@ ui <- function(req) {
     fillCol(
       plotOutput("plot", height = "100%")
     )
-    #timestamp()
   )
 }
 
@@ -65,6 +50,7 @@ config_ui <- fillPage(
     miniUI::miniContentPanel(
       textInput("title", "Title", ""),
       choose_data_ui("data", "Choose data"),
+      tableOutput("preview"),
       uiOutput("x_ui"),
       uiOutput("y_ui")
     ),
@@ -80,6 +66,10 @@ config_server <- function(input, output, session) {
   data_spec <- choose_data("data")
 
   data <- reactive_tableau_data(data_spec, options = list(maxRows = 3))
+
+  output$preview <- renderTable({
+    data()
+  })
 
   output$x_ui <- renderUI({
     data() %...>% (function(df) {
@@ -100,6 +90,7 @@ config_server <- function(input, output, session) {
       xvar = req(input$xvar),
       yvar = req(input$yvar),
       save. = TRUE
+      # TODO: add. = FALSE
     )
   }
 

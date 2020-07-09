@@ -1,5 +1,7 @@
 # TODO: Validation of config settings
 # TODO: Config settings do not default to currently-saved state
+# TODO: Errors are thrown by Tableau if no worksheet has data
+# TODO: Why is column order changing?
 
 #' @export
 tableau_ui <- function(manifest, ui, config_ui) {
