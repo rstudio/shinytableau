@@ -1,5 +1,4 @@
 import { SettingsChangedEvent, DataTable } from "@tableau/extensions-api-types";
-import chooseDataInputBinding from "./choosedata";
 import { rejectInit, resolveInit } from "./init";
 import { collectSchema } from "./schema";
 import { RPCHandler } from "./rpchandler";
@@ -174,5 +173,3 @@ Shiny.addCustomMessageHandler("shinytableau-rpc", async (req: RPCRequest) => {
 Shiny.addCustomMessageHandler("shinytableau-close-dialog", value => {
   tableau.extensions.ui.closeDialog(value.payload);
 });
-
-Shiny.inputBindings.register(chooseDataInputBinding, "shinytableau.chooseDataInputBinding");

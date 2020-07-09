@@ -1,9 +1,10 @@
 # TODO: Validation of config settings
 # TODO: Config settings do not default to currently-saved state
 # TODO: Errors are thrown by Tableau if no worksheet has data
-# TODO: Why is column order changing?
 
-#' @export
+# Wraps manifest, ui, and config_ui, which are conceptually three totally
+# separate things, into a single ui function for shinyApp to consume. This
+# relies on the querystring to determine what mode the request is intended for.
 tableau_ui <- function(manifest, ui, config_ui) {
   force(manifest)
   force(ui)

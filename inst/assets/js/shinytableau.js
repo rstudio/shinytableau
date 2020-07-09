@@ -1,95 +1,6 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const init_1 = require("./init");
-const React = (window.React);
-const ReactDOM = (window.ReactDOM);
-class ChooseDataInputBinding extends Shiny.InputBinding {
-    find(scope) {
-        return $(scope).find(".shinytableau-choose-data");
-    }
-    async initialize(el) {
-        const inner = el.querySelector(".shinytableau-choose-data-inner");
-        try {
-            await init_1.tableauInitialized();
-            const worksheetInfos = [];
-            for (const ws of tableau.extensions.dashboardContent.dashboard.worksheets) {
-                const tables = await ws.getUnderlyingTablesAsync();
-                worksheetInfos.push({
-                    name: ws.name,
-                    underlyingTables: tables.map(tbl => ({
-                        caption: tbl.caption,
-                        id: tbl.id
-                    }))
-                });
-            }
-            const data = $(el).data();
-            const props = {
-                id: this.getId(el),
-                worksheets: worksheetInfos,
-                source: data.source,
-                aggregation: data.aggregation,
-                ignore_aliases: data["ignore-aliases"],
-                ignore_selection: data["ignore-selection"],
-                include_all_columns: data["include-all-columns"],
-                max_rows: data["max-rows"]
-            };
-            ReactDOM.render(React.createElement(ChooseData, Object.assign({}, props)), inner);
-        }
-        catch (err) {
-            console.error("Initialization failed for #", this.getId(el));
-            throw err;
-        }
-    }
-    getValue(el) {
-        // TODO: implement
-        return null;
-    }
-    setValue(el, value) {
-        // TODO: implement
-    }
-    subscribe(el, callback) {
-    }
-    unsubscribe(el) {
-    }
-}
-function ChooseData(props) {
-    const [worksheet, setWorksheet] = React.useState("");
-    const tables = React.useMemo(() => { var _a; return (_a = props.worksheets.find(ws => ws.name === worksheet)) === null || _a === void 0 ? void 0 : _a.underlyingTables; }, [props.worksheets, worksheet]);
-    function handleWorksheetChange(evt) {
-        setWorksheet(evt.currentTarget.value);
-    }
-    return React.createElement(React.Fragment, null,
-        React.createElement("select", { onChange: handleWorksheetChange },
-            React.createElement("option", { value: "" }, "Choose a worksheet"),
-            props.worksheets.map(ws => React.createElement("option", null, ws.name))),
-        worksheet && React.createElement(WorksheetOptions, Object.assign({ worksheet: worksheet }, props)));
-}
-function WorksheetOptions(props) {
-    const [aggregation, setAggregation] = React.useState();
-    return React.createElement(React.Fragment, null,
-        props.aggregation === "ask" && React.createElement("p", null,
-            React.createElement(AggregationChoice, { id: props.id, value: "summary", label: "Use summary data", onChecked: setAggregation }),
-            React.createElement(AggregationChoice, { id: props.id, value: "underlying", label: "Use underlying data", onChecked: setAggregation })),
-        aggregation === "underlying" &&
-            React.createElement("select", null, props.worksheets.find(ws => ws.name === props.worksheet).underlyingTables.map(tbl => React.createElement("option", { value: tbl.id }, tbl.caption))));
-}
-function AggregationChoice(props) {
-    function handleChange(evt) {
-        if (evt.currentTarget.checked) {
-            props.onChecked(props.value);
-        }
-    }
-    const id = `${props.id}-aggregation-radio-${props.value}`;
-    return React.createElement("div", null,
-        React.createElement("input", { type: "radio", name: `${props.id}-aggregation-radio`, id: id, value: props.value, onChange: handleChange }),
-        React.createElement("label", { htmlFor: id }, props.label));
-}
-exports.default = new ChooseDataInputBinding();
-
-},{"./init":4}],2:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.getData = void 0;
 async function getData(spec, options) {
     if (isSummaryDataSpec(spec)) {
@@ -141,10 +52,9 @@ async function getDataSourceData(spec, options) {
     return await ds.getLogicalTableDataAsync(spec.table, options);
 }
 
-},{}],3:[function(require,module,exports){
+},{}],2:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const choosedata_1 = require("./choosedata");
 const init_1 = require("./init");
 const schema_1 = require("./schema");
 const rpchandler_1 = require("./rpchandler");
@@ -295,9 +205,8 @@ Shiny.addCustomMessageHandler("shinytableau-rpc", async (req) => {
 Shiny.addCustomMessageHandler("shinytableau-close-dialog", value => {
     tableau.extensions.ui.closeDialog(value.payload);
 });
-Shiny.inputBindings.register(choosedata_1.default, "shinytableau.chooseDataInputBinding");
 
-},{"./choosedata":1,"./init":4,"./rpchandler":5,"./schema":6}],4:[function(require,module,exports){
+},{"./init":3,"./rpchandler":4,"./schema":5}],3:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.tableauInitialized = exports.rejectInit = exports.resolveInit = void 0;
@@ -310,7 +219,7 @@ async function tableauInitialized() {
 }
 exports.tableauInitialized = tableauInitialized;
 
-},{}],5:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RPCHandler = void 0;
@@ -332,7 +241,7 @@ function dataTableData(dt) {
     return results;
 }
 
-},{"./dataspec":2,"./schema":6}],6:[function(require,module,exports){
+},{"./dataspec":1,"./schema":5}],5:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dataTableToInfo = exports.collectSchema = void 0;
@@ -429,4 +338,4 @@ async function collectDataSource(ds) {
     };
 }
 
-},{"./init":4}]},{},[3]);
+},{"./init":3}]},{},[2]);
