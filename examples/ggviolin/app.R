@@ -48,11 +48,7 @@ server <- function(input, output, session) {
 config_ui <- fillPage(
   fillCol(flex = c(1, NA),
     miniUI::miniContentPanel(
-      textInput("title", "Title", ""),
-      choose_data_ui("data", "Choose data"),
-      tableOutput("preview"),
-      uiOutput("x_ui"),
-      uiOutput("y_ui")
+      uiOutput("ui")
     ),
     htmltools::tags$div(style = "text-align: right; padding: 8px 15px; height: 50px; border-top: 1px solid #DDD;",
       actionButton("ok", "OK", class = "btn-primary"),
@@ -63,12 +59,29 @@ config_ui <- fillPage(
 )
 
 config_server <- function(input, output, session) {
+  restore_inputs(
+    !!!choose_data_unpack("data", tableau_setting("data_spec")),
+    title = tableau_setting("plot_title"),
+    xvar = tableau_setting("xvar"),
+    yvar = tableau_setting("yvar")
+  )
+
   data_spec <- choose_data("data")
 
-  data <- reactive_tableau_data(data_spec, options = list(maxRows = 3))
+  data <- reactive_tableau_data(data_spec, options = list(maxRows = 5))
+
+  output$ui <- renderUI({
+    list(
+      textInput("title", "Title", ""),
+      choose_data_ui("data", "Choose data"),
+      tableOutput("preview"),
+      uiOutput("x_ui"),
+      uiOutput("y_ui")
+    )
+  })
 
   output$preview <- renderTable({
-    data()
+    data() %...>% head(5)
   })
 
   output$x_ui <- renderUI({

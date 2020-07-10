@@ -1,7 +1,7 @@
 schema <- function(session) {
   session <- unwrap_session(session)
 
-  session$input[["shinytableau-schema"]]
+  isolate(session$input[["shinytableau-schema"]])
 }
 
 #' @export

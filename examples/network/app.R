@@ -62,6 +62,12 @@ config_ui <- fillPage(
 )
 
 config_server <- function(input, output, session) {
+
+  restore_inputs(
+    !!!choose_data_unpack("ndf_spec"),
+    !!!choose_data_unpack("edf_spec")
+  )
+
   ndf_spec <- choose_data("ndf_spec")
   edf_spec <- choose_data("edf_spec")
 
@@ -74,15 +80,38 @@ config_server <- function(input, output, session) {
     )
   }
 
+  test <- function(expr, default_message) {
+    tryCatch({expr; NULL},
+      shiny.silent.error = function(err) { default_message },
+      validation = function(err) { conditionMessage(err) }
+    )
+  }
+
+  validate <- function() {
+    message <- NULL
+    if (!is.null(message)) message <- test(ndf_spec(), "Please specify node data")
+    if (!is.null(message)) message <- test(edf_spec(), "Please specify edge data")
+    if (!is.null(message)) {
+      showModal(modalDialog(message, title = "Error"))
+      FALSE
+    } else {
+      TRUE
+    }
+  }
+
   observeEvent(input$ok, {
-    save_settings()
-    tableau_close_dialog()
+    if (validate()) {
+      save_settings()
+      tableau_close_dialog()
+    }
   })
   observeEvent(input$cancel, {
     tableau_close_dialog()
   })
   observeEvent(input$apply, {
-    save_settings()
+    if (validate()) {
+      save_settings()
+    }
   })
 }
 

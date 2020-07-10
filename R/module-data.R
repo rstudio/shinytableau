@@ -138,6 +138,25 @@ choose_data <- function(id, options = choose_data_options(), session = getDefaul
   }, session)
 }
 
+#' @export
+choose_data_unpack <- function(id, setting = isolate(tableau_setting(id))) {
+  if (is.null(setting)) {
+    return(NULL)
+  }
+
+  ns <- NS(id)
+  results <- list()
+  results[[ns("worksheet")]] <- setting[["worksheet"]]
+  results[[ns(NS("agg", "choice"))]] <- setting[["source"]]
+  if (identical(setting[["source"]], "underlying")) {
+    results[[ns(NS("underlying", "choice"))]] <- setting[["table"]]
+  } else if (identical(setting[["source"]], "datasource")) {
+    results[[ns(NS("datasource", "choice"))]] <- setting[["ds"]]
+    results[[ns(NS("logical", "choice"))]] <- setting[["table"]]
+  }
+  results
+}
+
 optional_chooser_ui <- function(id, ...) {
   ns <- NS(id)
   uiOutput(ns("ui"), ...)
