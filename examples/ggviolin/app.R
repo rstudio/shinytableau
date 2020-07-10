@@ -74,14 +74,10 @@ config_server <- function(input, output, session) {
     list(
       textInput("title", "Title", ""),
       choose_data_ui("data", "Choose data"),
-      tableOutput("preview"),
       uiOutput("x_ui"),
-      uiOutput("y_ui")
+      uiOutput("y_ui"),
+      tableOutput("preview")
     )
-  })
-
-  output$preview <- renderTable({
-    data() %...>% head(5)
   })
 
   output$x_ui <- renderUI({
@@ -101,9 +97,7 @@ config_server <- function(input, output, session) {
       plot_title = input$title,
       data_spec = data_spec(),
       xvar = req(input$xvar),
-      yvar = req(input$yvar),
-      save. = TRUE
-      # TODO: add. = FALSE
+      yvar = req(input$yvar)
     )
   }
 

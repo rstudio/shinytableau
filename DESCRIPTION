@@ -1,7 +1,7 @@
 Package: shinytableau
 Type: Package
 Title: Tableau integration for Shiny
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Joe", "Cheng", , "joe@rstudio.com", c("aut", "cre")),
     person("Richard", "Iannone", , "rich@rstudio.com", "aut",
