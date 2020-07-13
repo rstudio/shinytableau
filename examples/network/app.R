@@ -1,4 +1,6 @@
-options(shiny.port = 2468)
+if (interactive()) {
+  options(shiny.port = 2469)
+}
 
 library(shiny)
 library(shinytableau)
