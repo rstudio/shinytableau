@@ -1,6 +1,6 @@
 trex_handler <- function(req, manifest, has_config) {
   if (is.null(manifest[["source_location"]])) {
-    manifest$source_location <- source_location(req, manifest)
+    manifest$source_location <- infer_embed_url(req)
   }
 
   if (is.null(manifest[["configure"]])) {
