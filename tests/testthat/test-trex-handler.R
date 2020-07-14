@@ -48,7 +48,7 @@ test_that("Infer URL", {
 
   expect_identical(
     infer_embed_url(extend(req,
-      HTTP_X_REDX_FRONTEND_NAME = "https://example.shinyapps.io/appname/",
+      HTTP_X_REDX_FRONTEND_NAME = "example.shinyapps.io/appname/",
       HTTP_RSTUDIO_CONNECT_APP_BASE_URL = "https://connect2/a/b/?c=d",
       HTTP_X_RSC_REQUEST = "https://connect/foo/bar/?qux=quux"
       )),
@@ -56,7 +56,7 @@ test_that("Infer URL", {
 
   expect_identical(
     infer_embed_url(extend(req,
-      HTTP_X_REDX_FRONTEND_NAME = "https://example.shinyapps.io/appname/",
+      HTTP_X_REDX_FRONTEND_NAME = "example.shinyapps.io/appname/",
       HTTP_RSTUDIO_CONNECT_APP_BASE_URL = "https://connect2/a/b/?c=d"
     )),
     "https://connect2/a/b/?mode=embed")
@@ -64,7 +64,7 @@ test_that("Infer URL", {
 
   expect_identical(
     infer_embed_url(extend(req,
-      HTTP_X_REDX_FRONTEND_NAME = "https://example.shinyapps.io/appname/"
+      HTTP_X_REDX_FRONTEND_NAME = "example.shinyapps.io/appname/"
     )),
     "https://example.shinyapps.io/appname/?mode=embed")
 })

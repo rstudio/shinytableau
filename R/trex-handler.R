@@ -26,7 +26,7 @@ infer_embed_url <- function(req) {
     req[["HTTP_X_RSC_REQUEST"]] %||%
     req[["HTTP_RSTUDIO_CONNECT_APP_BASE_URL"]] %||%
     # ShinyApps.io
-    req[["HTTP_X_REDX_FRONTEND_NAME"]]
+    if (!is.null(req[["HTTP_X_REDX_FRONTEND_NAME"]])) { paste0("https://", req[["HTTP_X_REDX_FRONTEND_NAME"]]) }
 
   if (is.null(url)) {
     forwarded_host <- req[["HTTP_X_FORWARDED_HOST"]]
