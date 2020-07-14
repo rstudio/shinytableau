@@ -9,7 +9,6 @@ library(promises)
 
 # TODO: yaml file?
 manifest <- tableau_manifest(
-  #source_location = "https://jcheng.shinyapps.io/tableautest/?mode=embed",
   extension_id = "com.example.ggviolin",
   extension_version = "1.1.3",
   name = "Violin Plot",

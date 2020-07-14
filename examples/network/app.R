@@ -11,7 +11,6 @@ library(promises)
 
 # TODO: yaml file?
 manifest <- tableau_manifest(
-  #source_location = "https://jcheng.shinyapps.io/tableautest/?mode=embed",
   extension_id = "com.rstudio.tableau.network",
   extension_version = "1.0.0",
   name = "Network",

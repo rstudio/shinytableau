@@ -13,10 +13,6 @@ tableau_ui <- function(manifest, ui, config_ui) {
   trex_initialized <- FALSE
 
   function(req) {
-    if (!trex_initialized) {
-      initialize_trex(manifest, !is.null(config_ui), req)
-    }
-
     qs <- parseQueryString(req[["QUERY_STRING"]])
     mode <- qs[["mode"]]
     if (identical(mode, "embed")) {
@@ -27,6 +23,8 @@ tableau_ui <- function(manifest, ui, config_ui) {
       } else {
         "This extension has no settings to configure"
       }
+    } else if (identical(mode, "trex")) {
+      trex_handler(req, manifest, !is.null(config_ui))
     } else {
       welcome_ui(manifest)
     }
@@ -47,37 +45,6 @@ display_with_deps <- function(x, req, react = FALSE) {
       x
     ))
   }
-}
-
-initialize_trex <- function(manifest, has_config, req) {
-  if (is.null(manifest[["source_location"]])) {
-    host <- req[["HTTP_HOST"]]
-    if (is.null(host)) {
-      host <- paste0(req[["SERVER_NAME"]], ":", req[["SERVER_PORT"]])
-    }
-
-    # Tableau hates 127.0.0.1 (and presumably [::1])
-    host <- sub("^(\\[::1\\]|127\\.0\\.0\\.1)(:|$)", "localhost\\2", host)
-
-    manifest$source_location <- paste0(
-      req[["rook.url_scheme"]],
-      "://",
-      host,
-      req[["SCRIPT_NAME"]],
-      req[["PATH_INFO"]],
-      "?mode=embed"
-    )
-  }
-
-  if (is.null(manifest[["configure"]])) {
-    manifest$configure <- isTRUE(has_config)
-  }
-
-  str <- render_manifest(manifest)
-  trexdir <- tempfile(pattern = "trex")
-  dir.create(trexdir)
-  addResourcePath("shinytableau-trex", trexdir)
-  writeBin(charToRaw(str), file.path(trexdir, "generated.trex"))
 }
 
 welcome_ui <- function(manifest) {
