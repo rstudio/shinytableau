@@ -5,7 +5,6 @@ library(shinytableau)
 library(corrr)
 library(dplyr)
 library(ggplot2)
-library(tidyselect)
 library(promises)
 
 # TODO: yaml file?
@@ -38,9 +37,10 @@ server <- function(input, output, session) {
   output$plot <- renderPlot({
 
     df() %...>% {
-      dplyr::select(., tidyselect:::where(is.numeric)) %>%
-        corrr::correlate(x = ., quiet = TRUE) %>%
-        corrr::rplot() +
+
+      numeric_cols <- names(which(vapply(., FUN.VALUE = logical(1), FUN = is.numeric)))
+
+      corrr::rplot(corrr::correlate(x = .[, numeric_cols], quiet = TRUE)) +
         ggplot2::theme(
           axis.text.x = ggplot2::element_text(
             angle = 90, vjust = 0.5, hjust = 1
