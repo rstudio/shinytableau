@@ -3,7 +3,6 @@ options(shiny.port = 2468)
 library(shiny)
 library(shinytableau)
 library(corrr)
-library(dplyr)
 library(ggplot2)
 library(promises)
 
@@ -38,9 +37,9 @@ server <- function(input, output, session) {
 
     df() %...>% {
 
-      numeric_cols <- names(which(vapply(., FUN.VALUE = logical(1), FUN = is.numeric)))
+      numeric_cols <- vapply(., FUN.VALUE = logical(1), FUN = is.numeric)
 
-      corrr::rplot(corrr::correlate(x = .[, numeric_cols], quiet = TRUE)) +
+      corrr::rplot(corrr::correlate(x = .[, numeric_cols, drop = FALSE], quiet = TRUE)) +
         ggplot2::theme(
           axis.text.x = ggplot2::element_text(
             angle = 90, vjust = 0.5, hjust = 1
