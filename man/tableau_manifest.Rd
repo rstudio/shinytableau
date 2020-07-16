@@ -15,9 +15,10 @@ tableau_manifest(
   author_organization = NULL,
   website = "https://example.com",
   source_location = NULL,
-  icon = system.file("default_icon.png", package = "shinytableau"),
+  icon_file = "default_icon.png",
+  icon_package = "shinytableau",
   permissions = c("full data"),
-  configure = NULL,
+  configure = TRUE,
   min_api_version = "1.4"
 )
 }
@@ -36,13 +37,13 @@ extension author and project website.}
 
 \item{source_location}{The source location.}
 
-\item{icon}{The icon to be used for the extension.}
-
 \item{permissions}{A setting that determines the level of permissions.}
 
 \item{configure}{Configuration settings.}
 
 \item{min_api_version}{The minimum API version.}
+
+\item{icon}{The icon to be used for the extension.}
 }
 \description{
 Generate a Tableau Extension Manifest through a function
