@@ -40,9 +40,10 @@ tableau_manifest <- function(
   author_organization = NULL,
   website = "https://example.com",
   source_location = NULL,
-  icon = system.file("default_icon.png", package = "shinytableau"),
+  icon_file = "default_icon.png",
+  icon_package = "shinytableau",
   permissions = c("full data"),
-  configure = NULL,
+  configure = TRUE,
   min_api_version = "1.4"
 ) {
   if (missing(extension_id)) { stop("`extension_id` is a required argument") }
@@ -50,6 +51,11 @@ tableau_manifest <- function(
   if (missing(name)) { stop("`name` is a required argument") }
   if (missing(author_name)) { stop("`author_name` is a required argument") }
   if (missing(website)) { stop("`website` is a required argument") }
+  if (is.null(icon_package)) {
+    icon <- icon_file
+  } else {
+    icon <- system.file(icon_file, package = icon_package)
+  }
 
   permissions <- match.arg(permissions)
 
