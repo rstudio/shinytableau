@@ -60,7 +60,7 @@ tableau_manifest <- function(
   permissions <- match.arg(permissions)
 
   if (!file.exists(icon)) {
-    stop("The icon file was not found")
+    stop("The icon file was not found.", call. = FALSE)
   }
 
   structure(
