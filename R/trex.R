@@ -46,11 +46,13 @@ tableau_manifest <- function(
   configure = TRUE,
   min_api_version = "1.4"
 ) {
-  if (missing(extension_id)) { stop("`extension_id` is a required argument") }
-  if (missing(extension_version)) { stop("`extension_version` is a required argument") }
-  if (missing(name)) { stop("`name` is a required argument") }
-  if (missing(author_name)) { stop("`author_name` is a required argument") }
-  if (missing(website)) { stop("`website` is a required argument") }
+
+  # if (missing(extension_id)) { stop("`extension_id` is a required argument") }
+  # if (missing(extension_version)) { stop("`extension_version` is a required argument") }
+  # if (missing(name)) { stop("`name` is a required argument") }
+  # if (missing(author_name)) { stop("`author_name` is a required argument") }
+  # if (missing(website)) { stop("`website` is a required argument") }
+
   if (is.null(icon_package)) {
     icon <- icon_file
   } else {
