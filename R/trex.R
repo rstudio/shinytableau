@@ -1,4 +1,23 @@
+#' Generate a Tableau Extension Manifest through a function
+#'
+#' Generate a Tableau Extension Manifest through a function
+#'
+#' @param extension_id The ID value for the Tableau extension.
+#' @param extension_version The version number.
+#' @param name The name of the extension.
+#' @param description,extended_description The description and extended
+#'   description for the extension.
+#' @param author_name,author_email,author_organization,website Details about the
+#'   extension author and project website.
+#' @param source_location The source location.
+#' @param icon The icon to be used for the extension.
+#' @param permissions A setting that determines the level of permissions.
+#' @param configure Configuration settings.
+#' @param min_api_version The minimum API version.
+#'
 #' @examples
+#' # Create a Tableau Manifest via the
+#' # `tableau_manifest()` function
 #' tableau_manifest(
 #'   extension_id = "com.example.ggvoronoi",
 #'   extension_version = "1.1.3",
@@ -8,6 +27,7 @@
 #'   author_email = "jane_doe@example.com",
 #'   website = "https://example.com/tableau/extensions/ggvoronoi"
 #' )
+#'
 #' @export
 tableau_manifest <- function(
   extension_id = "com.example.extensions.name",
