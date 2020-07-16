@@ -47,13 +47,77 @@ yaml_skeleton <- function(filename = "manifest.yml",
       website = "https://example.com",
       source_location = NULL,
       icon = list(
-        path = "default_icon.png",
+        file = "default_icon.png",
         package = "shinytableau"
       ),
       permissions = "full data",
-      configure = NULL,
+      configure = TRUE,
       min_api_version = "1.4"
     ),
     file = filename
+  )
+}
+
+
+#' @export
+tableau_manifest_from_yaml <- function(path = ".") {
+
+  # If the input to `path` doesn't specify a YAML
+  # file, assume it is a path to a dir containing one
+  if (grepl("\\.ya?ml$", path)) {
+
+    path <- as.character(fs::path_abs(path))
+
+  } else {
+
+    if (!fs::dir_exists(path)) {
+      stop(
+        "The `path` provided must either:\n",
+        " * Lead to a directory containing YAML file, or\n",
+        " * Point directly to a YAML file",
+        call. = FALSE
+      )
+    }
+
+    yml_files <-
+      list.files(path = path, pattern = "\\.ya?ml$", full.names = TRUE)
+
+    if (length(yml_files) == 1) {
+      path <- yml_files
+    } else if (length(yml_files) > 1) {
+      stop(
+        "The `path` provided leads to multiple YAML files, either:\n",
+        " * Specify a path to the appropriate YAML manifest file.\n",
+        " * Remove extraneous YAML files, leaving only the YAML manifest file.",
+        call. = FALSE
+      )
+    } else {
+      stop(
+        "The `path` provided doesn't lead to a YAML file, either:\n",
+        " * Specify a path to the appropriate YAML manifest file.\n",
+        " * Generate a YAML manifest file with `yaml_skeleton(\"", path, "\")`.",
+        call. = FALSE
+      )
+    }
+  }
+
+  y <- yaml::read_yaml(file = path)
+
+  tableau_manifest(
+    extension_id = y$extension_id,
+    extension_version = y$extension_version,
+    name = y$name,
+    description = y$description,
+    extended_description = y$extende_description,
+    author_name = y$author_name,
+    author_email = y$author_email,
+    author_organization = y$author_organization,
+    website = y$website,
+    source_location = y$source_location,
+    icon_file = y$icon$file,
+    icon_package = y$icon$package,
+    permissions = y$permissions,
+    configure = y$configure,
+    min_api_version = y$min_api_version
   )
 }
