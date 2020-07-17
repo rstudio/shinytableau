@@ -4,14 +4,10 @@
 \alias{yaml_skeleton}
 \title{Create a skeleton YAML manifest file}
 \usage{
-yaml_skeleton(filename = "manifest.yml", path = NULL)
+yaml_skeleton(path = ".")
 }
 \arguments{
-\item{filename}{The name of the YAML file to create on disk. By default, this
-is `"manifest.yml"`.}
-
-\item{path}{An optional path to which the YAML file should be saved (combined
-with `filename`).}
+\item{path}{A path in which the `"manifest.yml"` file will be created.}
 }
 \description{
 Tableau extensions require a manifest and the use of a YAML manifest file
@@ -26,11 +22,9 @@ example values. Later in the development lifecycle, the developer of a
 # root directory of the project
 # yaml_skeleton()
 
-# Generate the YAML file in a subdirectory
-# and call the file 'manifest-temp.yml'
-# yaml_skeleton(
-#   filename = "manifest-temp.yml",
-#   path = "app"
-# )
+# Generate the skeleton YAML manifest
+# file (called `manifest.yml`) in the
+# `app` subdirectory
+# yaml_skeleton(path = "app")
 
 }

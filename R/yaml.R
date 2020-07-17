@@ -7,26 +7,22 @@
 #' example values. Later in the development lifecycle, the developer of a
 #' **shinytableau** extension can use values relevant to the project.
 #'
-#' @param filename The name of the YAML file to create on disk. By default, this
-#'   is `"manifest.yml"`.
-#' @param path An optional path to which the YAML file should be saved (combined
-#'   with `filename`).
+#' @param path A path in which the `"manifest.yml"` file will be created.
 #'
 #' @examples
 #' # Generate a YAML manifest file in the
 #' # root directory of the project
 #' # yaml_skeleton()
 #'
-#' # Generate the YAML file in a subdirectory
-#' # and call the file 'manifest-temp.yml'
-#' # yaml_skeleton(
-#' #   filename = "manifest-temp.yml",
-#' #   path = "app"
-#' # )
+#' # Generate the skeleton YAML manifest
+#' # file (called `manifest.yml`) in the
+#' # `app` subdirectory
+#' # yaml_skeleton(path = "app")
 #'
 #' @export
-yaml_skeleton <- function(filename = "manifest.yml",
-                          path = NULL) {
+yaml_skeleton <- function(path = ".") {
+
+  filename <- "manifest.yml"
 
   if (!is.null(path)) {
     filename <- file.path(path, filename)
@@ -39,13 +35,13 @@ yaml_skeleton <- function(filename = "manifest.yml",
       extension_id = "com.example.extensions.name",
       extension_version = "0.1.0",
       name = "My Extension",
-      description = NULL,
-      extended_description = NULL,
+      description = "Description of the Extension",
+      extended_description = "A much longer Description of the Extension",
       author_name = "Your Name",
-      author_email = NULL,
-      author_organization = NULL,
+      author_email = "author@example.com",
+      author_organization = "Example Organization",
       website = "https://example.com",
-      source_location = NULL,
+      source_location = "https://example.com/source/",
       icon = list(
         file = "default_icon.png",
         package = "shinytableau"
@@ -59,49 +55,38 @@ yaml_skeleton <- function(filename = "manifest.yml",
 }
 
 
+
 #' @export
 tableau_manifest_from_yaml <- function(path = ".") {
 
-  # If the input to `path` doesn't specify a YAML
-  # file, assume it is a path to a dir containing one
-  if (grepl("\\.ya?ml$", path)) {
+  # Transform the path into an absolute path
+  path <- fs::path_abs(path)
 
-    path <- as.character(fs::path_abs(path))
+  # Is path pointing to a file
+  if (fs::is_dir(path)) {
 
-  } else {
-
-    if (!fs::dir_exists(path)) {
-      stop(
-        "The `path` provided must either:\n",
-        " * Lead to a directory containing YAML file, or\n",
-        " * Point directly to a YAML file",
-        call. = FALSE
-      )
-    }
-
-    yml_files <-
-      list.files(path = path, pattern = "\\.ya?ml$", full.names = TRUE)
-
-    if (length(yml_files) == 1) {
-      path <- yml_files
-    } else if (length(yml_files) > 1) {
-      stop(
-        "The `path` provided leads to multiple YAML files, either:\n",
-        " * Specify a path to the appropriate YAML manifest file.\n",
-        " * Remove extraneous YAML files, leaving only the YAML manifest file.",
-        call. = FALSE
-      )
-    } else {
-      stop(
-        "The `path` provided doesn't lead to a YAML file, either:\n",
-        " * Specify a path to the appropriate YAML manifest file.\n",
-        " * Generate a YAML manifest file with `yaml_skeleton(\"", path, "\")`.",
-        call. = FALSE
-      )
-    }
+    # Combine the absolute path with the fixed
+    # name of the YAML manifest file
+    path <- fs::path_join(parts = c(path, "manifest.yml"))
   }
 
+  # If the YAML manifest file doesn't exist, throw an error
+  if (!fs::file_exists(path) ||
+      (fs::file_exists(path) && fs::path_file(path) != "manifest.yml")) {
+    stop(
+      "The `path` provided must either:\n",
+      " * Represent a directory containing `manifest.yml`, or\n",
+      " * Point directly to a `manifest.yml` file",
+      call. = FALSE
+    )
+  }
+
+  # Read in the YAML manifest file as a list object
   y <- yaml::read_yaml(file = path)
+
+  # Validate key names in the YAML file and provide a
+  # warning for any invalid key names that are seen
+  check_valid_yaml_key_names(yaml_list = y)
 
   tableau_manifest(
     extension_id = y$extension_id,
@@ -121,3 +106,28 @@ tableau_manifest_from_yaml <- function(path = ".") {
     min_api_version = y$min_api_version
   )
 }
+
+check_valid_yaml_key_names <- function(yaml_list) {
+
+  y_keys <- c(names(yaml_list), names(yaml_list$icon))
+
+  if (!all(y_keys %in% manifest_keys_safe)) {
+
+    unknown_keys <- y_keys[!(y_keys %in% manifest_keys_safe)]
+
+    warning(
+      "Invalid manifest keys are seen in the YAML manifest file:\n",
+      " * They are: ", paste0("`", unknown_keys, "`", collapse = ", "), ".\n",
+      " * Correct these key names in the `manifest.yml` file.",
+      call. = FALSE
+    )
+  }
+}
+
+manifest_keys_safe <-
+  c(
+    "extension_id", "extension_version", "name", "description",
+    "extended_description", "author_name", "author_email", "author_organization",
+    "website", "source_location", "icon", "permissions", "configure",
+    "min_api_version", "file", "package"
+  )
