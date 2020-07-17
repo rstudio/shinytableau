@@ -4,14 +4,15 @@
 \alias{yaml_skeleton}
 \title{Create a skeleton YAML manifest file}
 \usage{
-yaml_skeleton(path = ".")
+yaml_skeleton(filename = "manifest.yml")
 }
 \arguments{
-\item{path}{A path in which the `"manifest.yml"` file will be created.}
+\item{filename}{A filename for the YAML manifest file. Can be combined with a
+relative path. The default, and recommended, filename is `"manifest.yml"`.}
 }
 \description{
-Tableau extensions require a manifest and the use of a YAML manifest file
-in **shinytableau** allows for a separation of concerns when developing an
+Tableau extensions require a manifest and the use of a YAML manifest file in
+**shinytableau** allows for a separation of concerns when developing an
 extension. With the `yaml_skeleton()` function, we can write a YAML manifest
 file to disk; it contains all of the required fields for the extension with
 example values. Later in the development lifecycle, the developer of a

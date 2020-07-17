@@ -16,7 +16,6 @@ tableau_manifest(
   website = "https://example.com",
   source_location = NULL,
   icon_file = "default_icon.png",
-  icon_package = "shinytableau",
   permissions = c("full data"),
   configure = TRUE,
   min_api_version = "1.4"

@@ -41,7 +41,6 @@ tableau_manifest <- function(
   website = "https://example.com",
   source_location = NULL,
   icon_file = "default_icon.png",
-  icon_package = "shinytableau",
   permissions = c("full data"),
   configure = TRUE,
   min_api_version = "1.4"
@@ -53,15 +52,9 @@ tableau_manifest <- function(
   # if (missing(author_name)) { stop("`author_name` is a required argument") }
   # if (missing(website)) { stop("`website` is a required argument") }
 
-  if (is.null(icon_package)) {
-    icon <- icon_file
-  } else {
-    icon <- system.file(icon_file, package = icon_package)
-  }
-
   permissions <- match.arg(permissions)
 
-  if (!file.exists(icon)) {
+  if (!file.exists(icon_file)) {
     stop("The icon file was not found.", call. = FALSE)
   }
 
@@ -77,7 +70,7 @@ tableau_manifest <- function(
       author_organization = author_organization,
       website = website,
       source_location = source_location,
-      icon = base64enc::base64encode(icon),
+      icon = base64enc::base64encode(icon_file),
       permissions = permissions,
       configure = configure,
       min_api_version = min_api_version
