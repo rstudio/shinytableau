@@ -26,7 +26,10 @@ yaml_skeleton <- function(filename = "manifest.yml") {
   filename <- fs::path_expand(filename)
 
   if (fs::file_exists(filename)) {
-    stop("The file `", fs::path_file(filename) )
+    stop(
+      "The file `", fs::path_file(filename), "` already exists in the path.",
+      call. = FALSE
+    )
   }
 
   yaml::write_yaml(
