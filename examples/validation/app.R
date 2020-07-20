@@ -7,20 +7,20 @@ library(magrittr)
 ui <- fluidPage(
   tags$script(src = "validation.js"),
   uiOutput("ui"),
+  actionButton("go", "Submit", class = "btn-primary"),
+  actionButton("reset", "Reset"),
   hr(),
   actionButton("redraw", "Redraw UI")
 )
 
 server <- function(input, output, session) {
+  pw <- password_input("password")
+
   sv <- ShinyValidator$new()
+  sv$add_validator(pw$validator)
   sv$add_rule("title", need, message = "This field is required")
   sv$add_rule("cars", need, label = "Cars")
   sv$add_rule("species", need, label = "Species")
-  sv$add_rule("pass1", need, label = "Password")
-  sv$add_rule("pass1", function(value) {
-    if (nchar(value) < 8) "Password is too short"
-  })
-  sv$add_rule("pass2", ~ if (!identical(., input$pass1)) "Passwords must match")
 
   # sv$require
   # sv$check
@@ -31,9 +31,7 @@ server <- function(input, output, session) {
       textInput("title", "Title", value = isolate(input$title)),
       checkboxGroupInput("cars", "Cars", choices = rownames(mtcars)[1:3], selected = isolate(input$cars)),
       selectInput("species", "Iris species", choices = unique(iris$Species), selected = isolate(input$species), multiple = TRUE),
-      passwordInput("pass1", "Password", value = isolate(input$pass1)),
-      passwordInput("pass2", "Password (confirm)", value = isolate(input$pass2)),
-      actionButton("go", "Submit")
+      password_input_ui("password")
     )
   })
 
@@ -42,10 +40,25 @@ server <- function(input, output, session) {
 
     if (sv$is_valid()) {
       message("Action performed")
+      reset_form()
+      showNotification("Something good happened!", type = "message")
     } else {
       message("Action aborted")
+      showNotification("Please correct errors and try again!", type = "warning")
     }
   })
+
+  observeEvent(input$reset, {
+    reset_form()
+  })
+
+  reset_form <- function() {
+    updateTextInput(session, "title", value = "")
+    updateCheckboxGroupInput(session, "cars", selected = character(0))
+    updateSelectInput(session, "species", selected = character(0))
+    pw$reset()
+    sv$disable()
+  }
 }
 
 shinyApp(ui, server)

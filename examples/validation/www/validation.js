@@ -16,6 +16,9 @@ function findInputContainer(id) {
 // TODO: Support Bootstrap 4 too
 function setInvalid(id, message = null) {
   const inputContainer = findInputContainer(id);
+  if (!inputContainer) {
+    return;
+  }
   inputContainer.addClass("has-error");
   inputContainer.children(".shiny-validation-message").remove();
   if (message) {
@@ -28,6 +31,9 @@ function setInvalid(id, message = null) {
 
 function clearInvalid(id) {
   const inputContainer = findInputContainer(id);
+  if (!inputContainer) {
+    return;
+  }
   inputContainer.removeClass("has-error");
   inputContainer.children(".shiny-validation-message").remove();
 }
