@@ -2,7 +2,7 @@
 % Please edit documentation in R/trex.R
 \name{tableau_manifest}
 \alias{tableau_manifest}
-\title{Generate a Tableau Extension Manifest through a function}
+\title{Generate a Tableau Extension Manifest}
 \usage{
 tableau_manifest(
   extension_id = "com.example.extensions.name",
@@ -11,41 +11,58 @@ tableau_manifest(
   description = NULL,
   extended_description = description,
   author_name = "Your Name",
-  author_email = NULL,
-  author_organization = NULL,
+  author_email = "author@example.com",
+  author_organization = "Example Organization",
   website = "https://example.com",
   source_location = NULL,
   icon_file = "default_icon.png",
   permissions = c("full data"),
-  configure = TRUE,
   min_api_version = "1.4"
 )
 }
 \arguments{
-\item{extension_id}{The ID value for the Tableau extension.}
+\item{extension_id}{The ID value for the Tableau extension which follows the
+reverse domain name pattern. By default, this is set to a placeholder value
+of `"com.example.extensions.name"`}
 
-\item{extension_version}{The version number.}
+\item{extension_version}{The version number for the extension. The default
+value for this is `"0.1.0"`.}
 
-\item{name}{The name of the extension.}
+\item{name}{The name of the extension. This name will appear as given under
+*Extensions* on a *Tableau* dashboard sheet.}
 
 \item{description, extended_description}{The description and extended
-description for the extension.}
+description for the extension. Whereas `description` expects a relatively
+short amount of text, the `extended_description` parameter serves as a
+long-form description of the extension. HTML text can be used for the
+latter.}
 
 \item{author_name, author_email, author_organization, website}{Details about the
 extension author and project website.}
 
-\item{source_location}{The source location.}
+\item{source_location}{The source location, which is the URL of the server
+that hosts the web page that in turns interacts with Tableau.}
 
-\item{permissions}{A setting that determines the level of permissions.}
+\item{icon_file}{The path to the icon file to be used for the extension. The
+image should be no larger than 70x70px.}
 
-\item{configure}{Configuration settings.}
+\item{permissions}{A setting that determines the level of permissions. The
+default `"full_data"` is the default and currently the only available
+option for Tableau extensions. This declaration is required since the
+extension can access the underlying data or information about the data
+sources.}
 
-\item{min_api_version}{The minimum API version.}
+\item{min_api_version}{This specifies the minimum API version required for
+running the extension. The default for this is `"1.4"`.}
 
-\item{icon}{The icon to be used for the extension.}
+\item{configure}{If `TRUE` (the default) then the context menu for the
+extension will be configured.}
 }
 \description{
-Generate a Tableau Extension Manifest through a function
+The `tableau_manifest()` function generates Tableau Extension Manifest XML
+which constitutes the extension manifest file (with the standard extension
+`.trex`). This XML text contains metadata for the extension and is used for
+registration.
 }
 \examples{
 # Create a Tableau Manifest via the

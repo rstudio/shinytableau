@@ -26,6 +26,6 @@ example values. Later in the development lifecycle, the developer of a
 # Generate the skeleton YAML manifest
 # file (called `manifest.yml`) in the
 # `app` subdirectory
-# yaml_skeleton(path = "app")
+# yaml_skeleton(filename = "app/manifest.yml")
 
 }
