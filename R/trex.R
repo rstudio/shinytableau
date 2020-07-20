@@ -64,12 +64,6 @@ tableau_manifest <- function(
   min_api_version = "1.4"
 ) {
 
-  # if (missing(extension_id)) { stop("`extension_id` is a required argument") }
-  # if (missing(extension_version)) { stop("`extension_version` is a required argument") }
-  # if (missing(name)) { stop("`name` is a required argument") }
-  # if (missing(author_name)) { stop("`author_name` is a required argument") }
-  # if (missing(website)) { stop("`website` is a required argument") }
-
   permissions <- match.arg(permissions)
 
   if (!file.exists(icon_file)) {
@@ -104,6 +98,7 @@ print.tableau_manifest <- function(x, ...) {
 }
 
 render_manifest <- function(manifest) {
+
   with(manifest, {
     x <- tag_helper
     result <- x("manifest",
