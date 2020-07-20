@@ -97,10 +97,8 @@ tableau_manifest_from_yaml <- function(path = ".") {
     author_email = y$author_email,
     author_organization = y$author_organization,
     website = y$website,
-    source_location = y$source_location,
     icon_file = path_icon_file,
     permissions = y$permissions,
-    configure = y$configure,
     min_api_version = y$min_api_version
   )
 }
