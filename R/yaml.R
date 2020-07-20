@@ -32,31 +32,14 @@ yaml_skeleton <- function(filename = "manifest.yml") {
     )
   }
 
-  yaml::write_yaml(
-    list(
-      extension_id = "com.example.extensions.name",
-      extension_version = "0.1.0",
-      name = "My Extension",
-      description = "Description of the Extension",
-      extended_description = "A *much* longer description of the extension.\nCan be written using **Markdown**.\n",
-      author_name = "Your Name",
-      author_email = "author@example.com",
-      author_organization = "Example Organization",
-      website = "https://example.com",
-      source_location = "https://example.com/source/",
-      icon = list(
-        file = "default_icon.png",
-        package = "shinytableau"
-      ),
-      permissions = "full data",
-      configure = TRUE,
-      min_api_version = "1.4"
-    ),
-    file = filename
-  )
+  yml <-
+    readLines(con = system.file(
+      "manifest.yml",
+      package = "shinytableau"
+    ))
+
+  writeLines(text = yml, con = filename)
 }
-
-
 
 #' @export
 tableau_manifest_from_yaml <- function(path = ".") {

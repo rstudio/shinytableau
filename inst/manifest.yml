@@ -1,0 +1,19 @@
+extension_id: com.example.extensions.name
+extension_version: 0.1.0
+name: My Extension
+description: Description of the Extension
+extended_description: |
+  A *much* longer description of the extension.
+  Can be written using **Markdown**.
+author_name: Your Name
+author_email: author@example.com
+author_organization: Example Organization
+website: https://example.com
+icon:
+  file: default_icon.png
+  package: shinytableau
+# This should always be 'full data' if requiring Tableau data,
+# otherwise, remove the `permissions` key-value line
+permissions: full data
+configure: true
+min_api_version: '1.4'
