@@ -1,19 +1,37 @@
-#' Generate a Tableau Extension Manifest through a function
+#' Generate a Tableau Extension Manifest
 #'
-#' Generate a Tableau Extension Manifest through a function
+#' The `tableau_manifest()` function generates Tableau Extension Manifest XML
+#' which constitutes the extension manifest file (with the standard extension
+#' `.trex`). This XML text contains metadata for the extension and is used for
+#' registration.
 #'
-#' @param extension_id The ID value for the Tableau extension.
-#' @param extension_version The version number.
-#' @param name The name of the extension.
+#' @param extension_id The ID value for the Tableau extension which follows the
+#'   reverse domain name pattern. By default, this is set to a placeholder value
+#'   of `"com.example.extensions.name"`
+#' @param extension_version The version number for the extension. The default
+#'   value for this is `"0.1.0"`.
+#' @param name The name of the extension. This name will appear as given under
+#'   *Extensions* on a *Tableau* dashboard sheet.
 #' @param description,extended_description The description and extended
-#'   description for the extension.
+#'   description for the extension. Whereas `description` expects a relatively
+#'   short amount of text, the `extended_description` parameter serves as a
+#'   long-form description of the extension. HTML text can be used for the
+#'   latter.
 #' @param author_name,author_email,author_organization,website Details about the
 #'   extension author and project website.
-#' @param source_location The source location.
-#' @param icon The icon to be used for the extension.
-#' @param permissions A setting that determines the level of permissions.
-#' @param configure Configuration settings.
-#' @param min_api_version The minimum API version.
+#' @param source_location The source location, which is the URL of the server
+#'   that hosts the web page that in turns interacts with Tableau.
+#' @param icon_file The path to the icon file to be used for the extension. The
+#'   image should be no larger than 70x70px.
+#' @param permissions A setting that determines the level of permissions. The
+#'   default `"full_data"` is the default and currently the only available
+#'   option for Tableau extensions. This declaration is required since the
+#'   extension can access the underlying data or information about the data
+#'   sources.
+#' @param configure If `TRUE` (the default) then the context menu for the
+#'   extension will be configured.
+#' @param min_api_version This specifies the minimum API version required for
+#'   running the extension. The default for this is `"1.4"`.
 #'
 #' @examples
 #' # Create a Tableau Manifest via the

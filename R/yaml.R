@@ -18,7 +18,7 @@
 #' # Generate the skeleton YAML manifest
 #' # file (called `manifest.yml`) in the
 #' # `app` subdirectory
-#' # yaml_skeleton(path = "app")
+#' # yaml_skeleton(filename = "app/manifest.yml")
 #'
 #' @export
 yaml_skeleton <- function(filename = "manifest.yml") {
