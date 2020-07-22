@@ -5,20 +5,7 @@ library(shinytableau)
 library(ggplot2)
 library(promises)
 
-# TODO: yaml file?
-manifest <- tableau_manifest(
-  extension_id = "com.example.ggviolin",
-  extension_version = "1.1.3",
-  name = "Violin Plot",
-  description = "Insert a violin plot using ggplot2",
-  extended_description = tagList(
-    tags$p("This is an extension for Tableau dashboards that enables the easy creation of violin plots.")
-  ),
-  author_name = "Jane Doe",
-  author_email = "jane_doe@example.com",
-  author_organization = "Example Corp.",
-  website = "https://example.com/tableau/extensions/ggviolin"
-)
+manifest <- tableau_manifest_from_yaml("manifest.yml")
 
 ui <- function(req) {
   fillPage(
@@ -112,6 +99,7 @@ config_server <- function(input, output, session) {
   })
 }
 
-tableau_extension(manifest, ui, server, config_ui, config_server,
+tableau_extension(
+  manifest, ui, server, config_ui, config_server,
   options = list(port = 2468)
 )
