@@ -124,6 +124,6 @@ manifest_keys_safe <-
   c(
     "extension_id", "extension_version", "name", "description",
     "extended_description", "author_name", "author_email", "author_organization",
-    "website", "source_location", "icon", "permissions", "configure",
+    "website", "source_location", "icon", "permissions",
     "min_api_version", "file", "package"
   )

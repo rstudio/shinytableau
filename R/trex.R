@@ -28,8 +28,6 @@
 #'   option for Tableau extensions. This declaration is required since the
 #'   extension can access the underlying data or information about the data
 #'   sources.
-#' @param configure If `TRUE` (the default) then the context menu for the
-#'   extension will be configured.
 #' @param min_api_version This specifies the minimum API version required for
 #'   running the extension. The default for this is `"1.4"`.
 #'
@@ -60,7 +58,6 @@ tableau_manifest <- function(
   source_location = NULL,
   icon_file = "default_icon.png",
   permissions = c("full data"),
-  configure = TRUE,
   min_api_version = "1.4"
 ) {
 
@@ -84,7 +81,6 @@ tableau_manifest <- function(
       source_location = source_location,
       icon = base64enc::base64encode(icon_file),
       permissions = permissions,
-      configure = configure,
       min_api_version = min_api_version
     ),
     class = "tableau_manifest"
@@ -129,7 +125,7 @@ render_manifest <- function(manifest) {
           lapply(permissions, x, tagname = "permission")
         ),
         x("context-menu",
-          if (configure) {
+          if (isTRUE(manifest$configure)) {
             x("configure-context-menu-item")
           }
         )
