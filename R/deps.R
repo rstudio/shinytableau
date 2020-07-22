@@ -9,23 +9,11 @@ tableau_extensions_api_lib <- function() {
   )
 }
 
-# tableau_ui_lib <- function() {
-#   list(
-#     reactR::html_dependency_react(offline = FALSE),
-#     htmltools::htmlDependency(
-#       "tableau-ui",
-#       version = "3.0.0",
-#       src = c(href = "https://unpkg.com/@tableau/tableau-ui@3.0.0/dist/"),
-#       script = "tableau-ui.min.js",
-#       all_files = FALSE
-#     )
-#   )
-# }
-
 #' @export
 shinytableau_lib <- function() {
-  # TODO: REMOVE THIS BEFORE RELEASE
-  if (interactive()) {
+
+  # Set to TRUE locally for fast iteration
+  if (FALSE) {
     debugPath <- file.path(here::here(), "inst/assets")
     if (dir.exists(debugPath) && dir.exists(file.path(here::here(), "inst/lib/tableau-extensions"))) {
       message("Using debug copy of shinytableau.js")

@@ -1,6 +1,4 @@
-if (interactive()) {
-  options(shiny.port = 2468)
-}
+# filetype: shinyApp
 
 library(shiny)
 library(shinytableau)
@@ -114,4 +112,6 @@ config_server <- function(input, output, session) {
   })
 }
 
-tableau_extension(manifest, ui, server, config_ui, config_server)
+tableau_extension(manifest, ui, server, config_ui, config_server,
+  options = list(port = 2468)
+)
