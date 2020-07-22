@@ -1,4 +1,4 @@
-# fileType: shinyApp
+# filetype: shinyApp
 
 library(shiny)
 library(shinytableau)
@@ -101,4 +101,7 @@ config_server <- function(input, output, session) {
   })
 }
 
-tableau_extension(manifest, ui, server, config_ui, config_server, options = list(port = 2469))
+tableau_extension(
+  manifest, ui, server, config_ui, config_server,
+  options = list(port = 2469)
+)
