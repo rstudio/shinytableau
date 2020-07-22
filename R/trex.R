@@ -12,8 +12,8 @@
 #' a **shinytableau** extension app is to use a YAML manifest file. A skeleton
 #' YAML manifest file can be created via the [yaml_skeleton()] function. Once
 #' the YAML file is edited to reflect the app being authored, it can be linked
-#' to **shinytableau** app by using the [tableau_manifest_from_yaml()] (in place
-#' of the `tableau_manifest()` call).
+#' to a **shinytableau** extension app by using the
+#' [tableau_manifest_from_yaml()] (in place of the `tableau_manifest()` call).
 #'
 #' @param extension_id The ID value for the Tableau extension which follows the
 #'   reverse domain name pattern. By default, this is set to a placeholder value
@@ -28,7 +28,7 @@
 #'   long-form description of the extension. HTML text can be used for the
 #'   latter.
 #' @param author_name,author_email,author_organization,website Details about the
-#'   extension author and project website.
+#'   extension author and the project website.
 #' @param source_location The source location, which is the URL of the server
 #'   that hosts the web page that in turns interacts with Tableau. If `NULL`
 #'   (the default, and a good option) then **shinytableau** will autodetect
@@ -36,7 +36,7 @@
 #' @param icon_file The path to the icon file to be used for the extension. The
 #'   image used as an icon file must be a 70x70px PNG file.
 #' @param permissions A setting that determines the level of permissions. The
-#'   default `"full_data"` is the default and currently the only available
+#'   value `"full_data"` is the default and is currently the only available
 #'   option for Tableau extensions. This declaration is required since the
 #'   extension can access the underlying data or information about the data
 #'   sources.

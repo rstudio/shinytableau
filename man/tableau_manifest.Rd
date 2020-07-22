@@ -38,7 +38,7 @@ long-form description of the extension. HTML text can be used for the
 latter.}
 
 \item{author_name, author_email, author_organization, website}{Details about the
-extension author and project website.}
+extension author and the project website.}
 
 \item{source_location}{The source location, which is the URL of the server
 that hosts the web page that in turns interacts with Tableau. If \code{NULL}
@@ -49,7 +49,7 @@ the source location.}
 image used as an icon file must be a 70x70px PNG file.}
 
 \item{permissions}{A setting that determines the level of permissions. The
-default \code{"full_data"} is the default and currently the only available
+value \code{"full_data"} is the default and is currently the only available
 option for Tableau extensions. This declaration is required since the
 extension can access the underlying data or information about the data
 sources.}
@@ -69,8 +69,8 @@ An often preferable alternative to using the \code{tableau_manifest()} function 
 a \strong{shinytableau} extension app is to use a YAML manifest file. A skeleton
 YAML manifest file can be created via the \code{\link[=yaml_skeleton]{yaml_skeleton()}} function. Once
 the YAML file is edited to reflect the app being authored, it can be linked
-to \strong{shinytableau} app by using the \code{\link[=tableau_manifest_from_yaml]{tableau_manifest_from_yaml()}} (in place
-of the \code{tableau_manifest()} call).
+to a \strong{shinytableau} extension app by using the
+\code{\link[=tableau_manifest_from_yaml]{tableau_manifest_from_yaml()}} (in place of the \code{tableau_manifest()} call).
 }
 \examples{
 # Create a Tableau Manifest via the
