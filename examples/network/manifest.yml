@@ -1,0 +1,15 @@
+extension_id: com.rstudio.tableau.network
+extension_version: 1.0.0
+name: Network
+description: Insert a network plot using DiagrammeR
+extended_description: |
+    This is an extension for Tableau dashboards that enables the easy creation of network plots.
+author_name: Rich Iannone
+author_email: rich@rstudio.com
+author_organization: RStudio, PBC
+website: https://github.com/rstudio/shinytableau/tree/master/examples/network
+icon:
+  file: default_icon.png
+  package: shinytableau
+permissions: full data
+min_api_version: '1.4'
