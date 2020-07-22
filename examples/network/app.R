@@ -1,6 +1,4 @@
-if (interactive()) {
-  options(shiny.port = 2469)
-}
+# fileType: shinyApp
 
 library(shiny)
 library(shinytableau)
@@ -9,20 +7,7 @@ library(DiagrammeR)
 library(visNetwork)
 library(promises)
 
-# TODO: yaml file?
-manifest <- tableau_manifest(
-  extension_id = "com.rstudio.tableau.network",
-  extension_version = "1.0.0",
-  name = "Network",
-  description = "Insert a network plot using DiagrammeR",
-  extended_description = tagList(
-    tags$p("This is an extension for Tableau dashboards that enables the easy creation of violin plots.")
-  ),
-  author_name = "Rich Iannone",
-  author_email = "rich@rstudio.com",
-  author_organization = "RStudio, PBC",
-  website = "https://github.com/rstudio/shinytableau/tree/master/examples/network"
-)
+manifest <- tableau_manifest_from_yaml("manifest.yml")
 
 ui <- function(req) {
   fillPage(
@@ -116,4 +101,4 @@ config_server <- function(input, output, session) {
   })
 }
 
-tableau_extension(manifest, ui, server, config_ui, config_server)
+tableau_extension(manifest, ui, server, config_ui, config_server, options = list(port = 2469))
