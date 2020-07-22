@@ -56,7 +56,7 @@ tableau_manifest <- function(
   author_organization = "Example Organization",
   website = "https://example.com",
   source_location = NULL,
-  icon_file = "default_icon.png",
+  icon_file = system.file("default_icon.png", package = "shinytableau"),
   permissions = c("full data"),
   min_api_version = "1.4"
 ) {
