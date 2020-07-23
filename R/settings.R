@@ -16,7 +16,7 @@ unwrap_session <- function(session) {
 }
 
 #' @export
-tableau_setting <- function(name, default = NULL, session = getDefaultReactiveDomain()) {
+tableau_setting <- function(name, default = NULL, session = shiny::getDefaultReactiveDomain()) {
   session <- unwrap_session(session)
 
   value <- session$input[[paste0("shinytableau-setting-", name)]]
@@ -24,7 +24,7 @@ tableau_setting <- function(name, default = NULL, session = getDefaultReactiveDo
 }
 
 #' @export
-update_tableau_settings <- function(..., save. = TRUE, add. = FALSE, session = getDefaultReactiveDomain()) {
+update_tableau_settings <- function(..., save. = TRUE, add. = FALSE, session = shiny::getDefaultReactiveDomain()) {
   session <- unwrap_session(session)
 
   session$sendCustomMessage(type = "shinytableau-setting-update",
@@ -37,7 +37,7 @@ update_tableau_settings <- function(..., save. = TRUE, add. = FALSE, session = g
 }
 
 #' @export
-tableau_settings_all <- function(session = getDefaultReactiveDomain()) {
+tableau_settings_all <- function(session = shiny::getDefaultReactiveDomain()) {
   session <- unwrap_session(session)
 
   session$input[["shinytableau-settings"]]

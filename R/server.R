@@ -12,24 +12,24 @@ tableau_server <- function(server, config_server) {
     wrap_session(session)
     init_rpc(session)
 
-    qs <- parseQueryString(isolate(session$clientData$url_search))
+    qs <- shiny::parseQueryString(shiny::isolate(session$clientData$url_search))
     if (identical(qs$mode, "embed")) {
-      o <- observe({
+      o <- shiny::observe({
         # Delay loading until settings are available
         settings <- tableau_settings_all()
-        req(settings)
+        shiny::req(settings)
         o$destroy()
-        isolate({
+        shiny::isolate({
           server(input, output, session)
         })
       })
     } else if (identical(qs$mode, "configure") && is.function(config_server)) {
-      o <- observe({
+      o <- shiny::observe({
         # Delay loading until settings are available
         settings <- tableau_settings_all()
-        req(settings)
+        shiny::req(settings)
         o$destroy()
-        isolate({
+        shiny::isolate({
           config_server(input, output, session)
         })
       })
@@ -61,7 +61,7 @@ tableau_server <- function(server, config_server) {
 #' @return `session.`, invisibly.
 #'
 #' @export
-restore_inputs <- function(..., session. = getDefaultReactiveDomain()) {
+restore_inputs <- function(..., session. = shiny::getDefaultReactiveDomain()) {
   if (is.null(session.)) {
     stop("`restore_inputs` must be called from within a Shiny server function")
   }

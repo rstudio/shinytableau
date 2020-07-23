@@ -15,9 +15,13 @@ Description: Create Shiny applications that can be embedded into Tableau
     data from worksheets, participate in selection and filtering, and more.
 License: MIT + file LICENSE
 Imports:
+    base64enc (>= 0.1-3),
+    commonmark (>= 1.7),
     dplyr,
     fs (>= 1.4.1),
+    here (>= 0.1),
     htmltools (>= 0.4.0),
+    jsonlite (>= 1.7.0),
     promises,
     rlang (>= 0.4.6),
     reactR,

@@ -21,7 +21,7 @@ shinytableau_lib <- function() {
         tableau_extensions_api_lib(),
         htmltools::htmlDependency(
           "shinytableau",
-          version = packageVersion("shinytableau"),
+          version = utils::packageVersion("shinytableau"),
           src = debugPath,
           script = "js/shinytableau.js",
           all_files = FALSE
@@ -34,7 +34,7 @@ shinytableau_lib <- function() {
     tableau_extensions_api_lib(),
     htmltools::htmlDependency(
       "shinytableau",
-      version = packageVersion("shinytableau"),
+      version = utils::packageVersion("shinytableau"),
       src = "assets",
       package = "shinytableau",
       script = "js/shinytableau.js",
