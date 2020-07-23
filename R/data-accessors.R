@@ -14,6 +14,7 @@ tableau_worksheet_info <- function(name, session = getDefaultReactiveDomain()) {
   schema(session)[["worksheets"]][[name]]
 }
 
+#' @import promises
 #' @export
 reactive_tableau_data <- function(spec, options = list(), session = getDefaultReactiveDomain()) {
 
