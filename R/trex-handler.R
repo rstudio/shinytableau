@@ -3,9 +3,7 @@ trex_handler <- function(req, manifest, has_config) {
     manifest$source_location <- infer_embed_url(req)
   }
 
-  if (is.null(manifest[["configure"]])) {
-    manifest$configure <- isTRUE(has_config)
-  }
+  manifest$configure <- isTRUE(has_config)
 
   filename <- paste0(manifest[["name"]], ".trex")
 

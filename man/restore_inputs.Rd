@@ -14,18 +14,18 @@ for the corresponding inputs.}
 \item{session.}{The current Shiny session.}
 }
 \value{
-`session.`, invisibly.
+\code{session.}, invisibly.
 }
 \description{
 Call this before your Shiny inputs are created, and when they are created,
 they will prepopulate themselves to the values contained herein. For example,
-if you call `restore_inputs(x = 3)`, and then subsequently a
-`numericInput("x", "x", 5)` is created, the created input will default to `3`
-instead of `5`. Note that each call to `restore_inputs` completely replaces
-any bookmarkable state, or previous calls to `restore_inputs`.
+if you call \code{restore_inputs(x = 3)}, and then subsequently a
+\code{numericInput("x", "x", 5)} is created, the created input will default to \code{3}
+instead of \code{5}. Note that each call to \code{restore_inputs} completely replaces
+any bookmarkable state, or previous calls to \code{restore_inputs}.
 }
 \details{
-`restore_inputs` is designed to be called from (the beginning of) a Shiny
+\code{restore_inputs} is designed to be called from (the beginning of) a Shiny
 server function, and as such, can only affect inputs created on the server
-side (generally using `renderUI` or `insertUI`).
+side (generally using \code{renderUI} or \code{insertUI}).
 }
