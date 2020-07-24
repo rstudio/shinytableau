@@ -19,7 +19,6 @@ Imports:
     commonmark (>= 1.7),
     dplyr,
     fs (>= 1.4.1),
-    here (>= 0.1),
     htmltools (>= 0.4.0),
     jsonlite (>= 1.7.0),
     promises,
