@@ -1,6 +1,7 @@
 # shinytableau
 
 <!-- badges: start -->
+[![R build status](https://github.com/rstudio/shinytableau/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/shinytableau/actions?workflow=R-CMD-check)
 [![Codecov test coverage](https://codecov.io/gh/rstudio/shinytableau/branch/master/graph/badge.svg)](https://codecov.io/gh/rstudio/shinytableau?branch=master)
 <!-- badges: end -->
 
