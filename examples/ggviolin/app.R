@@ -1,25 +1,11 @@
-options(shiny.port = 2468)
+# filetype: shinyApp
 
 library(shiny)
 library(shinytableau)
 library(ggplot2)
 library(promises)
 
-# TODO: yaml file?
-manifest <- tableau_manifest(
-  #source_location = "https://jcheng.shinyapps.io/tableautest/?mode=embed",
-  extension_id = "com.example.ggviolin",
-  extension_version = "1.1.3",
-  name = "Violin Plot",
-  description = "Insert a violin plot using ggplot2",
-  extended_description = tagList(
-    tags$p("This is an extension for Tableau dashboards that enables the easy creation of violin plots.")
-  ),
-  author_name = "Jane Doe",
-  author_email = "jane_doe@example.com",
-  author_organization = "Example Corp.",
-  website = "https://example.com/tableau/extensions/ggviolin"
-)
+manifest <- tableau_manifest_from_yaml("manifest.yml")
 
 ui <- function(req) {
   fillPage(
@@ -48,11 +34,7 @@ server <- function(input, output, session) {
 config_ui <- fillPage(
   fillCol(flex = c(1, NA),
     miniUI::miniContentPanel(
-      textInput("title", "Title", ""),
-      choose_data_ui("data", "Choose data"),
-      tableOutput("preview"),
-      uiOutput("x_ui"),
-      uiOutput("y_ui")
+      uiOutput("ui")
     ),
     htmltools::tags$div(style = "text-align: right; padding: 8px 15px; height: 50px; border-top: 1px solid #DDD;",
       actionButton("ok", "OK", class = "btn-primary"),
@@ -63,12 +45,25 @@ config_ui <- fillPage(
 )
 
 config_server <- function(input, output, session) {
+  restore_inputs(
+    !!!choose_data_unpack("data", tableau_setting("data_spec")),
+    title = tableau_setting("plot_title"),
+    xvar = tableau_setting("xvar"),
+    yvar = tableau_setting("yvar")
+  )
+
   data_spec <- choose_data("data")
 
-  data <- reactive_tableau_data(data_spec, options = list(maxRows = 3))
+  data <- reactive_tableau_data(data_spec, options = list(maxRows = 5))
 
-  output$preview <- renderTable({
-    data()
+  output$ui <- renderUI({
+    list(
+      textInput("title", "Title", ""),
+      choose_data_ui("data", "Choose data"),
+      uiOutput("x_ui"),
+      uiOutput("y_ui"),
+      tableOutput("preview")
+    )
   })
 
   output$x_ui <- renderUI({
@@ -88,9 +83,7 @@ config_server <- function(input, output, session) {
       plot_title = input$title,
       data_spec = data_spec(),
       xvar = req(input$xvar),
-      yvar = req(input$yvar),
-      save. = TRUE
-      # TODO: add. = FALSE
+      yvar = req(input$yvar)
     )
   }
 
@@ -106,4 +99,7 @@ config_server <- function(input, output, session) {
   })
 }
 
-tableau_extension(manifest, ui, server, config_ui, config_server)
+tableau_extension(
+  manifest, ui, server, config_ui, config_server,
+  options = list(port = 2468)
+)

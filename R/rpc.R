@@ -12,7 +12,7 @@ init_rpc <- function(session) {
   session$sendCustomMessage("shinytableau-rpc-init", list(url = url))
 }
 
-begin_request <- function(method, ..., session. = getDefaultReactiveDomain()) {
+begin_request <- function(method, ..., session. = shiny::getDefaultReactiveDomain()) {
   session. <- unwrap_session(session.)
   session <- session.
 
@@ -77,7 +77,7 @@ response_handler <- function(max_bytes = getOption("shinytableau.maxRequestSize"
       ))
     }
 
-    qs <- parseQueryString(req[["QUERY_STRING"]])
+    qs <- shiny::parseQueryString(req[["QUERY_STRING"]])
     id <- qs$id
     if (is.null(id)) {
       return(NULL) # 404

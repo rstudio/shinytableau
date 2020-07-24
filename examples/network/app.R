@@ -1,4 +1,4 @@
-options(shiny.port = 2468)
+# filetype: shinyApp
 
 library(shiny)
 library(shinytableau)
@@ -7,21 +7,7 @@ library(DiagrammeR)
 library(visNetwork)
 library(promises)
 
-# TODO: yaml file?
-manifest <- tableau_manifest(
-  #source_location = "https://jcheng.shinyapps.io/tableautest/?mode=embed",
-  extension_id = "com.rstudio.tableau.network",
-  extension_version = "1.0.0",
-  name = "Network",
-  description = "Insert a network plot using DiagrammeR",
-  extended_description = tagList(
-    tags$p("This is an extension for Tableau dashboards that enables the easy creation of violin plots.")
-  ),
-  author_name = "Rich Iannone",
-  author_email = "rich@rstudio.com",
-  author_organization = "RStudio, PBC",
-  website = "https://github.com/rstudio/shinytableau/tree/master/examples/network"
-)
+manifest <- tableau_manifest_from_yaml("manifest.yml")
 
 ui <- function(req) {
   fillPage(
@@ -62,6 +48,12 @@ config_ui <- fillPage(
 )
 
 config_server <- function(input, output, session) {
+
+  restore_inputs(
+    !!!choose_data_unpack("ndf_spec"),
+    !!!choose_data_unpack("edf_spec")
+  )
+
   ndf_spec <- choose_data("ndf_spec")
   edf_spec <- choose_data("edf_spec")
 
@@ -74,16 +66,42 @@ config_server <- function(input, output, session) {
     )
   }
 
+  test <- function(expr, default_message) {
+    tryCatch({expr; NULL},
+      shiny.silent.error = function(err) { default_message },
+      validation = function(err) { conditionMessage(err) }
+    )
+  }
+
+  validate <- function() {
+    message <- NULL
+    if (!is.null(message)) message <- test(ndf_spec(), "Please specify node data")
+    if (!is.null(message)) message <- test(edf_spec(), "Please specify edge data")
+    if (!is.null(message)) {
+      showModal(modalDialog(message, title = "Error"))
+      FALSE
+    } else {
+      TRUE
+    }
+  }
+
   observeEvent(input$ok, {
-    save_settings()
-    tableau_close_dialog()
+    if (validate()) {
+      save_settings()
+      tableau_close_dialog()
+    }
   })
   observeEvent(input$cancel, {
     tableau_close_dialog()
   })
   observeEvent(input$apply, {
-    save_settings()
+    if (validate()) {
+      save_settings()
+    }
   })
 }
 
-tableau_extension(manifest, ui, server, config_ui, config_server)
+tableau_extension(
+  manifest, ui, server, config_ui, config_server,
+  options = list(port = 2469)
+)

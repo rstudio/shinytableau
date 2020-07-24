@@ -1,0 +1,7 @@
+destination: docs
+
+home:
+  strip_header: true
+
+development:
+  version_tooltip: "Development version"

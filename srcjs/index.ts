@@ -109,7 +109,22 @@ function trackSettings() {
     updateSettings(evt.newSettings);
   });
 
-  Shiny.addCustomMessageHandler("shinytableau-setting-update", ({settings, save}) => {
+  interface SettingsMessage {
+    settings: {[key: string]: any};
+    save: boolean;
+    add: boolean;
+  }
+
+  Shiny.addCustomMessageHandler("shinytableau-setting-update", ({settings, save, add}: SettingsMessage) => {
+    if (!add) {
+      // If we're not adding to the existing settings, then erase all the
+      // settings that aren't in the newly received settings.
+      for (const key of Object.keys(tableau.extensions.settings.getAll())) {
+        if (!Object.prototype.hasOwnProperty.call(settings, key)) {
+          tableau.extensions.settings.erase(key);
+        }
+      }
+    }
     for (const [key, value] of Object.entries(settings)) {
       if (value === null || typeof(value) === "undefined") {
         tableau.extensions.settings.erase(key);
