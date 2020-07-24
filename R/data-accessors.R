@@ -1,21 +1,22 @@
 schema <- function(session) {
   session <- unwrap_session(session)
 
-  isolate(session$input[["shinytableau-schema"]])
+  shiny::isolate(session$input[["shinytableau-schema"]])
 }
 
 #' @export
-tableau_worksheets <- function(session = getDefaultReactiveDomain()) {
+tableau_worksheets <- function(session = shiny::getDefaultReactiveDomain()) {
   names(schema(session)[["worksheets"]])
 }
 
 #' @export
-tableau_worksheet_info <- function(name, session = getDefaultReactiveDomain()) {
+tableau_worksheet_info <- function(name, session = shiny::getDefaultReactiveDomain()) {
   schema(session)[["worksheets"]][[name]]
 }
 
+#' @import promises
 #' @export
-reactive_tableau_data <- function(spec, options = list(), session = getDefaultReactiveDomain()) {
+reactive_tableau_data <- function(spec, options = list(), session = shiny::getDefaultReactiveDomain()) {
 
   session <- unwrap_session(session)
 
@@ -24,8 +25,8 @@ reactive_tableau_data <- function(spec, options = list(), session = getDefaultRe
     spec <- function() value
   }
 
-  reactive({
-    req(spec())
+  shiny::reactive({
+    shiny::req(spec())
 
     if (!isTRUE(options[["ignoreSelection"]])) {
       # Take dependency
@@ -39,11 +40,11 @@ reactive_tableau_data <- function(spec, options = list(), session = getDefaultRe
 }
 
 #' @export
-tableau_datasources <- function(session = getDefaultReactiveDomain()) {
+tableau_datasources <- function(session = shiny::getDefaultReactiveDomain()) {
   names(schema(session)[["dataSources"]])
 }
 
 #' @export
-tableau_datasource_info <- function(id, session = getDefaultReactiveDomain()) {
+tableau_datasource_info <- function(id, session = shiny::getDefaultReactiveDomain()) {
   schema(session)[["dataSources"]][[id]]
 }

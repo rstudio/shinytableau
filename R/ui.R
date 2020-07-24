@@ -13,7 +13,7 @@ tableau_ui <- function(manifest, ui, config_ui) {
   trex_initialized <- FALSE
 
   function(req) {
-    qs <- parseQueryString(req[["QUERY_STRING"]])
+    qs <- shiny::parseQueryString(req[["QUERY_STRING"]])
     mode <- qs[["mode"]]
     if (identical(mode, "embed")) {
       display_with_deps(ui, req)
@@ -51,8 +51,8 @@ welcome_ui <- function(manifest) {
   trexfilename <- paste0(manifest[["name"]], ".trex")
 
   htmltools::tagList(
-    includeCSS(system.file("welcome/welcome.css", package = "shinytableau")),
-    htmlTemplate(system.file("welcome/welcome.html", package = "shinytableau"),
+    htmltools::includeCSS(system.file("welcome/welcome.css", package = "shinytableau")),
+    htmltools::htmlTemplate(system.file("welcome/welcome.html", package = "shinytableau"),
       manifest = manifest,
       trexfilename = trexfilename,
       author = author_html(manifest),
@@ -74,7 +74,7 @@ author_html <- function(manifest) {
     )
   }
   if (!is.null(org)) {
-    author <- tagList(author,
+    author <- htmltools::tagList(author,
       paste0(" (", org, ")")
     )
   }
@@ -82,7 +82,7 @@ author_html <- function(manifest) {
 }
 
 #' @export
-tableau_close_dialog <- function(payload = "", session = getDefaultReactiveDomain()) {
+tableau_close_dialog <- function(payload = "", session = shiny::getDefaultReactiveDomain()) {
   session <- unwrap_session(session)
   session$sendCustomMessage("shinytableau-close-dialog", list(payload = payload))
 }

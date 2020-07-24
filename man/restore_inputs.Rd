@@ -4,7 +4,7 @@
 \alias{restore_inputs}
 \title{Prepopulate Shiny inputs}
 \usage{
-restore_inputs(..., session. = getDefaultReactiveDomain())
+restore_inputs(..., session. = shiny::getDefaultReactiveDomain())
 }
 \arguments{
 \item{...}{Named arguments, where the names are input names (don't forget to

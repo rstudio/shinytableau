@@ -1,0 +1,5 @@
+utils::globalVariables(
+  c(
+    "."
+  )
+)

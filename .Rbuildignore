@@ -8,3 +8,8 @@
 ^package\.json$
 ^node_modules$
 ^build$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^codecov\.yml$
+^.github$
