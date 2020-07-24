@@ -3,9 +3,9 @@ options(shiny.autoreload = TRUE)
 library(shiny)
 library(htmltools)
 library(magrittr)
+library(shinyvalidate)
 
 ui <- fluidPage(
-  tags$script(src = "validation.js"),
   uiOutput("ui"),
   actionButton("go", "Submit", class = "btn-primary"),
   actionButton("reset", "Reset"),
@@ -16,14 +16,14 @@ ui <- fluidPage(
 server <- function(input, output, session) {
   pw <- password_input("password")
 
-  sv <- ShinyValidator$new()
-  sv$add_validator(pw$validator)
-  sv$add_rule("title", need, message = "This field is required")
-  sv$add_rule("cars", need, label = "Cars")
-  sv$add_rule("species", need, label = "Species")
+  iv <- InputValidator$new()
+  iv$add_validator(pw$validator)
+  iv$add_rule("title", need, "This field is required")
+  iv$add_rule("cars", need, label = "Cars")
+  iv$add_rule("species", need, label = "Species")
 
-  # sv$require
-  # sv$check
+  # iv$require
+  # iv$check
 
   output$ui <- renderUI({
     input$redraw
@@ -36,9 +36,9 @@ server <- function(input, output, session) {
   })
 
   observeEvent(input$go, {
-    sv$enable()
+    iv$enable()
 
-    if (sv$is_valid()) {
+    if (iv$is_valid()) {
       message("Action performed")
       reset_form()
       showNotification("Something good happened!", type = "message")
@@ -57,7 +57,7 @@ server <- function(input, output, session) {
     updateCheckboxGroupInput(session, "cars", selected = character(0))
     updateSelectInput(session, "species", selected = character(0))
     pw$reset()
-    sv$disable()
+    iv$disable()
   }
 }
 
