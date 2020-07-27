@@ -81,7 +81,6 @@ server <- function(input, output, session) {
 config_ui <- fillPage(
   fillCol(flex = c(1, NA),
     miniUI::miniContentPanel(
-      textInput("title", "Title", ""),
       choose_data_ui("data", "Choose data"),
       tableOutput("preview")
     ),
@@ -104,7 +103,6 @@ config_server <- function(input, output, session) {
 
   save_settings <- function() {
     update_tableau_settings(
-      plot_title = input$title,
       data_spec = data_spec(),
       save. = TRUE
       # TODO: add. = FALSE
