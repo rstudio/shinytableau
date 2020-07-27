@@ -2,9 +2,9 @@
 
 library(shiny)
 library(shinytableau)
+library(dplyr)
 library(thematic)
-library(corrr)
-library(ggplot2)
+library(corrplot)
 library(promises)
 
 manifest <- tableau_manifest_from_yaml("manifest.yml")
@@ -24,6 +24,8 @@ server <- function(input, output, session) {
 
     df() %...>% {
 
+      thematic::thematic_on(font = "Open Sans", bg = "white", fg = "black")
+
       get_r_column_names_types <- function(tbl) {
 
         suppressWarnings(
@@ -41,41 +43,6 @@ server <- function(input, output, session) {
           col_names = names(column_names_types),
           r_col_types = unname(unlist(column_names_types))
         )
-      }
-
-      get_corr_plot <- function(mat,
-                                labels_vec) {
-
-        corr_df <-
-          as.data.frame(as.table(mat)) %>%
-          dplyr::mutate(Freq = ifelse(Var1 == Var2, NA_real_, Freq)) %>%
-          dplyr::mutate(Var1 = factor(Var1, levels = names(labels_vec))) %>%
-          dplyr::mutate(Var2 = factor(Var2, levels = rev(names(labels_vec))))
-
-
-        corr_df %>%
-          ggplot2::ggplot(ggplot2::aes(x = Var1, y = Var2, fill = Freq)) +
-          ggplot2::geom_tile(color = "white", linejoin = "bevel") +
-          ggplot2::scale_fill_gradientn(
-            colours = c("blue", "white", "red"),
-            na.value = "gray30",
-            limits = c(-1, 1)
-          ) +
-          ggplot2::labs(x = "", y = "") +
-          ggplot2::theme_minimal() +
-          ggplot2::theme(
-            axis.text.x = ggplot2::element_text(
-              angle = 90, vjust = 0.5, hjust = 1, size = 10
-            ),
-            axis.text.y = ggplot2::element_text(size = 10),
-            panel.grid = ggplot2::element_blank(),
-            legend.direction = "horizontal",
-            legend.title = ggplot2::element_blank(),
-            legend.position = c(0.5, 1.03),
-            plot.margin = ggplot2::unit(c(1, 0.5, 0, 0), "cm"),
-            legend.key.width = ggplot2::unit(2.0, "cm"),
-            legend.key.height = ggplot2::unit(3.0, "mm")
-          )
       }
 
       tbl_info <- get_r_column_names_types(tbl = .)
@@ -103,11 +70,10 @@ server <- function(input, output, session) {
         corr_pearson <- stats::cor(data_corr, method = "pearson", use = "pairwise.complete.obs")
       }
 
-      labels_vec <- seq_along(colnames(corr_pearson))
-      names(labels_vec) <- colnames(corr_pearson)
-
-      corr_plot <- get_corr_plot(mat = corr_pearson, labels_vec = labels_vec)
-      corr_plot
+      corrplot::corrplot(
+        corr = as.matrix(corr_pearson),
+        type = "lower", order = "hclust", tl.col = "black", tl.srt = 45
+      )
     }
   })
 }
