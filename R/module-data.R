@@ -30,9 +30,14 @@ choose_data_options <- function(
 choose_data_ui <- function(id, label) {
   ns <- shiny::NS(id)
   htmltools::tagList(
-    htmltools::tags$label(class = "control-label", label),
-    htmltools::tags$div(class = "well", style = "width: 300px",
-                    shiny::uiOutput(ns("worksheet_ui")),
+    htmltools::tags$label(
+      class = "control-label",
+      style = "font-family: 'Open Sans';",
+      label
+    ),
+    htmltools::tags$div(
+      class = "well", style = "font-family: 'Open Sans'; width: 300px",
+      shiny::uiOutput(ns("worksheet_ui")),
       optional_chooser_ui(ns("agg")),
       optional_chooser_ui(ns("underlying")),
       optional_chooser_ui(ns("datasource")),
