@@ -88,9 +88,11 @@ tableau_config_server <- function(ui_func, server_func) {
     if (is.null(result)) {
       save_settings <- function() {}
     } else if (!is.function(result)) {
-      # TODO: Throw appropriate error message, describing what was expected
-      # and pointing to the appropriate help page
-      stop("Unexpected result returned from config server function")
+      stop("`config_server` returned an unexpected value. It should return a ",
+        "function that takes no arguments, whose purpose is to save settings. ",
+        "See the Details section of ?tableau_extension.",
+        call. = FALSE
+      )
     }
 
     shiny::onBookmarked(function(url) {
