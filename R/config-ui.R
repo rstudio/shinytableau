@@ -20,8 +20,6 @@ tableau_config_server <- function(ui_func, server_func) {
   ns <- shiny::NS(c("shinytableau", "config"))
 
   function(input, output, session) {
-    # TODO: Set up restore context
-
     shiny::isolate({
       bookmark_url <- tableau_setting("shinytableau_ui_state")
       tryCatch(
@@ -37,9 +35,9 @@ tableau_config_server <- function(ui_func, server_func) {
           }
         },
         error = function(err) {
-          # TODO show a good error here
           shiny::showNotification(
-
+            "An error occurred while loading your current configuration. Please choose new settings and Apply.",
+            type = "error"
           )
         }
       )
