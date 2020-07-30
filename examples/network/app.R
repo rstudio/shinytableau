@@ -54,5 +54,5 @@ config_server <- function(input, output, session, iv) {
 
 tableau_extension(
   manifest, ui, server, config_ui, config_server,
-  options = list(port = 2469)
+  options = ext_options(port = 2469)
 )

@@ -6,7 +6,7 @@
 # Wraps manifest, ui, and config_ui, which are conceptually three totally
 # separate things, into a single ui function for shinyApp to consume. This
 # relies on the querystring to determine what mode the request is intended for.
-tableau_ui <- function(manifest, ui, config_ui) {
+tableau_ui <- function(manifest, ui, config_ui, options = ext_options()) {
   force(manifest)
   force(ui)
   force(config_ui)
@@ -17,10 +17,19 @@ tableau_ui <- function(manifest, ui, config_ui) {
     qs <- shiny::parseQueryString(req[["QUERY_STRING"]])
     mode <- qs[["mode"]]
     if (identical(mode, "embed")) {
-      display_with_deps(ui, req)
+      tagList(
+        # Create metadata script block for our JS to consume
+        tags$head(tags$script(id = "tableau-ext-config", type = "application/json",
+          jsonlite::toJSON(auto_unbox = TRUE, list(
+            config_width = options[["config_width"]],
+            config_height = options[["config_height"]]
+          ))
+        )),
+        display_with_deps(ui, req)
+      )
     } else if (identical(mode, "configure")) {
       if (!is.null(config_ui)) {
-        display_with_deps(config_ui, req, TRUE)
+        display_with_deps(config_ui, req)
       } else {
         "This extension has no settings to configure"
       }

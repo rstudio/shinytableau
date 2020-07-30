@@ -42,15 +42,30 @@ $(document).on("shiny:sessioninitialized", () => {
 });
 
 function configure() {
+  let width = 600;
+  let height = 400;
+  const config = document.querySelector("script[type='application/json']#tableau-ext-config");
+  if (config) {
+    try {
+      const options = JSON.parse(config.textContent);
+      if (typeof(options.config_width) === "number") {
+        width = options.config_width;
+      }
+      if (typeof(options.config_height) === "number") {
+        height = options.config_height;
+      }
+    } catch (parse_err) {
+      console.error(parse_err);
+    }
+  }
+
   (async function() {
     try {
       const url = new URL("?mode=configure", document.baseURI).href;
-      console.log("Opening configure");
+      console.log(`Opening configure, ${width} x ${height}`);
       const payload = "";
-      const result = await tableau.extensions.ui.displayDialogAsync(url, payload, {
-        // TODO: Make configurable
-        width: 600,
-        height: 400
+      await tableau.extensions.ui.displayDialogAsync(url, payload, {
+        width, height
       });
     } catch (err) {
       // TODO
