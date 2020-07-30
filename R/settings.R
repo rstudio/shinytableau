@@ -24,16 +24,10 @@ tableau_setting <- function(name, default = NULL, session = shiny::getDefaultRea
 }
 
 #' @export
-update_tableau_settings <- function(..., save. = TRUE, add. = FALSE, session = shiny::getDefaultReactiveDomain()) {
-  session <- unwrap_session(session)
+update_tableau_settings_async <- function(..., save. = TRUE, add. = FALSE, session. = shiny::getDefaultReactiveDomain()) {
+  session. <- unwrap_session(session.)
 
-  session$sendCustomMessage(type = "shinytableau-setting-update",
-    message = list(
-      settings = list(...),
-      save = save.,
-      add = add.
-    )
-  )
+  begin_request("saveSettings", rlang::list2(...), list(save = save., add = add.), session. = session.)
 }
 
 #' @export

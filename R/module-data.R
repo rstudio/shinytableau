@@ -42,7 +42,7 @@ choose_data_ui <- function(id, label) {
 }
 
 #' @export
-choose_data <- function(id, options = choose_data_options(), session = shiny::getDefaultReactiveDomain()) {
+choose_data <- function(id, options = choose_data_options(), iv = NULL, session = shiny::getDefaultReactiveDomain()) {
   force(id)
   force(options)
 
@@ -56,6 +56,10 @@ choose_data <- function(id, options = choose_data_options(), session = shiny::ge
     names(datasources) <- datasource_ids
 
     ns <- session$ns
+
+    if (!is.null(iv)) {
+      iv$add_rule("worksheet", need, label = "Worksheet")
+    }
 
     output$worksheet_ui <- shiny::renderUI({
       shiny::selectInput(ns("worksheet"), "Worksheet", choices = c(

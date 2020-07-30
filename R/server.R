@@ -14,22 +14,28 @@ tableau_server <- function(server, config_server) {
 
     qs <- shiny::parseQueryString(shiny::isolate(session$clientData$url_search))
     if (identical(qs$mode, "embed")) {
+      insertUI("body", "afterBegin", tableau_spinner(fill = TRUE), immediate = TRUE)
+
       o <- shiny::observe({
         # Delay loading until settings are available
         settings <- tableau_settings_all()
         shiny::req(settings)
         o$destroy()
         shiny::isolate({
+          removeUI(".tableau-spinner", immediate = FALSE)
           server(input, output, session)
         })
       })
     } else if (identical(qs$mode, "configure") && is.function(config_server)) {
+      insertUI("body", "afterBegin", tableau_spinner(fill = TRUE), immediate = TRUE)
+
       o <- shiny::observe({
         # Delay loading until settings are available
         settings <- tableau_settings_all()
         shiny::req(settings)
         o$destroy()
         shiny::isolate({
+          removeUI(".tableau-spinner", immediate = FALSE)
           config_server(input, output, session)
         })
       })

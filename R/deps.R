@@ -37,6 +37,7 @@ shinytableau_lib <- function() {
       src = "assets",
       package = "shinytableau",
       script = "js/shinytableau.js",
+      stylesheet = "css/styles.css",
       all_files = FALSE
     )
   )
