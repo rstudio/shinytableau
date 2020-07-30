@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+.sass-cache
 node_modules/
 build/
 docs

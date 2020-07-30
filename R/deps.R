@@ -23,6 +23,7 @@ shinytableau_lib <- function() {
   #       version = utils::packageVersion("shinytableau"),
   #       src = debugPath,
   #       script = "js/shinytableau.js",
+  #       stylesheet = "css/styles.css",
   #       all_files = FALSE
   #     )
   #   ))

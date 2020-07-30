@@ -1,8 +1,10 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^\.sass-cache$
 ^examples$
 ^LICENSE\.md$
 ^srcjs$
+^scss$
 ^yarn\.lock$
 ^tsconfig\.json$
 ^package\.json$
