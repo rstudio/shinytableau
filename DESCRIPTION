@@ -23,7 +23,6 @@ Imports:
     jsonlite (>= 1.7.0),
     promises,
     rlang (>= 0.4.6),
-    reactR,
     shiny (>= 1.5.0.9001),
     uuid (>= 0.1-4),
     yaml (>= 2.2.1),

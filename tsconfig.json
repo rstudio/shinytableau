@@ -6,7 +6,6 @@
     "sourceMap": true,
     "alwaysStrict": true,
     "noImplicitAny": true,
-    "jsx": "react",
     "baseUrl": "./src",
     "typeRoots": ["./node_modules/@tableau", "./node_modules/@types"],
     // "outFile": "inst/assets/js/shinytableau.js"

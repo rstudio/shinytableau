@@ -32,20 +32,15 @@ tableau_ui <- function(manifest, ui, config_ui) {
   }
 }
 
-display_with_deps <- function(x, req, react = FALSE) {
-  if (is.function(x)) {
-    return(htmltools::tagList(
-      if (react) reactR::html_dependency_react(),
-      shinytableau::shinytableau_lib(),
-      x(req)
-    ))
-  } else {
-    return(htmltools::tagList(
-      if (react) reactR::html_dependency_react(),
-      shinytableau::shinytableau_lib(),
-      x
-    ))
+display_with_deps <- function(ui, req) {
+  if (is.function(ui)) {
+    ui <- ui(req)
   }
+
+  return(htmltools::tagList(
+    shinytableau::shinytableau_lib(),
+    ui
+  ))
 }
 
 welcome_ui <- function(manifest) {
