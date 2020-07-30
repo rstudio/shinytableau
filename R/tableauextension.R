@@ -1,6 +1,17 @@
 #' @export
 tableau_extension <- function(manifest, ui, server, config_ui = NULL,
   config_server = NULL, options = ext_options()) {
+  force(manifest)
+  force(ui)
+  force(server)
+  force(config_ui)
+  force(config_server)
+  force(options)
+
+  if (!is.null(config_ui) && !is.function(config_ui)) {
+    stop("The `config_ui` argument, if provided, must be a function ",
+      "that takes a single argument", call. = FALSE)
+  }
 
   shiny::shinyApp(
     tableau_ui(manifest, ui, config_ui_template(), options),

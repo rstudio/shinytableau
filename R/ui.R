@@ -31,10 +31,6 @@ tableau_ui <- function(manifest, ui, config_ui, options = ext_options()) {
       )
     } else if (identical(mode, "configure")) {
       if (!is.null(config_ui)) {
-        if (!is.function(config_ui)) {
-          stop("The `config_ui` argument, if provided, must be a function ",
-            "that takes a single argument", call. = FALSE)
-        }
         display_with_deps(config_ui, req)
       } else {
         "This extension has no settings to configure"
