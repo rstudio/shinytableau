@@ -111,13 +111,25 @@ tableau_config_server <- function(ui_func, server_func) {
       }
     }
 
+    catch_apply_error <- function(err) {
+      shiny::showNotification(
+        htmltools::tagList(
+          htmltools::strong("An error occurred while saving changes:"),
+          tags$br(),
+          tags$br(),
+          as.character(conditionMessage(err))
+        ),
+        type = "error"
+      )
+      shiny::printError(err)
+    }
+
     shiny::observeEvent(input[[ns("ok")]], {
       apply_changes() %...>% {
         if (.) {
           tableau_close_dialog()
         }
-      }
-      # TODO: catch error
+      } %...!% catch_apply_error
     })
 
     shiny::observeEvent(input[[ns("cancel")]], {
@@ -125,8 +137,7 @@ tableau_config_server <- function(ui_func, server_func) {
     })
 
     shiny::observeEvent(input[[ns("apply")]], {
-      apply_changes()
-      # TODO: Catch error (async)
+      apply_changes() %...!% catch_apply_error
     })
   }
 }
