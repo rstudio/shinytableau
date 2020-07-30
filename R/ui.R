@@ -2,6 +2,8 @@
 # TODO: Show message on initial load if configuration is required
 # TODO: Show progress indicators on initial load and recalculation
 # TODO: Remove miniUI dependency
+# TODO: reactive_tableau_data equivalent for accessing schemas; will let us get
+#   rid of async in ggviolin config_server
 
 # Wraps manifest, ui, and config_ui, which are conceptually three totally
 # separate things, into a single ui function for shinyApp to consume. This
