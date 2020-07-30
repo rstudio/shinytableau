@@ -46,14 +46,13 @@ config_server <- function(input, output, session, iv) {
   data_spec <- choose_data("data", iv = iv)
 
   data <- reactive_tableau_data(data_spec, options = list(maxRows = 5))
+  schema <- reactive_tableau_schema(data_spec)
 
   output$var_selection_ui <- renderUI({
-    data() %...>% {
-      tagList(
-        selectInput("xvar", "Dimension", names(.)),
-        selectInput("yvar", "Measure", names(.))
-      )
-    }
+    tagList(
+      selectInput("xvar", "Dimension", schema()$columns$fieldName),
+      selectInput("yvar", "Measure", schema()$columns$fieldName)
+    )
   })
 
   output$preview <- renderTable({

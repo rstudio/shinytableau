@@ -40,6 +40,48 @@ reactive_tableau_data <- function(spec, options = list(), session = shiny::getDe
 }
 
 #' @export
+reactive_tableau_schema <- function(spec, session = shiny::getDefaultReactiveDomain()) {
+
+  session <- unwrap_session(session)
+
+  if (!is.function(spec)) {
+    value <- spec
+    spec <- function() value
+  }
+
+  shiny::reactive({
+    sp <- shiny::req(spec())
+
+    worksheet_name <- sp[["worksheet"]]
+    switch(sp[["source"]],
+      summary = {
+        return(tableau_worksheet_info(worksheet_name, session = session)[["summary"]])
+      },
+      underlying = {
+        tables <- tableau_worksheet_info(worksheet_name, session = session)[["underlyingTables"]]
+        shiny::req(tables)
+        shiny::req(find_logical_table(tables, sp[["table"]]))
+      },
+      datasource = {
+        tables <- tableau_datasource_info(sp[["ds"]], session = session)[["logicalTables"]]
+        shiny::req(tables)
+        shiny::req(find_logical_table(tables, sp[["table"]]))
+      },
+      stop("Unknown data_spec source: '", sp[["source"]], "'")
+    )
+  })
+}
+
+find_logical_table <- function(logical_tables, id) {
+  for (table in logical_tables) {
+    if (table[["id"]] == id) {
+      return(table)
+    }
+  }
+  return(NULL)
+}
+
+#' @export
 tableau_datasources <- function(session = shiny::getDefaultReactiveDomain()) {
   names(schema(session)[["dataSources"]])
 }
