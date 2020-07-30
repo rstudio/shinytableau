@@ -71,9 +71,7 @@ config_server <- function(input, output, session, iv) {
   return(save_settings)
 }
 
-enableBookmarking("url")
-
 tableau_extension(
   manifest, ui, server, config_ui, config_server,
-  options = ext_options(config_width = 900, config_height = 600, port = 2468)
+  options = ext_options(config_width = 600, config_height = 600, port = 2468)
 )

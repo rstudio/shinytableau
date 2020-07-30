@@ -35,6 +35,7 @@ tableau_config_server <- function(ui_func, server_func) {
           }
         },
         error = function(err) {
+          shiny::printError(err)
           shiny::showNotification(
             "An error occurred while loading your current configuration. Please choose new settings and Apply.",
             type = "error"
@@ -114,6 +115,7 @@ tableau_config_server <- function(ui_func, server_func) {
     }
 
     catch_apply_error <- function(err) {
+      shiny::printError(err)
       shiny::showNotification(
         htmltools::tagList(
           htmltools::strong("An error occurred while saving changes:"),
@@ -123,7 +125,6 @@ tableau_config_server <- function(ui_func, server_func) {
         ),
         type = "error"
       )
-      shiny::printError(err)
     }
 
     shiny::observeEvent(input[[ns("ok")]], {
