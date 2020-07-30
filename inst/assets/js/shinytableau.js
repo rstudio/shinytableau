@@ -91,15 +91,30 @@ $(document).on("shiny:sessioninitialized", () => {
     });
 });
 function configure() {
+    let width = 600;
+    let height = 400;
+    const config = document.querySelector("script[type='application/json']#tableau-ext-config");
+    if (config) {
+        try {
+            const options = JSON.parse(config.textContent);
+            if (typeof (options.config_width) === "number") {
+                width = options.config_width;
+            }
+            if (typeof (options.config_height) === "number") {
+                height = options.config_height;
+            }
+        }
+        catch (parse_err) {
+            console.error(parse_err);
+        }
+    }
     (async function () {
         try {
             const url = new URL("?mode=configure", document.baseURI).href;
-            console.log("Opening configure");
+            console.log(`Opening configure, ${width} x ${height}`);
             const payload = "";
-            const result = await tableau.extensions.ui.displayDialogAsync(url, payload, {
-                // TODO: Make configurable
-                width: 600,
-                height: 400
+            await tableau.extensions.ui.displayDialogAsync(url, payload, {
+                width, height
             });
         }
         catch (err) {
@@ -152,33 +167,6 @@ function trackSettings() {
     updateSettings(tableau.extensions.settings.getAll());
     tableau.extensions.settings.addEventListener(tableau.TableauEventType.SettingsChanged, (evt) => {
         updateSettings(evt.newSettings);
-    });
-    Shiny.addCustomMessageHandler("shinytableau-setting-update", ({ settings, save, add }) => {
-        if (!add) {
-            // If we're not adding to the existing settings, then erase all the
-            // settings that aren't in the newly received settings.
-            for (const key of Object.keys(tableau.extensions.settings.getAll())) {
-                if (!Object.prototype.hasOwnProperty.call(settings, key)) {
-                    tableau.extensions.settings.erase(key);
-                }
-            }
-        }
-        for (const [key, value] of Object.entries(settings)) {
-            if (value === null || typeof (value) === "undefined") {
-                tableau.extensions.settings.erase(key);
-            }
-            else {
-                tableau.extensions.settings.set(key, JSON.stringify(value));
-            }
-        }
-        if (save) {
-            tableau.extensions.settings.saveAsync().then(result => {
-                console.log("Tableau extension settings saved");
-            }, error => {
-                console.error("Error saving extension settings");
-                console.error(error);
-            });
-        }
     });
 }
 let responseUrl;
@@ -238,6 +226,28 @@ class RPCHandler {
     async getData(spec, options) {
         const dt = await dataspec_1.getData(spec, options);
         return Object.assign(Object.assign({}, schema_1.dataTableToInfo(dt)), { data: dataTableData(dt), isTotalRowCountLimited: dt.isTotalRowCountLimited, isSummaryData: dt.isSummaryData });
+    }
+    async saveSettings(settings, { save, add }) {
+        if (!add) {
+            // If we're not adding to the existing settings, then erase all the
+            // settings that aren't in the newly received settings.
+            for (const key of Object.keys(tableau.extensions.settings.getAll())) {
+                if (!Object.prototype.hasOwnProperty.call(settings, key)) {
+                    tableau.extensions.settings.erase(key);
+                }
+            }
+        }
+        for (const [key, value] of Object.entries(settings)) {
+            if (value === null || typeof (value) === "undefined") {
+                tableau.extensions.settings.erase(key);
+            }
+            else {
+                tableau.extensions.settings.set(key, JSON.stringify(value));
+            }
+        }
+        if (save) {
+            await tableau.extensions.settings.saveAsync();
+        }
     }
 }
 exports.RPCHandler = RPCHandler;

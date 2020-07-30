@@ -1,11 +1,14 @@
-# TODO: Validation of config settings
-# TODO: Config settings do not default to currently-saved state
 # TODO: Errors are thrown by Tableau if no worksheet has data
+# TODO: Show message on initial load if configuration is required
+# TODO: Show progress indicators on initial load and recalculation
+# TODO: Remove miniUI dependency
+# TODO: reactive_tableau_data equivalent for accessing schemas; will let us get
+#   rid of async in ggviolin config_server
 
 # Wraps manifest, ui, and config_ui, which are conceptually three totally
 # separate things, into a single ui function for shinyApp to consume. This
 # relies on the querystring to determine what mode the request is intended for.
-tableau_ui <- function(manifest, ui, config_ui) {
+tableau_ui <- function(manifest, ui, config_ui, options = ext_options()) {
   force(manifest)
   force(ui)
   force(config_ui)
@@ -16,10 +19,19 @@ tableau_ui <- function(manifest, ui, config_ui) {
     qs <- shiny::parseQueryString(req[["QUERY_STRING"]])
     mode <- qs[["mode"]]
     if (identical(mode, "embed")) {
-      display_with_deps(ui, req)
+      tagList(
+        # Create metadata script block for our JS to consume
+        tags$head(tags$script(id = "tableau-ext-config", type = "application/json",
+          jsonlite::toJSON(auto_unbox = TRUE, list(
+            config_width = options[["config_width"]],
+            config_height = options[["config_height"]]
+          ))
+        )),
+        display_with_deps(ui, req)
+      )
     } else if (identical(mode, "configure")) {
       if (!is.null(config_ui)) {
-        display_with_deps(config_ui, req, TRUE)
+        display_with_deps(config_ui, req)
       } else {
         "This extension has no settings to configure"
       }
@@ -31,20 +43,15 @@ tableau_ui <- function(manifest, ui, config_ui) {
   }
 }
 
-display_with_deps <- function(x, req, react = FALSE) {
-  if (is.function(x)) {
-    return(htmltools::tagList(
-      if (react) reactR::html_dependency_react(),
-      shinytableau::shinytableau_lib(),
-      x(req)
-    ))
-  } else {
-    return(htmltools::tagList(
-      if (react) reactR::html_dependency_react(),
-      shinytableau::shinytableau_lib(),
-      x
-    ))
+display_with_deps <- function(ui, req) {
+  if (is.function(ui)) {
+    ui <- ui(req)
   }
+
+  return(htmltools::tagList(
+    shinytableau::shinytableau_lib(),
+    ui
+  ))
 }
 
 welcome_ui <- function(manifest) {

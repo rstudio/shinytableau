@@ -78,19 +78,12 @@ server <- function(input, output, session) {
   })
 }
 
-config_ui <- fillPage(
-  fillCol(flex = c(1, NA),
-    miniUI::miniContentPanel(
-      choose_data_ui("data", "Choose data"),
-      tableOutput("preview")
-    ),
-    htmltools::tags$div(style = "text-align: right; padding: 8px 15px; height: 50px; border-top: 1px solid #DDD;",
-      actionButton("ok", "OK", class = "btn-primary"),
-      actionButton("cancel", "Cancel"),
-      actionButton("apply", "Apply")
-    )
+config_ui <- function(req) {
+  tagList(
+    choose_data_ui("data", "Choose data"),
+    tableOutput("preview")
   )
-)
+}
 
 config_server <- function(input, output, session) {
   data_spec <- choose_data("data")
@@ -102,23 +95,11 @@ config_server <- function(input, output, session) {
   })
 
   save_settings <- function() {
-    update_tableau_settings(
-      data_spec = data_spec(),
-      save. = TRUE
-      # TODO: add. = FALSE
+    update_tableau_settings_async(
+      data_spec = data_spec()
     )
   }
-
-  observeEvent(input$ok, {
-    save_settings()
-    tableau_close_dialog()
-  })
-  observeEvent(input$cancel, {
-    tableau_close_dialog()
-  })
-  observeEvent(input$apply, {
-    save_settings()
-  })
+  return(save_settings)
 }
 
 tableau_extension(
