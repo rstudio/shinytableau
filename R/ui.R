@@ -1,6 +1,7 @@
 # TODO: Errors are thrown by Tableau if no worksheet has data
 # TODO: Show message on initial load if configuration is required
 # TODO: Show progress indicators on initial load and recalculation
+# TODO: Remove miniUI dependency
 
 # Wraps manifest, ui, and config_ui, which are conceptually three totally
 # separate things, into a single ui function for shinyApp to consume. This

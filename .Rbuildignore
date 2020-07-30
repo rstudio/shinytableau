@@ -5,6 +5,7 @@
 ^LICENSE\.md$
 ^srcjs$
 ^scss$
+^.nvmrc$
 ^yarn\.lock$
 ^tsconfig\.json$
 ^package\.json$

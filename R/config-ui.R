@@ -1,13 +1,13 @@
 config_ui_template <- function() {
-  ns <- NS(c("shinytableau", "config"))
+  ns <- shiny::NS(c("shinytableau", "config"))
 
-  fillPage(
-    fillCol(flex = c(1, NA),
+  shiny::fillPage(
+    shiny::fillCol(flex = c(1, NA),
       miniUI::miniContentPanel(
-        uiOutput(ns("ui"))
+        shiny::uiOutput(ns("ui"))
       ),
       htmltools::tags$div(style = "text-align: right; padding: 8px 15px; height: 50px; border-top: 1px solid #DDD;",
-        uiOutput(ns("footer_ui"))
+        shiny::uiOutput(ns("footer_ui"))
       )
     )
   )
@@ -17,19 +17,19 @@ tableau_config_server <- function(ui_func, server_func) {
   force(ui_func)
   force(server_func)
 
-  ns <- NS(c("shinytableau", "config"))
+  ns <- shiny::NS(c("shinytableau", "config"))
 
   function(input, output, session) {
     # TODO: Set up restore context
 
-    isolate({
+    shiny::isolate({
       bookmark_url <- tableau_setting("shinytableau_ui_state")
       tryCatch(
         {
           if (!is.null(bookmark_url)) {
             parts <- strsplit(bookmark_url, "?", fixed = TRUE)[[1]]
             if (length(parts) == 2) {
-              qs <- parseQueryString(parts[[2]])
+              qs <- shiny::parseQueryString(parts[[2]])
               qs[["_inputs_"]] <- NULL
               qs <- lapply(qs, jsonlite::parse_json, simplifyVector = TRUE)
               restore_inputs(!!!qs)
@@ -48,10 +48,10 @@ tableau_config_server <- function(ui_func, server_func) {
     # The use of moduleServer here is a trick to let us independently specify
     # bookmark excludes that cannot alter or be altered by other calls to
     # setBookmarkExclude().
-    moduleServer(NULL, function(input, output, session) {
-      observe({
+    shiny::moduleServer(NULL, function(input, output, session) {
+      shiny::observe({
         input_names <- names(input)
-        setBookmarkExclude(c(
+        shiny::setBookmarkExclude(c(
           grep("^shinytableau-setting-", input_names, value = TRUE),
           grep("^shinytableau-config-", input_names, value = TRUE),
           "shinytableau-settings",
@@ -60,17 +60,17 @@ tableau_config_server <- function(ui_func, server_func) {
       })
     })
 
-    output[[ns("ui")]] <- renderUI({
-      isolate({
+    output[[ns("ui")]] <- shiny::renderUI({
+      shiny::isolate({
         ui_func(session$request)
       })
     })
 
-    output[[ns("footer_ui")]] <- renderUI({
-      tagList(
-        actionButton(ns("ok"), "OK", class = "btn-primary"),
-        actionButton(ns("cancel"), "Cancel"),
-        actionButton(ns("apply"), "Apply")
+    output[[ns("footer_ui")]] <- shiny::renderUI({
+      shiny::tagList(
+        shiny::actionButton(ns("ok"), "OK", class = "btn-primary"),
+        shiny::actionButton(ns("cancel"), "Cancel"),
+        shiny::actionButton(ns("apply"), "Apply")
       )
     })
 
@@ -102,18 +102,18 @@ tableau_config_server <- function(ui_func, server_func) {
 
     apply_changes <- function() {
       if (iv$is_valid()) {
-        promise_resolve(save_settings()) %...>% {
+        promises::promise_resolve(save_settings()) %...>% {
           session$doBookmark()
         } %...>% {
           TRUE
         }
       } else {
         iv$enable()
-        promise_resolve(FALSE)
+        promises::promise_resolve(FALSE)
       }
     }
 
-    observeEvent(input[[ns("ok")]], {
+    shiny::observeEvent(input[[ns("ok")]], {
       apply_changes() %...>% {
         if (.) {
           tableau_close_dialog()
@@ -122,11 +122,11 @@ tableau_config_server <- function(ui_func, server_func) {
       # TODO: catch error
     })
 
-    observeEvent(input[[ns("cancel")]], {
+    shiny::observeEvent(input[[ns("cancel")]], {
       tableau_close_dialog()
     })
 
-    observeEvent(input[[ns("apply")]], {
+    shiny::observeEvent(input[[ns("apply")]], {
       apply_changes()
       # TODO: Catch error (async)
     })

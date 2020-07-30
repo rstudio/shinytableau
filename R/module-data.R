@@ -58,7 +58,7 @@ choose_data <- function(id, options = choose_data_options(), iv = NULL, session 
     ns <- session$ns
 
     if (!is.null(iv)) {
-      iv$add_rule("worksheet", need, label = "Worksheet")
+      iv$add_rule("worksheet", shiny::need, label = "Worksheet")
     }
 
     output$worksheet_ui <- shiny::renderUI({
