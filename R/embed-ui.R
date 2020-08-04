@@ -4,8 +4,12 @@ embed_ui_template <- function() {
   shiny::uiOutput(ns("body"), container = htmltools::tags$body)
 }
 
-tableau_embed_server <- function(manifest, ui, server_func) {
+tableau_embed_server <- function(manifest, ui, server_func, options) {
+  force(manifest)
+  force(ui)
   force(server_func)
+  force(options)
+
   if (is.function(ui)) {
     ui_func <- ui
   } else {
@@ -16,8 +20,9 @@ tableau_embed_server <- function(manifest, ui, server_func) {
 
   function(input, output, session) {
     output[[ns("body")]] <- shiny::renderUI({
+      prompt_for_config <- isTRUE(options[["prompt_for_config"]])
       has_settings <- shiny::isolate(length(tableau_settings_all()) > 0)
-      if (!has_settings) {
+      if (prompt_for_config && !has_settings) {
         # Take reactive dependency on settings
         tableau_settings_all()
 
