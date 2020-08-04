@@ -14,9 +14,17 @@ tableau_extension <- function(manifest, ui, server, config_ui = NULL,
   }
 
   shiny::shinyApp(
-    tableau_ui(manifest, ui, config_ui_template(), options),
-    tableau_server(server, tableau_config_server(config_ui, config_server)),
-    options = options, enableBookmarking = "url"
+    tableau_ui(manifest,
+      embed_ui_template(),
+      config_ui_template(),
+      options
+    ),
+    tableau_server(
+      tableau_embed_server(manifest, ui, server),
+      tableau_config_server(config_ui, config_server)
+    ),
+    options = options,
+    enableBookmarking = "url"
   )
 }
 

@@ -40,7 +40,7 @@ tableau_ui <- function(manifest, ui, config_ui, options = ext_options()) {
     } else if (identical(mode, "trex")) {
       trex_handler(req, manifest, !is.null(config_ui))
     } else {
-      welcome_ui(manifest)
+      display_with_deps(welcome_ui(manifest), req)
     }
   }
 }
