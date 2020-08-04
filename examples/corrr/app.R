@@ -85,8 +85,8 @@ config_ui <- function(req) {
   )
 }
 
-config_server <- function(input, output, session) {
-  data_spec <- choose_data("data")
+config_server <- function(input, output, session, iv) {
+  data_spec <- choose_data("data", iv = iv)
 
   data <- reactive_tableau_data(data_spec, options = list(maxRows = 3))
 
