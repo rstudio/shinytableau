@@ -96,6 +96,8 @@ body {
   text-indent: 2px !important;
   max-height: 30px !important;
   box-shadow: none !important;
+  margin-left: 10px !important;
+  width: 270px !important;
 }
 
 .selectize-input.input-active {
@@ -115,11 +117,44 @@ body {
   margin: 0 !important;
 }
 
+.irs-slider {
+  box-shadow: none !important;
+  border-radius: 0 27px 27px 0 !important;
+  background: #FFFFFF !important;
+}
+
+.irs-bar {
+  background: #B4B4B4 !important;
+  border-color: #B4B4B4 !important;
+}
+
+.irs-bar-edge {
+  background: #FAFAFA !important;
+  border-color: #FAFAFA !important;
+  width: 10px !important;
+  border-radius: 0 !important;
+}
+
+.irs-single {
+  background: #34689A !important;
+}
+
 .well {
   background-color: transparent !important;
-  border: none !important;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
+  border: 1px solid #D4D4D4 !important;
+  box-shadow: none !important;
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+  margin-left: 10px !important;
+  padding-left: 10px !important;
+  padding-right: 10px !important;
+  padding-top: 10px !important;
+  padding-bottom: 0 !important;
+  border-radius: 0 !important;
+}
+
+.form-control {
+  border-radius: 0 !important;
   box-shadow: none !important;
 }
 
@@ -145,11 +180,18 @@ div#preview {
   line-height: 0.8 !important;
   padding-left: 30px !important;
   padding-right: 30px !important;
+  font-size: 12px !important;
+  min-width: 96px !important;
+  height: 24px !important;
 }
 
 .btn-primary {
   background-color: #34689A !important;
   border-color: #34689A !important;
+}
+
+#shinytableau-config-cancel, #shinytableau-config-apply {
+  border-color: #666666 !important;
 }
 
 /*# sourceMappingURL=styles.css.map */
