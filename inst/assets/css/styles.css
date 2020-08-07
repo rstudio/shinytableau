@@ -153,6 +153,24 @@ body {
   border-radius: 0 !important;
 }
 
+.nav-tabs {
+  background-color: #F5F5F5 !important;
+  border: none !important;
+}
+
+.nav-tabs > li.active > a {
+  background-color: #F5F5F5 !important;
+  border: none !important;
+  font-weight: bold !important;
+  border-bottom: 2px solid #666666 !important;
+}
+
+.nav-tabs > li > a {
+  background-color: #F5F5F5 !important;
+  border: none !important;
+  height: 38px !important;
+}
+
 .form-control {
   border-radius: 0 !important;
   box-shadow: none !important;
