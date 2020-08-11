@@ -27,6 +27,14 @@ shinytableau_lib <- function() {
   #   ))
   # }
 
+  # TODO: Don't break existing theme variables
+  bootstraplib::bs_theme_new()
+  bootstraplib::bs_theme_add(
+    defaults = sass::sass_file(system.file("theme/defaults.scss", package = "shinytableau")),
+    declarations = sass::sass_file(system.file("theme/declarations.scss", package = "shinytableau")),
+    rules = sass::sass_file(system.file("theme/rules.scss", package = "shinytableau"))
+  )
+
   list(
     tableau_extensions_api_lib(),
     htmltools::htmlDependency(
@@ -35,8 +43,8 @@ shinytableau_lib <- function() {
       src = "assets",
       package = "shinytableau",
       script = "js/shinytableau.js",
-      stylesheet = "css/styles.css",
       all_files = FALSE
-    )
+    ),
+    bootstraplib::bootstrap()
   )
 }

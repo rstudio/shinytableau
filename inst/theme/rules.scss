@@ -1,0 +1,75 @@
+$outline-fg: #666;
+
+.btn {
+  border: 1px solid transparent;
+
+  &:focus {
+    border-color: #3498DB;
+    box-shadow: 0 0 4px 0 #3498DB;
+  }
+}
+.btn-default {
+  color: $outline-fg;
+  border-color: $outline-fg;
+
+  &:hover {
+    background-color: #ebebeb;
+    color: $outline-fg;
+    border-color: $outline-fg;
+  }
+  &:not(:disabled):not(.disabled):active {
+    background-color: #ccc;
+    color: #333;
+    border-color: #333;
+  }
+}
+
+.btn-primary {
+  color: white;
+  border-color: $primary;
+
+  &:hover {
+    background-color: #2a79af;
+    color: white;
+    border-color: #2a79af;
+  }
+  &:not(:disabled):not(.disabled):active {
+    background-color: #15557f;
+    color: white;
+    border-color: #15557f;
+  }
+}
+
+// TODO: Button hover/active state doesn't match Tableau
+// Primary normal: #1a699e
+// Primary hover: #2a79af
+// Primary active: #15557f
+// Outline hover bg: #ebebeb;
+// Outline active: #ccc bg, #333 border and font
+
+
+.button-bar {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 15px;
+  height: 50px;
+  border-top: 1px solid #ddd;
+
+  .button-bar-panel {
+    display: flex;
+    align-items: center;
+  }
+
+  .button-bar-left {
+    .btn {
+      margin-right: 12px;
+    }
+  }
+
+  .button-bar-right {
+    justify-content: flex-end;
+    .btn {
+      margin-left: 12px;
+    }
+  }
+}
