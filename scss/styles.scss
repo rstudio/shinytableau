@@ -155,25 +155,6 @@ body {
   border-radius: 0 !important;
 }
 
-.nav-tabs {
-  background-color: #F5F5F5 !important;
-  border: none !important;
-}
-
-.nav-tabs > li.active > a {
-  background-color: #F5F5F5 !important;
-  border: none !important;
-  font-weight: bold !important;
-  border-bottom: 2px solid #666666 !important;
-}
-
-.nav-tabs > li > a {
-  background-color: #F5F5F5 !important;
-  border: none !important;
-  height: 38px !important;
-  color: #555555 !important;
-}
-
 .form-control {
   border-radius: 0 !important;
   box-shadow: none !important;
@@ -187,33 +168,7 @@ body {
   background: #FAFAFA !important;
 }
 
-body {
-  font-family: "Open Sans", sans-serif !important;
-}
-
 div#preview {
   width: 500px !important;
   overflow-x: auto !important;
 }
-
-.btn {
-  border-radius: 2px !important;
-  line-height: 0.8 !important;
-  padding-left: 30px !important;
-  padding-right: 30px !important;
-  font-size: 12px !important;
-  min-width: 96px !important;
-  height: 24px !important;
-}
-
-.btn-primary {
-  background-color: #34689A !important;
-  border-color: #34689A !important;
-}
-
-#shinytableau-config-cancel, #shinytableau-config-apply {
-
-  border-color: #666666 !important;
-}
-
-

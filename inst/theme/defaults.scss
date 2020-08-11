@@ -1,12 +1,15 @@
 $primary: #1a699e !default;
-$secondary: white;
+$secondary: white !default;
 $body-color: #333 !default;
 
-$font-family-sans-serif: "Open Sans", sans-serif;
-$border-radius: 2px;
+$font-family-sans-serif: "Open Sans", sans-serif !default;
+$border-radius: 2px !default;
 
-$input-btn-font-size: 12px;
+$input-btn-font-size: 12px !default;
 
-$btn-font-weight: bold;
-$btn-padding-y: 3px;
-$btn-padding-x: 24px;
+$btn-font-weight: bold !default;
+$btn-padding-y: 3px !default;
+$btn-padding-x: 24px !default;
+
+$input-btn-focus-box-shadow: 0 0 4px 0 #3498DB !default;
+$focus-color: #3498DB !default;

@@ -4,8 +4,7 @@ $outline-fg: #666;
   border: 1px solid transparent;
 
   &:focus {
-    border-color: #3498DB;
-    box-shadow: 0 0 4px 0 #3498DB;
+    border-color: $focus-color;
   }
 }
 .btn-default {
@@ -72,4 +71,45 @@ $outline-fg: #666;
       margin-left: 12px;
     }
   }
+}
+
+
+.nav-tabs {
+  background-color: $gray-100;
+  border: none;
+
+  > li {
+    border: 1px solid transparent;
+
+    &:focus-within {
+      border: 1px solid $focus-color;
+      box-shadow: $input-btn-focus-box-shadow;
+      // Prevent box-shadow from being occluded by neighboring tabs
+      z-index: 10;
+    }
+
+    > a {
+      background-color: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      height: 38px;
+      color: $gray-700;
+      outline: none;
+
+      &:focus {
+        border-bottom-color: transparent;
+      }
+      &:hover {
+        border-bottom-color: $gray-300;
+      }
+    }
+  }
+
+  > li.active > a {
+    background-color: transparent;
+    font-weight: bold;
+    border-bottom-color: $gray-600;
+  }
+
+
 }
