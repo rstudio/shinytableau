@@ -3,7 +3,6 @@ $secondary: white !default;
 $body-color: #333 !default;
 
 $font-family-sans-serif: "Open Sans", sans-serif !default;
-$font-size-base: 0.75rem !default;
 
 $border-radius: 2px !default;
 
@@ -14,6 +13,20 @@ $btn-font-weight: bold !default;
 $btn-padding-y: 3px !default;
 $btn-padding-x: 24px !default;
 
+$label-margin-bottom: 0 !default;
+$label-font-size: 12px !default;
+
+$input-color: #333 !default;
+$input-border-color: #cbcbcb !default;
+$input-border-radius: 0 !default;
+$input-border-radius-lg: 0 !default;
+$input-border-radius-sm: 0 !default;
+$input-padding-x: 0.4rem !default;
+$input-padding-y: 0 !default;
+$input-height: 24px !default;
+
 $focus-color: #3498DB !default;
 $primary-dark: #15557f !default;
 $primary-light: #2a79af !default;
+
+$enable-transitions: false !default;
