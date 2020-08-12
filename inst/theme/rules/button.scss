@@ -1,0 +1,41 @@
+$outline-fg: #666;
+
+.btn {
+  border: 1px solid transparent;
+
+  &:focus {
+    border-color: $focus-color;
+  }
+}
+
+.btn-default {
+  color: $outline-fg;
+  border-color: $outline-fg;
+
+  &:hover {
+    background-color: #ebebeb;
+    color: $outline-fg;
+    border-color: $outline-fg;
+  }
+  &:not(:disabled):not(.disabled):active {
+    background-color: #ccc;
+    color: #333;
+    border-color: #333;
+  }
+}
+
+.btn-primary {
+  color: white;
+  border-color: $primary;
+
+  &:hover {
+    background-color: #2a79af;
+    color: white;
+    border-color: #2a79af;
+  }
+  &:not(:disabled):not(.disabled):active {
+    background-color: #15557f;
+    color: white;
+    border-color: #15557f;
+  }
+}
