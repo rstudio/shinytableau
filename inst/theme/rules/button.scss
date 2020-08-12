@@ -6,6 +6,11 @@ $outline-fg: #666;
   &:focus {
     border-color: $focus-color;
   }
+  // The very explicit :active:focus is needed in order for the focus shadow to
+  // override the active shadow
+  &:focus, &:not(:disabled):not(.disabled):active:focus {
+    box-shadow: $input-btn-focus-box-shadow;
+  }
 }
 
 .btn-default {
@@ -25,17 +30,17 @@ $outline-fg: #666;
 }
 
 .btn-primary {
-  color: white;
+  color: color-yiq($primary);
   border-color: $primary;
 
   &:hover {
-    background-color: #2a79af;
-    color: white;
-    border-color: #2a79af;
+    background-color: $primary-light;
+    color: color-yiq($primary-light);
+    border-color: $primary-light;
   }
   &:not(:disabled):not(.disabled):active {
-    background-color: #15557f;
-    color: white;
-    border-color: #15557f;
+    background-color: $primary-dark;
+    color: color-yiq($primary-dark);
+    border-color: $primary-dark;
   }
 }
