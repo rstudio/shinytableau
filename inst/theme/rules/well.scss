@@ -1,0 +1,9 @@
+.well {
+  background-color: transparent;
+  border: 1px solid #D4D4D4;
+  margin-bottom: 10px !important;
+
+  .form-group:last-child {
+    margin-bottom: 0;
+  }
+}

@@ -29,4 +29,8 @@ $focus-color: #3498DB !default;
 $primary-dark: #15557f !default;
 $primary-light: #2a79af !default;
 
+// Tighten up well padding. (card-spacer-y appears to have no effect on wells)
+$card-spacer-x: 0.75rem !default;
+$card-spacer-y: 0.5rem !default;
+
 $enable-transitions: false !default;
