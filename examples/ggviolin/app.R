@@ -9,12 +9,17 @@ manifest <- tableau_manifest_from_yaml("manifest.yml")
 
 ui <- function(req) {
   fillPage(
-    plotOutput("plot", height = "100%")
+    plotOutput("plot", height = "100%", brush = brushOpts("plot_brush", resetOnNew = TRUE))
   )
 }
 
 server <- function(input, output, session) {
   df <- reactive_tableau_data(reactive(tableau_setting("data_spec")))
+
+  observeEvent(input$plot_brush, {
+    worksheet <- req(tableau_setting("data_spec")$worksheet)
+    tableau_select_marks_by_brush_async(worksheet, input$plot_brush)
+  })
 
   output$plot <- renderPlot({
     plot_title <- tableau_setting("plot_title")

@@ -119,8 +119,8 @@ tableau_config_server <- function(ui_func, server_func) {
       shiny::showNotification(
         htmltools::tagList(
           htmltools::strong("An error occurred while saving changes:"),
-          tags$br(),
-          tags$br(),
+          htmltools::tags$br(),
+          htmltools::tags$br(),
           as.character(conditionMessage(err))
         ),
         type = "error"

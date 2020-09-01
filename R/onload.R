@@ -25,7 +25,7 @@
 }
 
 long_to_wide <- function(lst) {
-  dplyr::as_tibble(dplyr::bind_rows(lst))
+  tibble::as_tibble(do.call(rbind, lst))
 }
 
 data_table_info <- function(table) {

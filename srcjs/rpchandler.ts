@@ -1,4 +1,4 @@
-import { DataTable } from "@tableau/extensions-api-types";
+import { DataTable, SelectionCriteria, RangeValue } from "@tableau/extensions-api-types";
 import { dataTableToInfo } from "./schema";
 import { DataSpec, getData } from "./dataspec";
 
@@ -32,6 +32,58 @@ export class RPCHandler {
     }
     if (save) {
       await tableau.extensions.settings.saveAsync();
+    }
+  }
+
+  async selectMarksByValue(worksheet: string, criteria: SelectionCriteria[],
+    updateType: "select-replace" | "select-add" | "select-remove"): Promise<void> {
+
+    const ws = tableau.extensions.dashboardContent.dashboard.worksheets.find(ws => ws.name === worksheet);
+    if (!ws) {
+      throw new Error(`Unknown worksheet ${worksheet}`);
+    }
+
+    replaceInf(criteria);
+
+    ws.selectMarksByValueAsync(criteria, updateType as any);
+  }
+
+  async selectMarksByValue2(worksheet: string, criteria: SelectionCriteria[],
+    inverse_criteria: SelectionCriteria[][]): Promise<void> {
+  
+      const ws = tableau.extensions.dashboardContent.dashboard.worksheets.find(ws => ws.name === worksheet);
+      if (!ws) {
+        throw new Error(`Unknown worksheet ${worksheet}`);
+      }
+
+      const promises: Array<Promise<void>> = [];
+
+      replaceInf(criteria);
+      promises.push(ws.selectMarksByValueAsync(criteria, "select-replace" as any));
+      for (const inv_cri of inverse_criteria) {
+        replaceInf(inv_cri);
+        for (const inv_cri_one of inv_cri) {
+          promises.push(ws.selectMarksByValueAsync([inv_cri_one], "select-remove" as any));
+        }
+      }
+      await Promise.all(promises);
+  }
+}
+
+// JSON doesn't support Infinity/-Infinity directly. So for ranged values, we
+// encode them as strings on the R side, and decode them here.
+function replaceInf(criteria: SelectionCriteria[]) {
+  for (const crit of criteria) {
+    const rv = crit.value as any;
+    if (rv.min === "Inf") {
+      rv.min = 1000000000; // Infinity;
+    } else if (rv.min === "-Inf") {
+      rv.min = -1000000000; // -Infinity;
+    }
+    if (rv.max === "Inf") {
+      rv.max = 1000000000; // Infinity;
+    } else if (rv.min === "-Inf") {
+      rv.max = -1000000000; // -Infinity;
     }
   }
 }

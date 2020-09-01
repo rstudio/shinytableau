@@ -249,8 +249,51 @@ class RPCHandler {
             await tableau.extensions.settings.saveAsync();
         }
     }
+    async selectMarksByValue(worksheet, criteria, updateType) {
+        const ws = tableau.extensions.dashboardContent.dashboard.worksheets.find(ws => ws.name === worksheet);
+        if (!ws) {
+            throw new Error(`Unknown worksheet ${worksheet}`);
+        }
+        replaceInf(criteria);
+        ws.selectMarksByValueAsync(criteria, updateType);
+    }
+    async selectMarksByValue2(worksheet, criteria, inverse_criteria) {
+        const ws = tableau.extensions.dashboardContent.dashboard.worksheets.find(ws => ws.name === worksheet);
+        if (!ws) {
+            throw new Error(`Unknown worksheet ${worksheet}`);
+        }
+        const promises = [];
+        replaceInf(criteria);
+        promises.push(ws.selectMarksByValueAsync(criteria, "select-replace"));
+        for (const inv_cri of inverse_criteria) {
+            replaceInf(inv_cri);
+            for (const inv_cri_one of inv_cri) {
+                promises.push(ws.selectMarksByValueAsync([inv_cri_one], "select-remove"));
+            }
+        }
+        await Promise.all(promises);
+    }
 }
 exports.RPCHandler = RPCHandler;
+// JSON doesn't support Infinity/-Infinity directly. So for ranged values, we
+// encode them as strings on the R side, and decode them here.
+function replaceInf(criteria) {
+    for (const crit of criteria) {
+        const rv = crit.value;
+        if (rv.min === "Inf") {
+            rv.min = 1000000000; // Infinity;
+        }
+        else if (rv.min === "-Inf") {
+            rv.min = -1000000000; // -Infinity;
+        }
+        if (rv.max === "Inf") {
+            rv.max = 1000000000; // Infinity;
+        }
+        else if (rv.min === "-Inf") {
+            rv.max = -1000000000; // -Infinity;
+        }
+    }
+}
 function dataTableData(dt) {
     const data = dt.data;
     const results = {};

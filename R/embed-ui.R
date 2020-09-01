@@ -31,7 +31,7 @@ tableau_embed_server <- function(manifest, ui, server_func, options) {
         result <- shiny::isolate({
           ui_func(session$request)
         })
-        maskReactiveContext(server_func(input, output, session))
+        shiny::maskReactiveContext(server_func(input, output, session))
         result
       }
     })
@@ -47,9 +47,9 @@ needs_config_ui <- function(manifest) {
     ),
     htmltools::div(class = "alert-warning",
       "This extension object hasn't been configured yet. Click the ",
-      tags$code("More Options"),
+      htmltools::tags$code("More Options"),
       " down-arrow on this object, and select ",
-      tags$code("Configure", .noWS = "after"), "."
+      htmltools::tags$code("Configure", .noWS = "after"), "."
     )
   )
 }

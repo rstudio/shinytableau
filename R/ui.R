@@ -21,9 +21,9 @@ tableau_ui <- function(manifest, ui, config_ui, options = ext_options()) {
     qs <- shiny::parseQueryString(req[["QUERY_STRING"]])
     mode <- qs[["mode"]]
     if (identical(mode, "embed")) {
-      tagList(
+      htmltools::tagList(
         # Create metadata script block for our JS to consume
-        tags$head(tags$script(id = "tableau-ext-config", type = "application/json",
+        htmltools::tags$head(htmltools::tags$script(id = "tableau-ext-config", type = "application/json",
           jsonlite::toJSON(auto_unbox = TRUE, list(
             config_width = options[["config_width"]],
             config_height = options[["config_height"]]
