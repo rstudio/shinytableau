@@ -28,7 +28,9 @@ Imports:
     shinyvalidate,
     miniUI,
     tibble,
-    mime
+    mime,
+    bootstraplib,
+    sass
 Remotes: rstudio/shiny, jcheng5/shinyvalidate
 Encoding: UTF-8
 LazyData: true
