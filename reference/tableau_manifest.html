@@ -137,21 +137,14 @@ to a <strong>shinytableau</strong> extension app by using the
 <code>tableau_manifest_from_yaml()</code> (in place of the <code>tableau_manifest()</code> call).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tableau_manifest</span>(
-  extension_id = <span class='st'>"com.example.extensions.name"</span>,
-  extension_version = <span class='st'>"0.1.0"</span>,
-  name = <span class='st'>"My extension"</span>,
-  description = <span class='kw'>NULL</span>,
-  extended_description = <span class='kw'>description</span>,
-  author_name = <span class='st'>"Your Name"</span>,
-  author_email = <span class='st'>"author@example.com"</span>,
+    <pre class="usage"><span class='fu'>tableau_manifest</span>(extension_id = <span class='st'>"com.example.extensions.name"</span>,
+  extension_version = <span class='st'>"0.1.0"</span>, name = <span class='st'>"My extension"</span>,
+  description = <span class='kw'>NULL</span>, extended_description = <span class='kw'>description</span>,
+  author_name = <span class='st'>"Your Name"</span>, author_email = <span class='st'>"author@example.com"</span>,
   author_organization = <span class='st'>"Example Organization"</span>,
-  website = <span class='st'>"https://example.com"</span>,
-  source_location = <span class='kw'>NULL</span>,
+  website = <span class='st'>"https://example.com"</span>, source_location = <span class='kw'>NULL</span>,
   icon_file = <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"default_icon.png"</span>, package = <span class='st'>"shinytableau"</span>),
-  permissions = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"full data"</span>),
-  min_api_version = <span class='st'>"1.4"</span>
-)</pre>
+  permissions = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"full data"</span>), min_api_version = <span class='st'>"1.4"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -229,7 +222,8 @@ Tableau Extension Manifest XML: <code><a href='yaml_skeleton.html'>yaml_skeleton
   author_name = <span class='st'>"Jane Doe"</span>,
   author_email = <span class='st'>"jane_doe@example.com"</span>,
   website = <span class='st'>"https://example.com/tableau/extensions/ggvoronoi"</span>
-)</div><div class='output co'>#&gt; &lt;?xml version="1.0" encoding="utf-8"?&gt;
+)
+</div><div class='output co'>#&gt; &lt;?xml version="1.0" encoding="utf-8"?&gt;
 #&gt; 
 #&gt; &lt;manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest"&gt;
 #&gt;   &lt;dashboard-extension id="com.example.ggvoronoi" extension-version="1.1.3"&gt;
@@ -247,7 +241,8 @@ Tableau Extension Manifest XML: <code><a href='yaml_skeleton.html'>yaml_skeleton
 #&gt;     &lt;/permissions&gt;
 #&gt;     &lt;context-menu&gt;&lt;/context-menu&gt;
 #&gt;   &lt;/dashboard-extension&gt;
-#&gt; &lt;/manifest&gt;</div><div class='input'></div></pre>
+#&gt; &lt;/manifest&gt;</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

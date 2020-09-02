@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • shinytableau</title>
+<title>Update a worksheet's selection using a plotOutput ggplot2 brush — tableau_select_marks_by_brush_async • shinytableau</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,16 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Update a worksheet's selection using a plotOutput ggplot2 brush — tableau_select_marks_by_brush_async" />
+<meta property="og:description" content="Shiny has its own built-in interactive plots feature (see
+this and
+this to get
+started). The tableau_select_marks_by_brush_async function lets you take a
+brush input from a shiny::plotOutput() and, if anything is selected, use it
+to drive the selection of a Tableau worksheet within the same dashboard. Note
+that because Tableau's selection model operates on marks, not rows in the
+underlying data, the x and y dimensions in the originating plot must be
+represented in the summary data of the target worksheet." />
 
 
 
@@ -58,7 +67,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -103,60 +112,58 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Update a worksheet's selection using a <code>plotOutput</code> ggplot2 brush</h1>
+    
+    <div class="hidden name"><code>tableau_select_marks_by_brush_async.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Shiny has its own built-in interactive plots feature (see
+<a href='https://shiny.rstudio.com/articles/plot-interaction.html'>this</a> and
+<a href='https://shiny.rstudio.com/articles/selecting-rows-of-data.html'>this</a> to get
+started). The <code>tableau_select_marks_by_brush_async</code> function lets you take a
+brush input from a <code><a href='https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html'>shiny::plotOutput()</a></code> and, if anything is selected, use it
+to drive the selection of a Tableau worksheet within the same dashboard. Note
+that because Tableau's selection model operates on marks, not rows in the
+underlying data, <strong>the x and y dimensions in the originating plot must be
+represented in the summary data of the target worksheet.</strong></p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>tableau_select_marks_by_brush_async</span>(<span class='kw'>worksheet</span>, <span class='kw'>brush</span>)</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="restore_inputs.html">restore_inputs()</a></code> </p>
-        </td>
-        <td><p>Prepopulate Shiny inputs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_manifest.html">tableau_manifest()</a></code> </p>
-        </td>
-        <td><p>Generate a Tableau Extension Manifest</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_select_marks_by_brush_async.html">tableau_select_marks_by_brush_async()</a></code> </p>
-        </td>
-        <td><p>Update a worksheet's selection using a <code>plotOutput</code> ggplot2 brush</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="yaml_skeleton.html">yaml_skeleton()</a></code> </p>
-        </td>
-        <td><p>Create a skeleton YAML manifest file</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>worksheet</th>
+      <td><p>Single-element character vector naming the worksheet whose
+selection we want to set. If your extension's configuration dialog uses
+<code>choose_data()</code> to allow the user to choose data, then use the
+<code>tableau_setting(YOUR_SETTING_ID)$worksheet</code> slot to access the worksheet
+name.</p></td>
+    </tr>
+    <tr>
+      <th>brush</th>
+      <td><p><code>input$YOUR_BRUSH_ID</code>, where <code>YOUR_BRUSH_ID</code> is the identifier
+passed as <code>plotOutput</code>'s <code>brush</code> argument (or passed to
+<code><a href='https://shiny.rstudio.com/reference/shiny/latest/brushOpts.html'>shiny::brushOpts()</a></code>, if you did it that way).</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <a href='https://rdrr.io/pkg/promises/man/promise.html'>promises::promise</a> object. The promise object will not resolve to
+a useful value, but you can use it to handle errors.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Currently this function only works with plots based on ggplot2, not base
+graphics plots, because only ggplot2 plots supply the metadata that we need.
+Future releases of Tableau may make it possible to provide this feature to
+base plots as well.</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
