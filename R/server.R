@@ -1,49 +1,48 @@
-tableau_server <- function(server, config_server) {
-  force(server)
+tableau_server <- function(embed_server, config_server, standalone_server, options) {
+  force(embed_server)
   force(config_server)
+  force(standalone_server)
+  force(options)
 
   # Check that server and config_server are functions and have the right params
-  validate_server_function(server, "server")
-  if (!is.null(config_server)) {
-    validate_server_function(config_server, "config_server")
-  }
+  validate_server_function(embed_server, "embed_server")
+  validate_server_function(config_server, "config_server", allowNULL = TRUE)
+  validate_server_function(standalone_server, "standalone_server")
 
   tableau_server_router <- function(input, output, session) {
     wrap_session(session)
     init_rpc(session)
 
-    qs <- shiny::parseQueryString(shiny::isolate(session$clientData$url_search))
-    if (identical(qs$mode, "embed")) {
-      shiny::insertUI("body", "afterBegin", tableau_spinner(fill = TRUE), immediate = TRUE)
+    mode <- mode_from_querystring(shiny::isolate(session$clientData$url_search), options)
 
-      o <- shiny::observe({
-        # Delay loading until settings are available
-        settings <- tableau_settings_all()
-        shiny::req(settings)
-        o$destroy()
-        shiny::isolate({
-          shiny::removeUI(".tableau-spinner", immediate = FALSE)
-          server(input, output, session)
-        })
-      })
-    } else if (identical(qs$mode, "configure") && is.function(config_server)) {
-      shiny::insertUI("body", "afterBegin", tableau_spinner(fill = TRUE), immediate = TRUE)
-
-      o <- shiny::observe({
-        # Delay loading until settings are available
-        settings <- tableau_settings_all()
-        shiny::req(settings)
-        o$destroy()
-        shiny::isolate({
-          shiny::removeUI(".tableau-spinner", immediate = FALSE)
-          config_server(input, output, session)
-        })
-      })
+    if (identical(mode, "embed")) {
+      load_after_settings(embed_server)
+    } else if (identical(mode, "configure") && is.function(config_server)) {
+      load_after_settings(config_server)
+    } else if (identical(mode, "standalone")) {
+      standalone_server(input, output, session)
     } else {
       # Do nothing
     }
   }
   tableau_server_router
+}
+
+# Delays invocation of server_func until Tableau initialization succeeds,
+# showing a progress spinner in the meantime.
+load_after_settings <- function(server_func, session = getDefaultReactiveDomain()) {
+  force(server_func)
+
+  shiny::withReactiveDomain(session, {
+    shiny::insertUI("body", "afterBegin", tableau_spinner(fill = TRUE), immediate = TRUE)
+
+    # Delay loading until settings are available. Note that observeEvent will
+    # not execute the body until the event expression is non-NULL.
+    shiny::observeEvent(tableau_settings_all(), {
+      shiny::removeUI(".tableau-spinner", immediate = FALSE)
+      server_func(session$input, session$output, session)
+    }, once = TRUE)
+  })
 }
 
 #' Prepopulate Shiny inputs
@@ -82,11 +81,23 @@ restore_inputs <- function(..., session. = shiny::getDefaultReactiveDomain()) {
   invisible(session.)
 }
 
-validate_server_function <- function(func, name) {
-  expected_args <- c("input", "output", "session")
-  valid <- is.function(func) && identical(names(formals(func)), expected_args)
-  if (!valid) {
+validate_server_function <- function(func, name, allowNULL = FALSE,
+  optional_params = character(0)) {
+
+  if (allowNULL && is.null(func)) {
+    return()
+  }
+
+  func_param_names <- if (is.function(func)) names(formals(func)) else NULL
+  if (!identical(func_param_names[1:3], c("input", "output", "session"))) {
     stop("`", name, "` argument must be a function with `input`, `output`, ",
       "and `session` parameters")
+  }
+
+  unexpected_params <- setdiff(func_param_names[-1:-3], optional_params)
+  if (length(unexpected_params) > 0) {
+    stop("`", name, "` argument had unexpected parameter(s): ",
+      paste(unexpected_params, collapse = ", ")
+    )
   }
 }

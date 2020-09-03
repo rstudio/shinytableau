@@ -10,16 +10,18 @@
 # Wraps manifest, ui, and config_ui, which are conceptually three totally
 # separate things, into a single ui function for shinyApp to consume. This
 # relies on the querystring to determine what mode the request is intended for.
-tableau_ui <- function(manifest, ui, config_ui, options = ext_options()) {
+tableau_ui <- function(manifest, embed_ui, config_ui, standalone_ui, options = ext_options()) {
   force(manifest)
-  force(ui)
+  force(embed_ui)
   force(config_ui)
+  force(standalone_ui)
+  force(options)
 
   trex_initialized <- FALSE
 
   function(req) {
-    qs <- shiny::parseQueryString(req[["QUERY_STRING"]])
-    mode <- qs[["mode"]]
+    mode <- mode_from_querystring(req[["QUERY_STRING"]], options)
+
     if (identical(mode, "embed")) {
       htmltools::tagList(
         # Create metadata script block for our JS to consume
@@ -29,7 +31,7 @@ tableau_ui <- function(manifest, ui, config_ui, options = ext_options()) {
             config_height = options[["config_height"]]
           ))
         )),
-        display_with_deps(ui, req)
+        display_with_deps(embed_ui, req)
       )
     } else if (identical(mode, "configure")) {
       if (!is.null(config_ui)) {
@@ -39,8 +41,10 @@ tableau_ui <- function(manifest, ui, config_ui, options = ext_options()) {
       }
     } else if (identical(mode, "trex")) {
       trex_handler(req, manifest, !is.null(config_ui))
-    } else {
+    } else if (identical(mode, "info")) {
       display_with_deps(welcome_ui(manifest), req)
+    } else if (identical(mode, "standalone")) {
+      display_with_deps(standalone_ui, req)
     }
   }
 }
@@ -94,4 +98,16 @@ author_html <- function(manifest) {
 tableau_close_dialog <- function(payload = "", session = shiny::getDefaultReactiveDomain()) {
   session <- unwrap_session(session)
   session$sendCustomMessage("shinytableau-close-dialog", list(payload = payload))
+}
+
+#' @export
+tableau_install_link <- function(..., target = "_blank", button = c("no", "primary", "default")) {
+  button <- match.arg(button)
+  button_class <- switch(button,
+    primary = "btn btn-primary",
+    default = "btn btn-default",
+    NULL
+  )
+
+  tags$a(href = "?mode=info", target = target, class = button_class, ...)
 }
