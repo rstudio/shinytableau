@@ -38,7 +38,25 @@ yaml_skeleton <- function(filename = "manifest.yml") {
       package = "shinytableau"
     ))
 
+  # Don't care too much if this fails. Just trying to not literally hardcode the
+  # extension id, in case people are too lazy to change it.
+  try({
+    project_name <- fs::path_file(fs::path_dir(fs::path_abs(filename)))
+    if (nchar(project_name) != 0) {
+      custom_id <- paste0("com.example.extensions.", project_name)
+      yml <- sub("com.example.extensions.name", custom_id, yml, fixed = TRUE)
+    }
+  })
+
   writeLines(text = yml, con = filename)
+
+  message("Manifest file successfully written to ", filename)
+
+  if (interactive()) {
+    file.edit(filename)
+  }
+
+  invisible(filename)
 }
 
 #' @export
