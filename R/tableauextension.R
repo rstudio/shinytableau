@@ -17,6 +17,10 @@ tableau_extension <- function(manifest, ui, server, config_ui = NULL,
   validate_server_function(config_server, "config_server", allowNULL = TRUE,
     optional_params = "iv")
 
+  if (is.null(config_ui)) {
+    options$prompt_for_config <- FALSE
+  }
+
   shiny::shinyApp(
     tableau_ui(manifest,
       embed_ui_template(),
