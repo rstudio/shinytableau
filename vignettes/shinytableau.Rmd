@@ -1,0 +1,155 @@
+---
+title: "shinytableau"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{shinytableau}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r echo=FALSE}
+library(magrittr)
+library(ggplot2)
+```
+
+Tableau version 2020.3 introduced a new extensibility feature called Dashboard Extensions. This feature lets programmers use JavaScript to create custom objects that normal Tableau users can drop into their Tableau dashboard layouts, providing custom visualizations and interactive features beyond Tableau's native capabilities.
+
+The {shinytableau} package allows you to easily create Tableau dashboard extensions using the power of R and Shiny. In typical Shiny fashion, it's not necessary to know web technologies like HTML, JavaScript, and CSS to create compelling Tableau extensions.
+
+## Example: Violin plot
+
+At the time of this writing, Tableau doesn't have built-in support for [violin plots](https://en.wikipedia.org/wiki/Violin_plot), only [box plots](https://help.tableau.com/current/pro/desktop/en-us/buildexamples_boxplot.htm). While box plots are more familiar, violin plots are more informative because they show you the entire distribution instead of merely quartiles. For example, the plots below show TODO:
+
+I would be remiss not to mention the heroics that Tableau consultant Gwilym Lockwood went through to [create a violin plot in Tableau](https://gwilymlockwood.com/2018/07/03/language-sex-violins-other-how-to-create-violin-plots-in-tableau/). The blog post is worth a read, but the takeaway is that you'd have to *really* want a violin plot to bother doing it this way.
+
+In R, on the other hand, there are several packages that provide violin plots; a cursory search turned up [vioplot](https://cran.r-project.org/web/packages/vioplot/vignettes/violin_customisation.html), [plotly](https://plotly.com/r/violin/), [ggpubr](https://rpkgs.datanovia.com/ggpubr/reference/ggviolin.html), and [ggplot2](https://ggplot2.tidyverse.org/reference/geom_violin.html). Here's how you might create a violin plot in ggplot2, using the `mtcars` data set, showing the horsepower (`hp`) distribution for each cylinder count (`cyl`):
+
+```{r warning=FALSE,fig.width=5,fig.height=4}
+ggplot(mtcars, aes(x = factor(cyl), y = hp)) +
+  geom_violin()
+```
+
+With shinytableau, we can wrap this R code into an easy-to-use Tableau dashboard extension that can be used by Tableau users that don't even know what R is. They don't need to modify the code to point to the data source and variables they want to plot, because you're going to provide them with a GUI for that. They don't need to think about how to configure R on their server, because you can deploy it just once for all users of the extension.
+
+Take a look at what it's like to use a shinytableau extension:
+
+(screencast)
+
+To recap:
+
+1. Navigate to the shinytableau extension's info page and click Download to save a .trex file to your hard drive.
+2. In a Tableau dashboard, drag an Extension object from the sidebar to the dashboard.
+3. Select "My Extensions", and choose the .trex file you just downloaded. (It's now safe to delete that .trex file, or keep it for the next time you want to install that extension.)
+4. Choose "Configure" from the down-arrow menu from the border of the extension object.
+
+You (and other Tableau users) can use the same shinytableau extension across multiple dashboards. And just as a single Tableau dashboard can contain multiple (e.g.) bar chart sheets, each with its own view of the data, you can also have one shinytableau extension appear multiple times in a dashboard, with each instance configured differently.
+
+## Writing your first extension
+
+Put simply, a shinytableau extension is a specially structured Shiny app. (If you haven't written a Shiny app before, you're *definitely* going to want to go through the Shiny tutorial, at the very least, before attempting to go further with shinytableau.)
+
+Let's start by creating the simplest possible Tableau extension: one that will display the string `"Hello, world!"`. First, create a new, empty RStudio project (File | New Project... | New Directory | New Project). Then call:
+
+```r
+shinytableau::yaml_skeleton()
+```
+
+This will create an example `manifest.yml` file in your project, which you should can edit as appropriate. This file controls the metadata that will be displayed to Tableau users when they install the extension.
+
+Next, create a file called `app.R` in this directory, and make it look like the following:
+
+```r
+# filetype: shinyApp
+
+library(shiny)
+library(shinytableau)
+
+manifest <- tableau_manifest_from_yaml()
+
+ui <- function(req) {
+  fillPage(
+    "Hello, world!"
+  )
+}
+
+server <- function(input, output, session) {
+}
+
+tableau_extension(manifest, ui, server,
+  options = ext_options(port = 3456)
+)
+```
+
+If you've written a Shiny app before, this will look extremely familiar. The only differences are the `manifest` object, the `ui` being wrapped in `function(req) {...}` (optional in a regular Shiny app, but mandatory here), and where the last line is usually `shinyApp(ui, server)` we now do `tableau_extension(manifest, ui, server)`.
+
+Press Ctrl+Shift+Enter (or Cmd+Shift+Return on Mac) and you should see the info page for this extension appear. Download the .trex file, drag an Extension onto a Tableau dashboard, choose the .trex file, and you should see something like this:
+
+(TODO: screenshot)
+
+#### Adding configuration
+
+Next, we'll demonstrate how configuration works by making our tiny extension only slightly more complex: instead of showing the hardcoded string `"Hello, world!"` we'll allow the string to be configured by the dashboard author.
+
+```r
+library(shiny)
+library(shinytableau)
+
+manifest <- tableau_manifest_from_yaml()
+
+ui <- function(req) {
+  fillPage(
+    textOutput("message_out")
+  )
+}
+
+server <- function(input, output, session) {
+  output$message_out <- renderText({
+    tableau_setting("message")
+  })
+}
+
+config_ui <- function(req) {
+  tagList(
+	  textInput("message_in", "Message to display")
+  )
+}
+
+config_server <- function(input, output, session) {
+  save_settings <- function() {
+    update_tableau_settings_async(
+      message = input$message_in
+    )
+  }
+  return(save_settings)
+}
+
+tableau_extension(manifest, ui, server, config_ui, config_server)
+```
+
+Compared to the "Hello, World!" version, we've made a number of important changes.
+
+Most obviously, we now have `config_ui` and `config_server`, which together represent the configuration dialog. These are passed to `tableau_extension` the next two arguments after `ui` and `server`.
+
+The job of `config_ui`/`config_server` is to take input about the user's preferences (in this case, what message should be displayed), and save them as *settings*. Each extension instance has its own set of settings; that is, if the same extension is dropped on a dashboard three times, that means there are three extension instances, each with their own completely independent settings.
+
+
+
+* Like `ui`, `config_ui ` also needs function(req)
+* Unlike regular Shiny apps, the `config_ui` will be inserted into a configuation dialog that's already partially laid out (OK/Cancel/Apply buttons, for example); so don't use `fluidPage`, `fillPage`, instead use `tagList` to wrap your return.
+* `config_server` must return a function with no arguments, that shinytableau will invoke when the user presses OK or Apply.
+
+
+
+
+
+
+
+You're responsible for creating:
+
+1. A `ui` and `server`, exactly as you would for a regular Shiny app. Whatever you render here is what will appear in the Tableau dashboard. Unlike regular Shiny apps, the server can access settings and data from the Tableau dashboard. See TODO.
+2. If your app requires a configuration GUI, you'll need to write `config_ui` and `config_server`, which are quite a lot like `ui` and `server`. Instead of being displayed directly in the Tableau dashboard, this is displayed as a dialog when the dashboard author clicks "Configure..." on one of your extension objects. See TODO.
+3. A `manifest.yml` file. This contains metadata like the name of your extension, a brief description, a homepage link, a logo, etc.
+
+
+
+## Deployment/hosting

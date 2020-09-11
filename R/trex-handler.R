@@ -79,7 +79,8 @@ escape_encode <- function(str) {
   any_encoded <- FALSE
   encoded <- vapply(chars, function(char) {
     bytes <- charToRaw(char)
-    needs_encoding <- chars %in% c('"', " ", "\r", "\n", "\\", "%") || length(bytes) > 1
+    # See the rule for `value-chars` at https://tools.ietf.org/html/rfc5987#section-3.2.1
+    needs_encoding <- !grepl("^[a-zA-Z0-9!#$&+\\-.^_`|~]$", char, perl = TRUE) || length(bytes) > 1
     if (needs_encoding) {
       any_encoded <<- TRUE
       paste0(collapse = "", sprintf("%%%02x", as.integer(bytes)))
