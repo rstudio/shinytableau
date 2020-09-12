@@ -138,9 +138,10 @@
 <p>There are two other small differences worth noting. First, the file starts with the comment <code># filetype: shinyApp</code>; this is a hint to the RStudio IDE that even though the file doesn’t look like a Shiny app (because it doesn’t end with <code><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html">shinyApp(ui, server)</a></code>), it actually is. Second, the call to <code>tableau_extension</code> includes a hardcoded port number. For local development purposes, it’s a good idea to hardcode the port to a unique value (between 1025 and 49151) for each extension.</p>
 <p>Now, press Ctrl+Shift+Enter (or Cmd+Shift+Return on Mac) and you should see the info page for this extension appear. Download the .trex file, drag an Extension onto a Tableau dashboard, choose the .trex file, and you should see “Hello, world!” in your dashboard.</p>
 <p><img src="tutorial-1.png" width="573"></p>
-<div id="adding-configuration-settings" class="section level4">
-<h4 class="hasAnchor">
-<a href="#adding-configuration-settings" class="anchor"></a>Adding configuration settings</h4>
+</div>
+<div id="adding-configuration-settings" class="section level2">
+<h2 class="hasAnchor">
+<a href="#adding-configuration-settings" class="anchor"></a>Adding configuration settings</h2>
 <p>Now we’ll see how configuration works by making our tiny extension only slightly more complex: instead of showing the hardcoded string “Hello, world!” we’ll allow the dashboard author to specify who is being greeted.</p>
 <p>We will use a configuration dialog to prompt the dashboard author for the greetee<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, save their input as a setting called <code>"greetee"</code>, and have the extension use that setting to dynamically render the greeting.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
@@ -174,11 +175,14 @@
   <span class="co"># Ensure that the user provides a value for input$greetee</span>
   <span class="kw">iv</span><span class="op">$</span><span class="fu">add_rule</span>(<span class="st">"greetee"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shinyvalidate/man/sv_required.html">sv_required</a></span>())
 
+  <span class="co"># config_server must have a save_settings function</span>
   <span class="kw">save_settings</span> <span class="op">&lt;-</span> <span class="fu">function</span>() {
     <span class="fu">update_tableau_settings_async</span>(
       greetee = <span class="kw">input</span><span class="op">$</span><span class="kw">greetee</span>
     )
   }
+
+  <span class="co"># config_server must always return the save_settings function</span>
   <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="kw">save_settings</span>)
 }
 
@@ -196,19 +200,56 @@
 <p>Compared to the “Hello, World!” version, we’ve made a number of important changes.</p>
 <p>Most obviously, we now have <code>config_ui</code> and <code>config_server</code>, which together represent the configuration dialog. These two variables are passed to <code>tableau_extension</code> as the next two arguments after <code>ui</code> and <code>server</code>.</p>
 <p>The job of <code>config_ui</code>/<code>config_server</code> is to take input about the user’s preferences (in this case, what message should be displayed), and save them as <em>settings</em>. Each extension instance has its own set of settings; that is, if the same extension is dropped on a dashboard three times, then there are three extension instances, each with their own completely independent config dialogs and settings.</p>
-<ul>
-<li>Like <code>ui</code>, <code>config_ui</code> also needs function(req)</li>
-<li>Unlike regular Shiny apps, the <code>config_ui</code> will be inserted into a configuation dialog that’s already partially laid out (OK/Cancel/Apply buttons, for example); so don’t use <code>fluidPage</code>, <code>fillPage</code>, instead use <code>tagList</code> to wrap your return.</li>
-<li>
-<code>config_server</code> must return a function with no arguments, that shinytableau will invoke when the user presses OK or Apply.</li>
-</ul>
-<p>You’re responsible for creating:</p>
-<ol style="list-style-type: decimal">
-<li>A <code>ui</code> and <code>server</code>, exactly as you would for a regular Shiny app. Whatever you render here is what will appear in the Tableau dashboard. Unlike regular Shiny apps, the server can access settings and data from the Tableau dashboard. See TODO.</li>
-<li>If your app requires a configuration GUI, you’ll need to write <code>config_ui</code> and <code>config_server</code>, which are quite a lot like <code>ui</code> and <code>server</code>. Instead of being displayed directly in the Tableau dashboard, this is displayed as a dialog when the dashboard author clicks “Configure…” on one of your extension objects. See TODO.</li>
-<li>A <code>manifest.yml</code> file. This contains metadata like the name of your extension, a brief description, a homepage link, a logo, etc.</li>
-</ol>
+<p>There are several essential requirements for <code>config_ui</code> and <code>config_server</code> that you need to know about.</p>
+<div id="config_ui" class="section level4">
+<h4 class="hasAnchor">
+<a href="#config_ui" class="anchor"></a>config_ui</h4>
+<p>As we said about <code>ui</code> above, <code>config_ui</code> needs to be a <code>function(req) { ... }</code> that returns some UI object, not just the UI object itself as you can do in a normal Shiny app.</p>
+<p>Also, most Shiny <code>ui</code> (including shinytableau ones) should have a <code>fluidPage</code>, <code>fillPage</code>, or other page function as their outermost call, but this isn’t the case with <code>config_ui</code>. The UI you return from <code>config_ui</code> will be inserted into a configuration dialog UI that shinytableau creates for you. So instead of <code><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage()</a></code>, use <code><a href="https://rdrr.io/pkg/htmltools/man/tag.html">tagList()</a></code>.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit">
+<span class="kw">config_ui</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">req</span>) {
+  <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tag.html">tagList</a></span>(
+    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textInput.html">textInput</a></span>(<span class="st">"greetee"</span>, <span class="st">"Whom would you like to greet?"</span>, <span class="st">"world"</span>)
+  )
+}
+</pre></div>
 </div>
+<div id="config_server" class="section level4">
+<h4 class="hasAnchor">
+<a href="#config_server" class="anchor"></a>config_server</h4>
+<p>There are two new requirements for <code>config_server</code> versus a regular <code>server</code>. First, a normal Shiny <code>server</code> is a function that takes <code>input</code>, <code>output</code>, and <code>session</code> arguments; a <code>config_server</code> takes an additional <code>iv</code> argument. This represents an <code>InputValidator</code> object from the <a href="https://rstudio.github.io/shinyvalidate/articles/shinyvalidate.html">shinyvalidate</a> package. You use <code>iv</code> to tell shinytableau which user inputs <em>must</em> be provided, and any validation rules that must be enforced. Any required inputs that are missing, or failing validation rules, will display errors in the form and prevent the OK and Apply buttons from taking effect.</p>
+<p>Second, a <code>config_server</code> function must declare a <code>save_settings</code> function, and must return this function. This is in contrast to regular Shiny server functions, which do not return anything<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. The <code>save_settings</code> function should take no arguments and, when called, should call <a href="https://rstudio.github.io/shinytableau/reference/update_tableau_settings_aync.html"><code>update_tableau_settings_async</code></a> to persist whatever settings the user has specified. In this case, we’re taking the user input, <code>input$greetee</code>, and persisting that as a setting named <code>greetee</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit">
+<span class="kw">config_server</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">input</span>, <span class="kw">output</span>, <span class="kw">session</span>, <span class="kw">iv</span>) {
+  <span class="co"># Ensure that the user provides a value for input$greetee</span>
+  <span class="kw">iv</span><span class="op">$</span><span class="fu">add_rule</span>(<span class="st">"greetee"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shinyvalidate/man/sv_required.html">sv_required</a></span>())
+
+  <span class="co"># config_server must have a save_settings function</span>
+  <span class="kw">save_settings</span> <span class="op">&lt;-</span> <span class="fu">function</span>() {
+    <span class="fu">update_tableau_settings_async</span>(
+      greetee = <span class="kw">input</span><span class="op">$</span><span class="kw">greetee</span>
+    )
+  }
+  
+  <span class="co"># config_server must always return the save_settings function</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="kw">save_settings</span>)
+}
+</pre></div>
+<p>(Advanced R users may be wondering if, rather than declaring and returning <code>save_settings</code>, simply having an anonymous function as the last expression would be sufficient. Yes, that works, but doing it the recommended way makes the intent more immediately obvious.)</p>
+<p>The values you pass to <code>update_tableau_settings_async()</code> will be saved as JSON objects, so it’s a good idea to keep things simple: atomic numeric, character, and logical vectors are safe to use, as are unnamed and named lists. <code>NULL</code> is fine too. It’s not a good idea to save more specialized objects like factors, data frames, environments, R6 objects. Even Date objects should probably be converted to character first, and parsed back into a Date by whomever is reading the setting.</p>
+<p>Speaking of reading settings…</p>
+</div>
+<div id="reading-settings" class="section level3">
+<h3 class="hasAnchor">
+<a href="#reading-settings" class="anchor"></a>Reading settings</h3>
+<p>Now that we’ve discussed how <code>config_ui</code> and <code>config_server</code> can let you write settings, we can talk about the much simpler topic of how to read settings from the extension object (i.e. <code>server</code>).</p>
+<p>The main way you’ll access settings is by calling <code>tableau_setting(setting_name)</code>, e.g. <code>tableau_setting("greetee")</code> in the example above. The important thing to note is that <code>tableau_setting</code> performs a <em>reactive</em> read, so whomever is doing the reading (i.e. reactive expression, reactive observer, or reactive output) will be triggered when the setting changes.</p>
+<p>You can call <code>tableau_settings_all()</code> to retrieve all of the current settings as a list. Generally you should try to use <code>tableau_setting</code> in favor of <code>tableau_settings_all</code>, because the latter takes a reactive dependency on <em>all</em> of the settings, even if you’re not actually interested in all of them.</p>
+</div>
+</div>
+<div id="accessing-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#accessing-data" class="anchor"></a>Accessing data</h2>
 </div>
 <div id="deploymenthosting" class="section level2">
 <h2 class="hasAnchor">
@@ -218,6 +259,7 @@
 <hr>
 <ol>
 <li id="fn1"><p>Yes, it’s a <a href="https://en.wiktionary.org/wiki/greetee">real word</a>!<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Although Shiny <em>module</em> server functions often do return objects to their callers.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>
