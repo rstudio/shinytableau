@@ -72,7 +72,7 @@ Now, press Ctrl+Shift+Enter (or Cmd+Shift+Return on Mac) and you should see the 
 
 ![](tutorial-1.png){width="573"}
 
-#### Adding configuration settings
+## Adding configuration settings
 
 Now we'll see how configuration works by making our tiny extension only slightly more complex: instead of showing the hardcoded string "Hello, world!" we'll allow the dashboard author to specify who is being greeted.
 
@@ -103,14 +103,61 @@ Most obviously, we now have `config_ui` and `config_server`, which together repr
 
 The job of `config_ui`/`config_server` is to take input about the user's preferences (in this case, what message should be displayed), and save them as *settings*. Each extension instance has its own set of settings; that is, if the same extension is dropped on a dashboard three times, then there are three extension instances, each with their own completely independent config dialogs and settings.
 
--   Like `ui`, `config_ui` also needs function(req)
--   Unlike regular Shiny apps, the `config_ui` will be inserted into a configuation dialog that's already partially laid out (OK/Cancel/Apply buttons, for example); so don't use `fluidPage`, `fillPage`, instead use `tagList` to wrap your return.
--   `config_server` must return a function with no arguments, that shinytableau will invoke when the user presses OK or Apply.
+There are several essential requirements for `config_ui` and `config_server` that you need to know about.
 
-You're responsible for creating:
+#### config\_ui
 
-1.  A `ui` and `server`, exactly as you would for a regular Shiny app. Whatever you render here is what will appear in the Tableau dashboard. Unlike regular Shiny apps, the server can access settings and data from the Tableau dashboard. See TODO.
-2.  If your app requires a configuration GUI, you'll need to write `config_ui` and `config_server`, which are quite a lot like `ui` and `server`. Instead of being displayed directly in the Tableau dashboard, this is displayed as a dialog when the dashboard author clicks "Configure..." on one of your extension objects. See TODO.
-3.  A `manifest.yml` file. This contains metadata like the name of your extension, a brief description, a homepage link, a logo, etc.
+As we said about `ui` above, `config_ui` needs to be a `function(req) { ... }` that returns some UI object, not just the UI object itself as you can do in a normal Shiny app.
+
+Also, most Shiny `ui` (including shinytableau ones) should have a `fluidPage`, `fillPage`, or other page function as their outermost call, but this isn't the case with `config_ui`. The UI you return from `config_ui` will be inserted into a configuration dialog UI that shinytableau creates for you. So instead of `fillPage()`, use `tagList()`.
+
+```{r eval=FALSE}
+config_ui <- function(req) {
+  tagList(
+    textInput("greetee", "Whom would you like to greet?", "world")
+  )
+}
+```
+
+#### config\_server
+
+There are two new requirements for `config_server` versus a regular `server`. First, a normal Shiny `server` is a function that takes `input`, `output`, and `session` arguments; a `config_server` takes an additional `iv` argument. This represents an `InputValidator` object from the [shinyvalidate](https://rstudio.github.io/shinyvalidate/articles/shinyvalidate.html) package. You use `iv` to tell shinytableau which user inputs *must* be provided, and any validation rules that must be enforced. Any required inputs that are missing, or failing validation rules, will display errors in the form and prevent the OK and Apply buttons from taking effect.
+
+Second, a `config_server` function must declare a `save_settings` function, and must return this function. This is in contrast to regular Shiny server functions, which do not return anything[^2]. The `save_settings` function should take no arguments and, when called, should call [`update_tableau_settings_async`](https://rstudio.github.io/shinytableau/reference/update_tableau_settings_aync.html) to persist whatever settings the user has specified. In this case, we're taking the user input, `input$greetee`, and persisting that as a setting named `greetee`.
+
+[^2]: Although Shiny *module* server functions often do return objects to their callers.
+
+```{r eval=FALSE}
+config_server <- function(input, output, session, iv) {
+  # Ensure that the user provides a value for input$greetee
+  iv$add_rule("greetee", sv_required())
+
+  # config_server must have a save_settings function
+  save_settings <- function() {
+    update_tableau_settings_async(
+      greetee = input$greetee
+    )
+  }
+  
+  # config_server must always return the save_settings function
+  return(save_settings)
+}
+```
+
+(Advanced R users may be wondering if, rather than declaring and returning `save_settings`, simply having an anonymous function as the last expression would be sufficient. Yes, that works, but doing it the recommended way makes the intent more immediately obvious.)
+
+The values you pass to `update_tableau_settings_async()` will be saved as JSON objects, so it's a good idea to keep things simple: atomic numeric, character, and logical vectors are safe to use, as are unnamed and named lists. `NULL` is fine too. It's not a good idea to save more specialized objects like factors, data frames, environments, R6 objects. Even Date objects should probably be converted to character first, and parsed back into a Date by whomever is reading the setting.
+
+Speaking of reading settings...
+
+### Reading settings
+
+Now that we've discussed how `config_ui` and `config_server` can let you write settings, we can talk about the much simpler topic of how to read settings from the extension object (i.e. `server`).
+
+The main way you'll access settings is by calling `tableau_setting(setting_name)`, e.g. `tableau_setting("greetee")` in the example above. The important thing to note is that `tableau_setting` performs a *reactive* read, so whomever is doing the reading (i.e. reactive expression, reactive observer, or reactive output) will be triggered when the setting changes.
+
+You can call `tableau_settings_all()` to retrieve all of the current settings as a list. Generally you should try to use `tableau_setting` in favor of `tableau_settings_all`, because the latter takes a reactive dependency on *all* of the settings, even if you're not actually interested in all of them.
+
+## Accessing data
 
 ## Deployment/hosting

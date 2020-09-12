@@ -28,11 +28,14 @@ config_server <- function(input, output, session, iv) {
   # Ensure that the user provides a value for input$greetee
   iv$add_rule("greetee", sv_required())
 
+  # config_server must have a save_settings function
   save_settings <- function() {
     update_tableau_settings_async(
       greetee = input$greetee
     )
   }
+
+  # config_server must always return the save_settings function
   return(save_settings)
 }
 
