@@ -140,14 +140,21 @@ to a <strong>shinytableau</strong> extension app by using the
 <code>tableau_manifest_from_yaml()</code> (in place of the <code>tableau_manifest()</code> call).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tableau_manifest</span>(extension_id = <span class='st'>"com.example.extensions.name"</span>,
-  extension_version = <span class='st'>"0.1.0"</span>, name = <span class='st'>"My extension"</span>,
-  description = <span class='kw'>NULL</span>, extended_description = <span class='kw'>description</span>,
-  author_name = <span class='st'>"Your Name"</span>, author_email = <span class='st'>"author@example.com"</span>,
+    <pre class="usage"><span class='fu'>tableau_manifest</span>(
+  extension_id = <span class='st'>"com.example.extensions.name"</span>,
+  extension_version = <span class='st'>"0.1.0"</span>,
+  name = <span class='st'>"My extension"</span>,
+  description = <span class='kw'>NULL</span>,
+  extended_description = <span class='kw'>description</span>,
+  author_name = <span class='st'>"Your Name"</span>,
+  author_email = <span class='st'>"author@example.com"</span>,
   author_organization = <span class='st'>"Example Organization"</span>,
-  website = <span class='st'>"https://example.com"</span>, source_location = <span class='kw'>NULL</span>,
+  website = <span class='st'>"https://example.com"</span>,
+  source_location = <span class='kw'>NULL</span>,
   icon_file = <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"default_icon.png"</span>, package = <span class='st'>"shinytableau"</span>),
-  permissions = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"full data"</span>), min_api_version = <span class='st'>"1.4"</span>)</pre>
+  permissions = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"full data"</span>),
+  min_api_version = <span class='st'>"1.4"</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -261,7 +268,7 @@ Tableau Extension Manifest XML: <code><a href='yaml_skeleton.html'>yaml_skeleton
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>

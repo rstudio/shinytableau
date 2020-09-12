@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Prepopulate Shiny inputs — restore_inputs • shinytableau</title>
+<title>Options for the choose_data module — choose_data_options • shinytableau</title>
 
 
 <!-- jquery -->
@@ -39,13 +39,9 @@
 
 
 
-<meta property="og:title" content="Prepopulate Shiny inputs — restore_inputs" />
-<meta property="og:description" content="Call this before your Shiny inputs are created, and when they are created,
-they will prepopulate themselves to the values contained herein. For example,
-if you call restore_inputs(x = 3), and then subsequently a
-numericInput(&quot;x&quot;, &quot;x&quot;, 5) is created, the created input will default to 3
-instead of 5. Note that each call to restore_inputs completely replaces
-any bookmarkable state, or previous calls to restore_inputs." />
+<meta property="og:title" content="Options for the choose_data module — choose_data_options" />
+<meta property="og:description" content="The choose_data() module has an options parameter. Use the
+choose_data_options function to construct such option objects." />
 
 
 
@@ -114,45 +110,43 @@ any bookmarkable state, or previous calls to restore_inputs." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Prepopulate Shiny inputs</h1>
+    <h1>Options for the <code>choose_data</code> module</h1>
     
-    <div class="hidden name"><code>restore_inputs.Rd</code></div>
+    <div class="hidden name"><code>choose_data_options.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Call this before your Shiny inputs are created, and when they are created,
-they will prepopulate themselves to the values contained herein. For example,
-if you call <code>restore_inputs(x = 3)</code>, and then subsequently a
-<code>numericInput("x", "x", 5)</code> is created, the created input will default to <code>3</code>
-instead of <code>5</code>. Note that each call to <code>restore_inputs</code> completely replaces
-any bookmarkable state, or previous calls to <code>restore_inputs</code>.</p>
+    <p>The <code><a href='choose_data_ui.html'>choose_data()</a></code> module has an <code>options</code> parameter. Use the
+<code>choose_data_options</code> function to construct such option objects.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>restore_inputs</span>(<span class='kw'>...</span>, session. = <span class='kw'>shiny</span>::<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span>())</pre>
+    <pre class="usage"><span class='fu'>choose_data_options</span>(
+  aggregation = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"ask"</span>, <span class='st'>"summary"</span>, <span class='st'>"underlying"</span>, <span class='st'>"datasource"</span>)
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>...</th>
-      <td><p>Named arguments, where the names are input names (don't forget to
-use namespaces if you're using modules!) and the values are default values
-for the corresponding inputs.</p></td>
-    </tr>
-    <tr>
-      <th>session.</th>
-      <td><p>The current Shiny session.</p></td>
+      <th>aggregation</th>
+      <td><p>A character vector indicating what kind of data is allowed
+to be selected from a worksheet:</p><ul>
+<li><p><code>"summary"</code> (i.e. aggregated),</p></li>
+<li><p><code>"underlying"</code> (i.e. row-level), and/or</p></li>
+<li><p><code>"datasource"</code> (the logical
+table(s) from which the underlying data is derived).</p></li>
+</ul>
+
+<p>A vector of length 1, 2, or 3 may be passed; if length 1, then the user
+will not be shown a choice.</p>
+<p>The special value <code>"ask"</code> (the default) is equivalent to
+<code><a href='https://rdrr.io/r/base/c.html'>c("summary", "underlying", "datasource")</a></code>.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code>session.</code>, invisibly.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p><code>restore_inputs</code> is designed to be called from (the beginning of) a Shiny
-server function, and as such, can only affect inputs created on the server
-side (generally using <code>renderUI</code> or <code>insertUI</code>).</p>
+    <div class='dont-index'><p><code><a href='choose_data_ui.html'>choose_data()</a></code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
