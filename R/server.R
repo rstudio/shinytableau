@@ -30,7 +30,7 @@ tableau_server <- function(embed_server, config_server, standalone_server, optio
 
 # Delays invocation of server_func until Tableau initialization succeeds,
 # showing a progress spinner in the meantime.
-load_after_settings <- function(server_func, session = getDefaultReactiveDomain()) {
+load_after_settings <- function(server_func, session = shiny::getDefaultReactiveDomain()) {
   force(server_func)
 
   shiny::withReactiveDomain(session, {

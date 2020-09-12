@@ -109,5 +109,5 @@ tableau_install_link <- function(..., target = "_blank", button = c("no", "prima
     NULL
   )
 
-  tags$a(href = "?mode=info", target = target, class = button_class, ...)
+  shiny::tags$a(href = "?mode=info", target = target, class = button_class, ...)
 }

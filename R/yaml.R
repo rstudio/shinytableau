@@ -53,7 +53,7 @@ yaml_skeleton <- function(filename = "manifest.yml") {
   message("Manifest file successfully written to ", filename)
 
   if (interactive()) {
-    file.edit(filename)
+    utils::file.edit(filename)
   }
 
   invisible(filename)
