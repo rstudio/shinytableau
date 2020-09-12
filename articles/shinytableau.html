@@ -105,7 +105,7 @@
 <div id="writing-your-first-extension" class="section level2">
 <h2 class="hasAnchor">
 <a href="#writing-your-first-extension" class="anchor"></a>Writing your first extension</h2>
-<p>Put simply, a shinytableau extension is a specially structured Shiny app. (If you haven’t written a Shiny app before, you’re <em>definitely</em> going to want to go through the Shiny tutorial, at the very least, before attempting to go further with shinytableau.)</p>
+<p>Put simply, a shinytableau extension is a specially structured Shiny app. (If you haven’t written a Shiny app before, you’re <em>definitely</em> going to want to go through the <a href="https://shiny.rstudio.com/tutorial/">Shiny tutorial</a>, at the very least, before attempting to go further with shinytableau.)</p>
 <p>Let’s start by creating the simplest possible Tableau extension: one that will display the string <code>"Hello, world!"</code>. First, create a new, empty RStudio project (File | New Project… | New Directory | New Project).</p>
 <p>Then call:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
@@ -148,6 +148,7 @@
 
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://shiny.rstudio.com">shiny</a></span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">shinytableau</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">shinyvalidate</span>)
 
 <span class="kw">manifest</span> <span class="op">&lt;-</span> <span class="fu">tableau_manifest_from_yaml</span>()
 
@@ -169,7 +170,10 @@
   )
 }
 
-<span class="kw">config_server</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">input</span>, <span class="kw">output</span>, <span class="kw">session</span>) {
+<span class="kw">config_server</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">input</span>, <span class="kw">output</span>, <span class="kw">session</span>, <span class="kw">iv</span>) {
+  <span class="co"># Ensure that the user provides a value for input$greetee</span>
+  <span class="kw">iv</span><span class="op">$</span><span class="fu">add_rule</span>(<span class="st">"greetee"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shinyvalidate/man/sv_required.html">sv_required</a></span>())
+
   <span class="kw">save_settings</span> <span class="op">&lt;-</span> <span class="fu">function</span>() {
     <span class="fu">update_tableau_settings_async</span>(
       greetee = <span class="kw">input</span><span class="op">$</span><span class="kw">greetee</span>
@@ -183,13 +187,15 @@
 )
 </pre></div>
 <p>If your RStudio session is still running the previous version of the code we wrote, stop it now by either clicking in the Console pane and hitting Escape, or pressing the stop-sign icon in the Console toolbar. Then run the new code with Ctrl+Shift+Enter/Cmd+Shift+Return.</p>
-<p>You should see something like this:</p>
-<p><img src="tutorial-2a.png"></p>
-<p><img src="tutorial-2b.png"></p>
-<p><img src="tutorial-2c.png"></p>
+<p>You should see something like the following screenshot: the extension object shows only the name of the extension, and a message that you need to configure the extension.</p>
+<p><img src="tutorial-2a.png" width="573"></p>
+<p>Clicking Configure shows a text input:</p>
+<p><img src="tutorial-2b.png" width="421"></p>
+<p>Type in a value and click OK, and you should see the extension object instantly update to reflect your change.</p>
+<p><img src="tutorial-2c.png" width="573"></p>
 <p>Compared to the “Hello, World!” version, we’ve made a number of important changes.</p>
 <p>Most obviously, we now have <code>config_ui</code> and <code>config_server</code>, which together represent the configuration dialog. These two variables are passed to <code>tableau_extension</code> as the next two arguments after <code>ui</code> and <code>server</code>.</p>
-<p>The job of <code>config_ui</code>/<code>config_server</code> is to take input about the user’s preferences (in this case, what message should be displayed), and save them as <em>settings</em>. Each extension instance has its own set of settings; that is, if the same extension is dropped on a dashboard three times, that means there are three extension instances, each with their own completely independent settings.</p>
+<p>The job of <code>config_ui</code>/<code>config_server</code> is to take input about the user’s preferences (in this case, what message should be displayed), and save them as <em>settings</em>. Each extension instance has its own set of settings; that is, if the same extension is dropped on a dashboard three times, then there are three extension instances, each with their own completely independent config dialogs and settings.</p>
 <ul>
 <li>Like <code>ui</code>, <code>config_ui</code> also needs function(req)</li>
 <li>Unlike regular Shiny apps, the <code>config_ui</code> will be inserted into a configuation dialog that’s already partially laid out (OK/Cancel/Apply buttons, for example); so don’t use <code>fluidPage</code>, <code>fillPage</code>, instead use <code>tagList</code> to wrap your return.</li>
