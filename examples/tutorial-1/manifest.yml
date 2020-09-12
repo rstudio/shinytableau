@@ -1,0 +1,15 @@
+extension_id: com.rstudio.shinytableau.tutorial1
+extension_version: 0.1.0
+name: Hello, World!
+description: Displays a friendly greeting to the current planet's inhabitants.
+extended_description: |
+  A *much* longer description of the extension.
+  Can be written using **Markdown**.
+author_name: Joe Cheng
+author_email: joe@rstudio.com
+author_organization: RStudio, Inc.
+website: https://github.com/rstudio/shinytableau/tree/master/examples/tutorial-1
+icon:
+  file: default_icon.png
+  package: shinytableau
+min_api_version: '1.4'

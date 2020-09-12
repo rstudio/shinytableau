@@ -1,0 +1,15 @@
+extension_id: com.rstudio.shinytableau.tutorial2
+extension_version: 0.1.0
+name: Hello, _________!
+description: Displays a friendly greeting that can be customized to target any entity.
+extended_description: |
+  A *much* longer description of the extension.
+  Can be written using **Markdown**.
+author_name: Joe Cheng
+author_email: joe@rstudio.com
+author_organization: RStudio, Inc.
+website: https://github.com/rstudio/shinytableau/tree/master/examples/tutorial-2
+icon:
+  file: default_icon.png
+  package: shinytableau
+min_api_version: '1.4'
