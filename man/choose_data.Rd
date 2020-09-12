@@ -5,7 +5,7 @@
 \alias{choose_data}
 \title{Shiny module to allow easy selecting of Tableau data}
 \usage{
-choose_data_ui(id, label)
+choose_data_ui(id, label = NULL)
 
 choose_data(
   id,
@@ -19,6 +19,8 @@ choose_data(
 (\code{choose_data_ui}) and server (\code{choose_data}) calls must use the same id,
 and the id must be unique within a scope (i.e. unique within the top-level
 Shiny server function, or unique within a given module server function).}
+
+\item{label}{Display label for the control, or \code{NULL} for no label.}
 
 \item{options}{See \code{\link[=choose_data_options]{choose_data_options()}}.}
 

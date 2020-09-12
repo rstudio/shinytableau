@@ -29,12 +29,15 @@ choose_data_options <- function(
   )
 }
 
+#' @param label Display label for the control, or `NULL` for no label.
 #' @rdname choose_data
 #' @export
-choose_data_ui <- function(id, label) {
+choose_data_ui <- function(id, label = NULL) {
   ns <- shiny::NS(id)
   htmltools::tagList(
-    htmltools::tags$label(class = "control-label", label),
+    if (!is.null(label)) {
+      htmltools::tags$label(class = "control-label", label)
+    },
     htmltools::tags$div(class = "well", style = "width: 300px",
                     shiny::uiOutput(ns("worksheet_ui")),
       optional_chooser_ui(ns("agg")),
