@@ -82,7 +82,7 @@
 <h2 class="hasAnchor">
 <a href="#example-violin-plot" class="anchor"></a>Example: Violin plot</h2>
 <p>At the time of this writing, Tableau doesn’t have built-in support for <a href="https://en.wikipedia.org/wiki/Violin_plot">violin plots</a>, only <a href="https://help.tableau.com/current/pro/desktop/en-us/buildexamples_boxplot.htm">box plots</a>. While box plots are more familiar, violin plots are more informative because they show you the entire distribution instead of merely quartiles. For example, the plots below show TODO:</p>
-<p>I would be remiss not to mention the heroics that Tableau consultant Gwilym Lockwood went through to <a href="https://gwilymlockwood.com/2018/07/03/language-sex-violins-other-how-to-create-violin-plots-in-tableau/">create a violin plot in Tableau</a>. The blog post is worth a read, but the takeaway is that you’d have to <em>really</em> want a violin plot to bother doing it this way.</p>
+<p>I would be remiss not to mention the heroics that Tableau consultant Gwilym Lockwood went through to <a href="https://gwilymlockwood.com/2018/07/03/language-sex-violins-other-how-to-create-violin-plots-in-tableau/">create a violin plot in Tableau</a>. The blog post is worth a read, but the takeaway is that you’d have to <em>really</em> want a violin plot to go through all of those steps.</p>
 <p>In R, on the other hand, there are several packages that provide violin plots; a cursory search turned up <a href="https://cran.r-project.org/web/packages/vioplot/vignettes/violin_customisation.html">vioplot</a>, <a href="https://plotly.com/r/violin/">plotly</a>, <a href="https://rpkgs.datanovia.com/ggpubr/reference/ggviolin.html">ggpubr</a>, and <a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">ggplot2</a>. Here’s how you might create a violin plot in ggplot2, using the <code>mtcars</code> data set, showing the horsepower (<code>hp</code>) distribution for each cylinder count (<code>cyl</code>):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="fu">ggplot</span>(<span class="kw">mtcars</span>, <span class="fu">aes</span>(x = <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="kw">cyl</span>), y = <span class="kw">hp</span>)) <span class="op">+</span>
@@ -100,16 +100,18 @@
 <li>Choose “Configure” from the down-arrow menu from the border of the extension object.</li>
 </ol>
 <p>You (and other Tableau users) can use the same shinytableau extension across multiple dashboards. And just as a single Tableau dashboard can contain multiple (e.g.) bar chart sheets, each with its own view of the data, you can also have one shinytableau extension appear multiple times in a dashboard, with each instance configured differently.</p>
+<p>We’ll come back to violin plots later, but let’s look at some much simpler examples first.</p>
 </div>
 <div id="writing-your-first-extension" class="section level2">
 <h2 class="hasAnchor">
 <a href="#writing-your-first-extension" class="anchor"></a>Writing your first extension</h2>
 <p>Put simply, a shinytableau extension is a specially structured Shiny app. (If you haven’t written a Shiny app before, you’re <em>definitely</em> going to want to go through the Shiny tutorial, at the very least, before attempting to go further with shinytableau.)</p>
-<p>Let’s start by creating the simplest possible Tableau extension: one that will display the string <code>"Hello, world!"</code>. First, create a new, empty RStudio project (File | New Project… | New Directory | New Project). Then call:</p>
+<p>Let’s start by creating the simplest possible Tableau extension: one that will display the string <code>"Hello, world!"</code>. First, create a new, empty RStudio project (File | New Project… | New Directory | New Project).</p>
+<p>Then call:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="kw">shinytableau</span>::<span class="fu"><a href="../reference/yaml_skeleton.html">yaml_skeleton</a></span>()
 </pre></div>
-<p>This will create an example <code>manifest.yml</code> file in your project, which you should can edit as appropriate. This file controls the metadata that will be displayed to Tableau users when they install the extension.</p>
+<p>This will create an example <code>manifest.yml</code> file in your project, which controls the metadata that is displayed to Tableau users when they install the extension. Besides the obvious fields like name, description, and author, you’ll also want to change the <code>extension_id</code> to a value unlikely to be used by anyone else, e.g. replacing <code>com.example</code> with your company’s <a href="https://en.wikipedia.org/wiki/Reverse_domain_name_notation">reverse domain name</a>.</p>
 <p>Next, create a file called <code>app.R</code> in this directory, and make it look like the following:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="co"># filetype: shinyApp</span>
@@ -120,8 +122,8 @@
 <span class="kw">manifest</span> <span class="op">&lt;-</span> <span class="fu">tableau_manifest_from_yaml</span>()
 
 <span class="kw">ui</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">req</span>) {
-  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span>(
-    <span class="st">"Hello, world!"</span>
+  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span>(padding = <span class="fl">12</span>,
+    <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html">h2</a></span>(<span class="st">"Hello, world!"</span>)
   )
 }
 
@@ -132,50 +134,61 @@
   options = <span class="fu">ext_options</span>(port = <span class="fl">3456</span>)
 )
 </pre></div>
-<p>If you’ve written a Shiny app before, this will look extremely familiar. The only differences are the <code>manifest</code> object, the <code>ui</code> being wrapped in <code>function(req) {...}</code> (optional in a regular Shiny app, but mandatory here), and where the last line is usually <code><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html">shinyApp(ui, server)</a></code> we now do <code>tableau_extension(manifest, ui, server)</code>.</p>
-<p>Press Ctrl+Shift+Enter (or Cmd+Shift+Return on Mac) and you should see the info page for this extension appear. Download the .trex file, drag an Extension onto a Tableau dashboard, choose the .trex file, and you should see something like this:</p>
-<p>(TODO: screenshot)</p>
-<div id="adding-configuration" class="section level4">
+<p>If you’ve written a Shiny app before, this code should look comfortingly familiar. The main differences are the <code>manifest</code> object, the <code>ui</code> being wrapped in <code>function(req) {...}</code> (optional in a regular Shiny app, but mandatory here), and where the last line is usually <code><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html">shinyApp(ui, server)</a></code> we now do <code>tableau_extension(manifest, ui, server)</code>.</p>
+<p>There are two other small differences worth noting. First, the file starts with the comment <code># filetype: shinyApp</code>; this is a hint to the RStudio IDE that even though the file doesn’t look like a Shiny app (because it doesn’t end with <code><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html">shinyApp(ui, server)</a></code>), it actually is. Second, the call to <code>tableau_extension</code> includes a hardcoded port number. For local development purposes, it’s a good idea to hardcode the port to a unique value (between 1025 and 49151) for each extension.</p>
+<p>Now, press Ctrl+Shift+Enter (or Cmd+Shift+Return on Mac) and you should see the info page for this extension appear. Download the .trex file, drag an Extension onto a Tableau dashboard, choose the .trex file, and you should see “Hello, world!” in your dashboard.</p>
+<p><img src="tutorial-1.png" width="573"></p>
+<div id="adding-configuration-settings" class="section level4">
 <h4 class="hasAnchor">
-<a href="#adding-configuration" class="anchor"></a>Adding configuration</h4>
-<p>Next, we’ll demonstrate how configuration works by making our tiny extension only slightly more complex: instead of showing the hardcoded string <code>"Hello, world!"</code> we’ll allow the string to be configured by the dashboard author.</p>
+<a href="#adding-configuration-settings" class="anchor"></a>Adding configuration settings</h4>
+<p>Now we’ll see how configuration works by making our tiny extension only slightly more complex: instead of showing the hardcoded string “Hello, world!” we’ll allow the dashboard author to specify who is being greeted.</p>
+<p>We will use a configuration dialog to prompt the dashboard author for the greetee<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, save their input as a setting called <code>"greetee"</code>, and have the extension use that setting to dynamically render the greeting.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
+<span class="co"># filetype: shinyApp</span>
+
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://shiny.rstudio.com">shiny</a></span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">shinytableau</span>)
 
 <span class="kw">manifest</span> <span class="op">&lt;-</span> <span class="fu">tableau_manifest_from_yaml</span>()
 
 <span class="kw">ui</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">req</span>) {
-  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span>(
-    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textOutput.html">textOutput</a></span>(<span class="st">"message_out"</span>)
+  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span>(padding = <span class="fl">12</span>,
+    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textOutput.html">textOutput</a></span>(<span class="st">"message"</span>, container = <span class="kw">h2</span>)
   )
 }
 
 <span class="kw">server</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">input</span>, <span class="kw">output</span>, <span class="kw">session</span>) {
-  <span class="kw">output</span><span class="op">$</span><span class="kw">message_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPrint.html">renderText</a></span>({
-    <span class="fu">tableau_setting</span>(<span class="st">"message"</span>)
+  <span class="kw">output</span><span class="op">$</span><span class="kw">message</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPrint.html">renderText</a></span>({
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Hello, "</span>, <span class="fu">tableau_setting</span>(<span class="st">"greetee"</span>), <span class="st">"!"</span>)
   })
 }
 
 <span class="kw">config_ui</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">req</span>) {
   <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tag.html">tagList</a></span>(
-      <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textInput.html">textInput</a></span>(<span class="st">"message_in"</span>, <span class="st">"Message to display"</span>)
+    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textInput.html">textInput</a></span>(<span class="st">"greetee"</span>, <span class="st">"Whom would you like to greet?"</span>, <span class="st">"world"</span>)
   )
 }
 
 <span class="kw">config_server</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">input</span>, <span class="kw">output</span>, <span class="kw">session</span>) {
   <span class="kw">save_settings</span> <span class="op">&lt;-</span> <span class="fu">function</span>() {
     <span class="fu">update_tableau_settings_async</span>(
-      message = <span class="kw">input</span><span class="op">$</span><span class="kw">message_in</span>
+      greetee = <span class="kw">input</span><span class="op">$</span><span class="kw">greetee</span>
     )
   }
   <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="kw">save_settings</span>)
 }
 
-<span class="fu">tableau_extension</span>(<span class="kw">manifest</span>, <span class="kw">ui</span>, <span class="kw">server</span>, <span class="kw">config_ui</span>, <span class="kw">config_server</span>)
+<span class="fu">tableau_extension</span>(<span class="kw">manifest</span>, <span class="kw">ui</span>, <span class="kw">server</span>, <span class="kw">config_ui</span>, <span class="kw">config_server</span>,
+  options = <span class="fu">ext_options</span>(port = <span class="fl">3456</span>)
+)
 </pre></div>
+<p>If your RStudio session is still running the previous version of the code we wrote, stop it now by either clicking in the Console pane and hitting Escape, or pressing the stop-sign icon in the Console toolbar. Then run the new code with Ctrl+Shift+Enter/Cmd+Shift+Return.</p>
+<p>You should see something like this:</p>
+<p><img src="tutorial-2a.png"></p>
+<p><img src="tutorial-2b.png"></p>
+<p><img src="tutorial-2c.png"></p>
 <p>Compared to the “Hello, World!” version, we’ve made a number of important changes.</p>
-<p>Most obviously, we now have <code>config_ui</code> and <code>config_server</code>, which together represent the configuration dialog. These are passed to <code>tableau_extension</code> the next two arguments after <code>ui</code> and <code>server</code>.</p>
+<p>Most obviously, we now have <code>config_ui</code> and <code>config_server</code>, which together represent the configuration dialog. These two variables are passed to <code>tableau_extension</code> as the next two arguments after <code>ui</code> and <code>server</code>.</p>
 <p>The job of <code>config_ui</code>/<code>config_server</code> is to take input about the user’s preferences (in this case, what message should be displayed), and save them as <em>settings</em>. Each extension instance has its own set of settings; that is, if the same extension is dropped on a dashboard three times, that means there are three extension instances, each with their own completely independent settings.</p>
 <ul>
 <li>Like <code>ui</code>, <code>config_ui</code> also needs function(req)</li>
@@ -194,6 +207,12 @@
 <div id="deploymenthosting" class="section level2">
 <h2 class="hasAnchor">
 <a href="#deploymenthosting" class="anchor"></a>Deployment/hosting</h2>
+</div>
+<div class="footnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Yes, it’s a <a href="https://en.wiktionary.org/wiki/greetee">real word</a>!<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
   </div>
 
