@@ -61,7 +61,7 @@ This will create an example `manifest.yml` file in your project, which controls 
 
 Next, create a file called `app.R` in this directory, and make it look like the following:
 
-```{r code=readLines("../examples/tutorial-1/app.R"), eval=FALSE, results='hide'}
+```{r code=readLines(system.file("examples/tutorial-1/app.R", package = "shinytableau")), eval=FALSE, results='hide'}
 ```
 
 If you've written a Shiny app before, this code should look comfortingly familiar. The main differences are the `manifest` object, the `ui` being wrapped in `function(req) {...}` (optional in a regular Shiny app, but mandatory here), and where the last line is usually `shinyApp(ui, server)` we now do `tableau_extension(manifest, ui, server)`.
@@ -80,7 +80,7 @@ We will use a configuration dialog to prompt the dashboard author for the greete
 
 [^1]: Yes, it's a [real word](https://en.wiktionary.org/wiki/greetee)!
 
-```{r code=readLines("../examples/tutorial-2/app.R"), eval=FALSE, results='hide'}
+```{r code=readLines(system.file("examples/tutorial-2/app.R", package = "shinytableau")), eval=FALSE, results='hide'}
 ```
 
 If your RStudio session is still running the previous version of the code we wrote, stop it now by either clicking in the Console pane and hitting Escape, or pressing the stop-sign icon in the Console toolbar. Then run the new code with Ctrl+Shift+Enter/Cmd+Shift+Return.

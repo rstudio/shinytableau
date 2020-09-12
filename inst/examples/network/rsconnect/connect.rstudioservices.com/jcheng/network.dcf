@@ -1,0 +1,12 @@
+name: network
+title: network
+username: jcheng
+account: jcheng
+server: connect.rstudioservices.com
+hostUrl: https://connect.rstudioservices.com/__api__
+appId: 990
+bundleId: 10124
+url: https://connect.rstudioservices.com/content/990/
+when: 1594659600.98904
+asMultiple: FALSE
+asStatic: FALSE
