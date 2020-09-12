@@ -20,6 +20,13 @@ reactive_tableau_data <- function(spec, options = list(), session = shiny::getDe
 
   session <- unwrap_session(session)
 
+  if (is.character(spec) && length(spec) == 1) {
+    setting_name <- spec
+    spec <- shiny::reactive({
+      tableau_setting(setting_name, session = session)
+    })
+  }
+
   if (!is.function(spec)) {
     value <- spec
     spec <- function() value
