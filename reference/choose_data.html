@@ -126,7 +126,7 @@ tables, which logical table. This Shiny module provides a drop-in component
 for prompting the user for these inputs in a consistent and usable way.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>choose_data_ui</span>(<span class='kw'>id</span>, label = <span class='kw'>NULL</span>)
+    <pre class="usage"><span class='fu'>choose_data_ui</span>(<span class='kw'>id</span>, <span class='kw'>label</span>)
 
 <span class='fu'>choose_data</span>(
   <span class='kw'>id</span>,
@@ -144,10 +144,6 @@ for prompting the user for these inputs in a consistent and usable way.</p>
 (<code>choose_data_ui</code>) and server (<code>choose_data</code>) calls must use the same id,
 and the id must be unique within a scope (i.e. unique within the top-level
 Shiny server function, or unique within a given module server function).</p></td>
-    </tr>
-    <tr>
-      <th>label</th>
-      <td><p>Display label for the control, or <code>NULL</code> for no label.</p></td>
     </tr>
     <tr>
       <th>options</th>
