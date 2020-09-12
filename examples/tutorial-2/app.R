@@ -2,6 +2,7 @@
 
 library(shiny)
 library(shinytableau)
+library(shinyvalidate)
 
 manifest <- tableau_manifest_from_yaml()
 
@@ -23,7 +24,10 @@ config_ui <- function(req) {
   )
 }
 
-config_server <- function(input, output, session) {
+config_server <- function(input, output, session, iv) {
+  # Ensure that the user provides a value for input$greetee
+  iv$add_rule("greetee", sv_required())
+
   save_settings <- function() {
     update_tableau_settings_async(
       greetee = input$greetee

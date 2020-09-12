@@ -47,7 +47,7 @@ We'll come back to violin plots later, but let's look at some much simpler examp
 
 ## Writing your first extension
 
-Put simply, a shinytableau extension is a specially structured Shiny app. (If you haven't written a Shiny app before, you're *definitely* going to want to go through the Shiny tutorial, at the very least, before attempting to go further with shinytableau.)
+Put simply, a shinytableau extension is a specially structured Shiny app. (If you haven't written a Shiny app before, you're *definitely* going to want to go through the [Shiny tutorial](https://shiny.rstudio.com/tutorial/), at the very least, before attempting to go further with shinytableau.)
 
 Let's start by creating the simplest possible Tableau extension: one that will display the string `"Hello, world!"`. First, create a new, empty RStudio project (File \| New Project... \| New Directory \| New Project).
 
@@ -85,19 +85,23 @@ We will use a configuration dialog to prompt the dashboard author for the greete
 
 If your RStudio session is still running the previous version of the code we wrote, stop it now by either clicking in the Console pane and hitting Escape, or pressing the stop-sign icon in the Console toolbar. Then run the new code with Ctrl+Shift+Enter/Cmd+Shift+Return.
 
-You should see something like this:
+You should see something like the following screenshot: the extension object shows only the name of the extension, and a message that you need to configure the extension.
 
-![](tutorial-2a.png)
+![](tutorial-2a.png){width="573"}
 
-![](tutorial-2b.png)
+Clicking Configure shows a text input:
 
-![](tutorial-2c.png)
+![](tutorial-2b.png){width="421"}
+
+Type in a value and click OK, and you should see the extension object instantly update to reflect your change.
+
+![](tutorial-2c.png){width="573"}
 
 Compared to the "Hello, World!" version, we've made a number of important changes.
 
 Most obviously, we now have `config_ui` and `config_server`, which together represent the configuration dialog. These two variables are passed to `tableau_extension` as the next two arguments after `ui` and `server`.
 
-The job of `config_ui`/`config_server` is to take input about the user's preferences (in this case, what message should be displayed), and save them as *settings*. Each extension instance has its own set of settings; that is, if the same extension is dropped on a dashboard three times, that means there are three extension instances, each with their own completely independent settings.
+The job of `config_ui`/`config_server` is to take input about the user's preferences (in this case, what message should be displayed), and save them as *settings*. Each extension instance has its own set of settings; that is, if the same extension is dropped on a dashboard three times, then there are three extension instances, each with their own completely independent config dialogs and settings.
 
 -   Like `ui`, `config_ui` also needs function(req)
 -   Unlike regular Shiny apps, the `config_ui` will be inserted into a configuation dialog that's already partially laid out (OK/Cancel/Apply buttons, for example); so don't use `fluidPage`, `fillPage`, instead use `tagList` to wrap your return.
