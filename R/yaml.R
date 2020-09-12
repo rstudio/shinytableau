@@ -147,7 +147,7 @@ resolve_file <- function(x, start, fieldname) {
       stop("Package ", x$package, " does not contain a file at ", x$file)
     }
   } else {
-    path <- fs::path_abs(x$file, start = start)
+    path <- unclass(fs::path_abs(x$file, start = start))
     if (!file.exists(path)) {
       stop("File not found: ", path)
     }
