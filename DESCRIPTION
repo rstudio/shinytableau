@@ -27,7 +27,8 @@ Imports:
     yaml (>= 2.2.1),
     shinyvalidate,
     miniUI,
-    tibble
+    tibble,
+    mime
 Remotes: rstudio/shiny, jcheng5/shinyvalidate
 Encoding: UTF-8
 LazyData: true

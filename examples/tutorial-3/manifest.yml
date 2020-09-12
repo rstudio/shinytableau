@@ -1,0 +1,30 @@
+extension_id: com.rstudio.shinytableau.tutorial3
+extension_version: 0.1.0
+name: Data summary
+description: Description of the Extension
+extended_description: |
+  Prints an extensive summary of a data table, featuring type-specific
+  information for all columns: univariate statistics and/or frequency
+  distributions, bar charts or histograms, as well as missing data counts and
+  proportions.
+
+  Based on the
+  [summarytools](https://cran.r-project.org/web/packages/summarytools/vignettes/Introduction.html)
+  R package.
+author_name: Joe Cheng
+author_email: joe@rstudio.com
+author_organization: RStudio, Inc.
+website: https://github.com/rstudio/shinytableau/tree/master/examples/tutorial-2
+
+icon:
+  file: default_icon.png
+  package: shinytableau
+
+screenshots:
+  - screenshot.png
+
+# This should always be 'full data' if requiring Tableau data,
+# otherwise, remove the `permissions` key-value line
+permissions: full data
+min_api_version: '1.4'
+

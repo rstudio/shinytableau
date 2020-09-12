@@ -88,22 +88,29 @@ tableau_manifest_from_yaml <- function(path = ".") {
   check_valid_yaml_key_names(yaml_list = y)
 
   # Resolve path of icon file
-  path_icon_file <- y$icon$file
-  if (!is.null(path_icon_file)) {
-    if (!is.null(y$icon$package)) {
-      path_icon_file <- system.file(path_icon_file, package = y$icon$package)
-    } else if (!fs::is_absolute_path(path_icon_file)) {
-      path_icon_file <-
-        fs::path_abs(path_icon_file, start = fs::path_dir(path))
-    }
-  }
+  path_icon_file <- resolve_file(y$icon, fs::path_dir(path), "icon")
 
   if (!is.null(y$extended_description)) {
     y$extended_description <-
       htmltools::HTML(commonmark::markdown_html(y$extended_description))
   }
 
-  # TODO: have image screenshot of app inlined in `extended_description`
+  if (!is.null(y$screenshots)) {
+    images <- vapply(y$screenshots, FUN.VALUE = character(1), FUN = function(sshot) {
+      sshot <- resolve_file(sshot, start = fs::path_dir(path), "screenshots")
+      as.character(htmltools::tags$p(htmltools::tags$img(
+        src = base64enc::dataURI(file = sshot, mime = mime::guess_type(sshot)),
+        style = htmltools::css(
+          max_width = "100%",
+          border = "1px solid #CCC",
+          border_radius = "2px",
+          box_sizing = "border-box",
+          padding = "3px"
+        )
+      )))
+    })
+    y$extended_description <- htmltools::HTML(paste(collapse = "\n", c(y$extended_description, images)))
+  }
 
   tableau_manifest(
     extension_id = y$extension_id,
@@ -119,6 +126,34 @@ tableau_manifest_from_yaml <- function(path = ".") {
     permissions = y$permissions,
     min_api_version = y$min_api_version
   )
+}
+
+resolve_file <- function(x, start, fieldname) {
+  if (length(x) == 0) {
+    return(NULL)
+  }
+
+  if (is.character(x)) {
+    x <- list(file = x)
+  }
+
+  if (!is.list(x)) {
+    stop("Invalid value provided for '", fieldname, "' metadata field")
+  }
+
+  if (!is.null(x$package)) {
+    path <- system.file(x$file, package = x$package)
+    if (nchar(path) == 0) {
+      stop("Package ", x$package, " does not contain a file at ", x$file)
+    }
+  } else {
+    path <- fs::path_abs(x$file, start = start)
+    if (!file.exists(path)) {
+      stop("File not found: ", path)
+    }
+  }
+
+  path
 }
 
 check_valid_yaml_key_names <- function(yaml_list) {
@@ -143,5 +178,5 @@ manifest_keys_safe <-
     "extension_id", "extension_version", "name", "description",
     "extended_description", "author_name", "author_email", "author_organization",
     "website", "source_location", "icon", "permissions",
-    "min_api_version", "file", "package"
+    "min_api_version", "file", "package", "screenshots"
   )

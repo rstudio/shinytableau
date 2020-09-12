@@ -4,14 +4,21 @@
 \alias{tableau_manifest}
 \title{Generate a Tableau Extension Manifest}
 \usage{
-tableau_manifest(extension_id = "com.example.extensions.name",
-  extension_version = "0.1.0", name = "My extension",
-  description = NULL, extended_description = description,
-  author_name = "Your Name", author_email = "author@example.com",
+tableau_manifest(
+  extension_id = "com.example.extensions.name",
+  extension_version = "0.1.0",
+  name = "My extension",
+  description = NULL,
+  extended_description = description,
+  author_name = "Your Name",
+  author_email = "author@example.com",
   author_organization = "Example Organization",
-  website = "https://example.com", source_location = NULL,
+  website = "https://example.com",
+  source_location = NULL,
   icon_file = system.file("default_icon.png", package = "shinytableau"),
-  permissions = c("full data"), min_api_version = "1.4")
+  permissions = c("full data"),
+  min_api_version = "1.4"
+)
 }
 \arguments{
 \item{extension_id}{The ID value for the Tableau extension which follows the

@@ -8,7 +8,6 @@ vignette: >
 ---
 
 ```{r echo=FALSE}
-library(magrittr)
 library(ggplot2)
 ```
 

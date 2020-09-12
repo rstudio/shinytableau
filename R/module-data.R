@@ -1,31 +1,35 @@
+#' Options for the `choose_data` module
+#'
+#' The [choose_data()] module has an `options` parameter. Use the
+#' `choose_data_options` function to construct such option objects.
+#'
+#' @param aggregation A character vector indicating what kind of data is allowed
+#'   to be selected from a worksheet:
+#'   * `"summary"` (i.e. aggregated),
+#'   * `"underlying"` (i.e. row-level), and/or
+#'   * `"datasource"` (the logical
+#'   table(s) from which the underlying data is derived).
+#'
+#'   A vector of length 1, 2, or 3 may be passed; if length 1, then the user
+#'   will not be shown a choice.
+#'
+#'   The special value `"ask"` (the default) is equivalent to
+#'   `c("summary", "underlying", "datasource")`.
+#'
+#' @seealso [choose_data()]
+#'
 #' @export
 choose_data_options <- function(
-  aggregation = c("ask", "summary", "underlying", "datasource"),
-  ignore_aliases = c(FALSE, TRUE, "ask"),
-  ignore_selection = c(FALSE, TRUE, "ask"),
-  include_all_columns = c(FALSE, TRUE, "ask"),
-  max_rows = c(0, "ask")
+  aggregation = c("ask", "summary", "underlying", "datasource")
 ) {
   aggregation <- match.arg(aggregation, several.ok = TRUE)
-  ignore_aliases <- match_fta(ignore_aliases)
-  ignore_selection <- match_fta(ignore_selection)
-  include_all_columns <- match_fta(include_all_columns)
-  if (missing(max_rows)) {
-    max_rows <- 0
-  }
-  if (!(is.numeric(max_rows) && length(max_rows) == 1) && !identical(max_rows, "ask")) {
-    stop("Invalid value for `max_rows`; expected either a positive numeric value or \"ask\"")
-  }
 
   list(
-    aggregation = aggregation,
-    ignore_aliases = ignore_aliases,
-    ignore_selection = ignore_selection,
-    include_all_columns = include_all_columns,
-    max_rows = max_rows
+    aggregation = aggregation
   )
 }
 
+#' @rdname choose_data
 #' @export
 choose_data_ui <- function(id, label) {
   ns <- shiny::NS(id)
@@ -41,8 +45,34 @@ choose_data_ui <- function(id, label) {
   )
 }
 
+#' Shiny module to allow easy selecting of Tableau data
+#'
+#' A common task in configuration dialogs is telling the extension where it
+#' should pull data from: from which worksheet, whether to use summary or
+#' underlying data is desired, and for underlying data with multiple logical
+#' tables, which logical table. This Shiny module provides a drop-in component
+#' for prompting the user for these inputs in a consistent and usable way.
+#'
+#' @param id An identifier. Like a Shiny input or output id, corresponding UI
+#'   (`choose_data_ui`) and server (`choose_data`) calls must use the same id,
+#'   and the id must be unique within a scope (i.e. unique within the top-level
+#'   Shiny server function, or unique within a given module server function).
+#' @param options See [choose_data_options()].
+#' @param iv A [shinyvalidate::InputValidator] object; almost certainly you'll
+#'   want to use the one that shinytableau passes to you via the `iv` parameter
+#'   of your `config_server` function (see the example below). If provided,
+#'   `choose_data` will add validation rules to this object; specifically,
+#'   validation will fail if the user does not select a worksheet.
+#' @param session The Shiny `session` object. (You should probably just use the
+#'   default.)
+#'
+#' @examples
+#' # TODO
+#'
 #' @export
-choose_data <- function(id, options = choose_data_options(), iv = NULL, session = shiny::getDefaultReactiveDomain()) {
+choose_data <- function(id, options = choose_data_options(), iv = NULL,
+  session = shiny::getDefaultReactiveDomain()) {
+
   force(id)
   force(options)
 
