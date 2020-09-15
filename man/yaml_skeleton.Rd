@@ -2,30 +2,60 @@
 % Please edit documentation in R/yaml.R
 \name{yaml_skeleton}
 \alias{yaml_skeleton}
-\title{Create a skeleton YAML manifest file}
+\alias{tableau_manifest_from_yaml}
+\title{Create and use a skeleton YAML manifest file}
 \usage{
 yaml_skeleton(filename = "manifest.yml")
+
+tableau_manifest_from_yaml(path = ".")
 }
 \arguments{
-\item{filename}{A filename for the YAML manifest file. Can be combined with a
-relative path. The default, and recommended, filename is \code{"manifest.yml"}.}
+\item{filename}{The (relative or absolute) file path where the YAML manifest
+file should be written. For an app.R based app, the recommended file path
+is \code{manifest.yml} in the same directory as app.R; for a package-based app,
+put the file in the package's \code{inst} directory, and call
+\code{tableau_manifest_from_yaml()} with \code{\link[=system.file]{system.file()}}.}
+
+\item{path}{The (relative or absolute) file or directory path from which to
+load an existing YAML manifest file. If the path is a directory, the
+filename \code{manifest.yml} will be added to the end of the path.}
+}
+\value{
+\code{yaml_skeleton} returns the filename, invisibly.
+\code{tableau_manifest_from_yaml} returns a manifest object that is suitable for
+passing to \code{\link[=tableau_extension]{tableau_extension()}}.
 }
 \description{
-Tableau extensions require a manifest and the use of a YAML manifest file in
-\strong{shinytableau} allows for a separation of concerns when developing an
-extension. With the \code{yaml_skeleton()} function, we can write a YAML manifest
-file to disk; it contains all of the required fields for the extension with
-example values. Later in the development lifecycle, the developer of a
-\strong{shinytableau} extension can use values relevant to the project.
+Tableau extensions need to provide a
+\href{https://tableau.github.io/extensions-api/docs/trex_manifest.html}{manifest}
+(\code{.trex}) file that Tableau users can load into their dashboards. This file
+contains metadata such as the ID and name of the extension, the name and
+email of the extension author, logo image, etc. With shinytableau, you as the
+extension author do not create this file directly; instead, you provide a
+simpler manifest.yml file.
+}
+\details{
+Call \code{yaml_skeleton()} from the R console to create a manifest.yml file.
+
+Call \code{tableau_manifest_from_yaml()} from your app.R to load it, and pass the
+resulting object to \code{\link[=tableau_extension]{tableau_extension()}}.
 }
 \examples{
+\dontrun{
 # Generate a YAML manifest file in the
 # root directory of the project
-# yaml_skeleton()
+yaml_skeleton()
 
 # Generate the skeleton YAML manifest
 # file (called `manifest.yml`) in the
 # `app` subdirectory
-# yaml_skeleton(filename = "app/manifest.yml")
+yaml_skeleton(filename = "app/manifest.yml")
+}
+}
+\seealso{
+See the \href{https://rstudio.github.io/shinytableau/articles/shinytableau.html}{Getting Started guide}
+to learn more.
 
+If the YAML file approach is inconvenient for some reason, you can also use
+\code{\link[=tableau_manifest]{tableau_manifest()}} to programmatically create a manifest.
 }
