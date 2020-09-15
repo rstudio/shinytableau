@@ -130,11 +130,11 @@
 <span class="kw">server</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">input</span>, <span class="kw">output</span>, <span class="kw">session</span>) {
 }
 
-<span class="fu">tableau_extension</span>(<span class="kw">manifest</span>, <span class="kw">ui</span>, <span class="kw">server</span>,
+<span class="fu"><a href="../reference/tableau_extension.html">tableau_extension</a></span>(<span class="kw">manifest</span>, <span class="kw">ui</span>, <span class="kw">server</span>,
   options = <span class="fu">ext_options</span>(port = <span class="fl">3456</span>)
 )
 </pre></div>
-<p>If you’ve written a Shiny app before, this code should look comfortingly familiar. The main differences are the <code>manifest</code> object, the <code>ui</code> being wrapped in <code>function(req) {...}</code> (optional in a regular Shiny app, but mandatory here), and where the last line is usually <code><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html">shinyApp(ui, server)</a></code> we now do <code>tableau_extension(manifest, ui, server)</code>.</p>
+<p>If you’ve written a Shiny app before, this code should look comfortingly familiar. The main differences are the <code>manifest</code> object, the <code>ui</code> being wrapped in <code>function(req) {...}</code> (optional in a regular Shiny app, but mandatory here), and where the last line is usually <code><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html">shinyApp(ui, server)</a></code> we now do <code><a href="../reference/tableau_extension.html">tableau_extension(manifest, ui, server)</a></code>.</p>
 <p>There are two other small differences worth noting. First, the file starts with the comment <code># filetype: shinyApp</code>; this is a hint to the RStudio IDE that even though the file doesn’t look like a Shiny app (because it doesn’t end with <code><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html">shinyApp(ui, server)</a></code>), it actually is. Second, the call to <code>tableau_extension</code> includes a hardcoded port number. For local development purposes, it’s a good idea to hardcode the port to a unique value (between 1025 and 49151) for each extension.</p>
 <p>Now, press Ctrl+Shift+Enter (or Cmd+Shift+Return on Mac) and you should see the info page for this extension appear. Download the .trex file, drag an Extension onto a Tableau dashboard, choose the .trex file, and you should see “Hello, world!” in your dashboard.</p>
 <p><img src="tutorial-1.png" width="573"></p>
@@ -160,7 +160,7 @@
 }
 
 <span class="kw">server</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">input</span>, <span class="kw">output</span>, <span class="kw">session</span>) {
-  <span class="kw">output</span><span class="op">$</span><span class="kw">message</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPrint.html">renderText</a></span>({
+  <span class="kw">output</span><span class="op">$</span><span class="kw">message</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderText.html">renderText</a></span>({
     <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Hello, "</span>, <span class="fu">tableau_setting</span>(<span class="st">"greetee"</span>), <span class="st">"!"</span>)
   })
 }
@@ -186,7 +186,7 @@
   <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="kw">save_settings</span>)
 }
 
-<span class="fu">tableau_extension</span>(<span class="kw">manifest</span>, <span class="kw">ui</span>, <span class="kw">server</span>, <span class="kw">config_ui</span>, <span class="kw">config_server</span>,
+<span class="fu"><a href="../reference/tableau_extension.html">tableau_extension</a></span>(<span class="kw">manifest</span>, <span class="kw">ui</span>, <span class="kw">server</span>, <span class="kw">config_ui</span>, <span class="kw">config_server</span>,
   options = <span class="fu">ext_options</span>(port = <span class="fl">3456</span>)
 )
 </pre></div>
