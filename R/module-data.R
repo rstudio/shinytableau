@@ -69,8 +69,11 @@ choose_data_ui <- function(id, label = NULL) {
 #' @param session The Shiny `session` object. (You should probably just use the
 #'   default.)
 #'
-#' @examples
-#' # TODO
+#' @seealso For an example, look at the `config_ui` and `config_server` defined
+#' in the
+#' [`tutorial-3` example app](https://github.com/rstudio/shinytableau/blob/eed65cc8/inst/examples/tutorial-3/app.R),
+#' as well as the "Accessing Data" section of the
+#' [Getting Started guide](https://rstudio.github.io/shinytableau/articles/shinytableau.html).
 #'
 #' @export
 choose_data <- function(id, options = choose_data_options(), iv = NULL,
@@ -78,6 +81,10 @@ choose_data <- function(id, options = choose_data_options(), iv = NULL,
 
   force(id)
   force(options)
+
+  # Just in case people pass `options = list(...)` instead of
+  # `options = choose_data_options()`.
+  options <- merge_defaults(options, choose_data_options())
 
   shiny::moduleServer(id, function(input, output, session) {
     worksheet_names <- tableau_worksheets(session)

@@ -1,3 +1,46 @@
+#' Create a Tableau Extension object
+#'
+#' `tableau_extension()` is to shinytableau extensions, what [shiny::shinyApp()]
+#' is to Shiny apps. Both functions are used as the last expression of an app.R
+#' file, and bring together the `ui` and `server` objects. However,
+#' `tableau_extension()` has additional arguments for the Tableau extension
+#' manifest (required) and configuration dialog UI and server (optional).
+#'
+#' @param manifest A Tableau manifest object, which provides a description of
+#'   the extension for both human and machine use.
+#'
+#'   The easiest way to provide this information is by creating a manifest.yml
+#'   file. Call the [yaml_skeleton()] function from the R prompt to create a
+#'   sample manifest.yml in the same directory as your app.R file, then
+#'   customize it for your extension. Then, in app.R, call `manifest <-
+#'   [tableau_manifest_from_yaml()]` and pass the `manifest` object as this
+#'   argument.
+#'
+#' @param ui **A function that takes a single `req` argument** and returns the
+#'   UI definition of the extension. When the extension is added to a Tableau
+#'   dashboard, this is the UI that will be displayed within the extension
+#'   object.
+#' @param server A function with three parameters (`input`, `output`, and
+#'   `session`) that sets up the server-side reactive logic to go with `ui`.
+#' @param config_ui Optional. **A function that takes a single `req` argument**
+#'   and returns the UI definition to be used for the extension's configuration
+#'   dialog. Unlike regular Shiny UI definitions, this should just be a
+#'   [shiny::tagList()] or HTML object rather than an entire page like
+#'   [shiny::fluidPage()] or [shiny::fillPage()].
+#' @param config_server Optional. A function with four parameters (`input`,
+#'   `output`, `session`, and `iv`) that sets up the server-side reactive logic
+#'   to go with `config_ui`. The `iv` parameter is a
+#'   [shinyvalidate::InputValidator] object that will enable when the config
+#'   dialog's OK or Apply buttons are clicked. The `config_server` function must
+#'   return a zero-argument function that, when run, calls
+#'   [update_tableau_settings_async()] to persist the user's configuration
+#'   preferences.
+#' @param options See [ext_options()].
+#'
+#' @seealso See the [Getting Started
+#'   guide](https://rstudio.github.io/shinytableau/articles/shinytableau.html)
+#'   to learn more.
+#'
 #' @export
 tableau_extension <- function(manifest, ui, server, config_ui = NULL,
   config_server = NULL, options = ext_options()) {
@@ -7,6 +50,10 @@ tableau_extension <- function(manifest, ui, server, config_ui = NULL,
   force(config_ui)
   force(config_server)
   force(options)
+
+  # Just in case people pass `options = list(...)` instead of
+  # `options = ext_options()`.
+  options <- merge_defaults(options, ext_options())
 
   if (!is.null(config_ui) && !is.function(config_ui)) {
     stop("The `config_ui` argument, if provided, must be a function ",

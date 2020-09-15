@@ -38,6 +38,7 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
-    ggplot2
+    ggplot2,
+    summarytools
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
