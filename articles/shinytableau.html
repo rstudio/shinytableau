@@ -119,7 +119,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://shiny.rstudio.com">shiny</a></span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">shinytableau</span>)
 
-<span class="kw">manifest</span> <span class="op">&lt;-</span> <span class="fu">tableau_manifest_from_yaml</span>()
+<span class="kw">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yaml_skeleton.html">tableau_manifest_from_yaml</a></span>()
 
 <span class="kw">ui</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">req</span>) {
   <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span>(padding = <span class="fl">12</span>,
@@ -151,7 +151,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">shinytableau</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">shinyvalidate</span>)
 
-<span class="kw">manifest</span> <span class="op">&lt;-</span> <span class="fu">tableau_manifest_from_yaml</span>()
+<span class="kw">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yaml_skeleton.html">tableau_manifest_from_yaml</a></span>()
 
 <span class="kw">ui</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">req</span>) {
   <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span>(padding = <span class="fl">12</span>,
@@ -160,7 +160,7 @@
 }
 
 <span class="kw">server</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">input</span>, <span class="kw">output</span>, <span class="kw">session</span>) {
-  <span class="kw">output</span><span class="op">$</span><span class="kw">message</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderText.html">renderText</a></span>({
+  <span class="kw">output</span><span class="op">$</span><span class="kw">message</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPrint.html">renderText</a></span>({
     <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Hello, "</span>, <span class="fu">tableau_setting</span>(<span class="st">"greetee"</span>), <span class="st">"!"</span>)
   })
 }

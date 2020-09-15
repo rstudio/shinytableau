@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a skeleton YAML manifest file — yaml_skeleton • shinytableau</title>
+<title>Create and use a skeleton YAML manifest file — yaml_skeleton • shinytableau</title>
 
 
 <!-- jquery -->
@@ -39,13 +39,14 @@
 
 
 
-<meta property="og:title" content="Create a skeleton YAML manifest file — yaml_skeleton" />
-<meta property="og:description" content="Tableau extensions require a manifest and the use of a YAML manifest file in
-shinytableau allows for a separation of concerns when developing an
-extension. With the yaml_skeleton() function, we can write a YAML manifest
-file to disk; it contains all of the required fields for the extension with
-example values. Later in the development lifecycle, the developer of a
-shinytableau extension can use values relevant to the project." />
+<meta property="og:title" content="Create and use a skeleton YAML manifest file — yaml_skeleton" />
+<meta property="og:description" content="Tableau extensions need to provide a
+manifest
+(.trex) file that Tableau users can load into their dashboards. This file
+contains metadata such as the ID and name of the extension, the name and
+email of the extension author, logo image, etc. With shinytableau, you as the
+extension author do not create this file directly; instead, you provide a
+simpler manifest.yml file." />
 
 
 
@@ -114,43 +115,72 @@ shinytableau extension can use values relevant to the project." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a skeleton YAML manifest file</h1>
+    <h1>Create and use a skeleton YAML manifest file</h1>
     
     <div class="hidden name"><code>yaml_skeleton.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Tableau extensions require a manifest and the use of a YAML manifest file in
-<strong>shinytableau</strong> allows for a separation of concerns when developing an
-extension. With the <code>yaml_skeleton()</code> function, we can write a YAML manifest
-file to disk; it contains all of the required fields for the extension with
-example values. Later in the development lifecycle, the developer of a
-<strong>shinytableau</strong> extension can use values relevant to the project.</p>
+    <p>Tableau extensions need to provide a
+<a href='https://tableau.github.io/extensions-api/docs/trex_manifest.html'>manifest</a>
+(<code>.trex</code>) file that Tableau users can load into their dashboards. This file
+contains metadata such as the ID and name of the extension, the name and
+email of the extension author, logo image, etc. With shinytableau, you as the
+extension author do not create this file directly; instead, you provide a
+simpler manifest.yml file.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>yaml_skeleton</span>(filename = <span class='st'>"manifest.yml"</span>)</pre>
+    <pre class="usage"><span class='fu'>yaml_skeleton</span>(filename = <span class='st'>"manifest.yml"</span>)
+
+<span class='fu'>tableau_manifest_from_yaml</span>(path = <span class='st'>"."</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>filename</th>
-      <td><p>A filename for the YAML manifest file. Can be combined with a
-relative path. The default, and recommended, filename is <code>"manifest.yml"</code>.</p></td>
+      <td><p>The (relative or absolute) file path where the YAML manifest
+file should be written. For an app.R based app, the recommended file path
+is <code>manifest.yml</code> in the same directory as app.R; for a package-based app,
+put the file in the package's <code>inst</code> directory, and call
+<code>tableau_manifest_from_yaml()</code> with <code><a href='https://rdrr.io/r/base/system.file.html'>system.file()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>path</th>
+      <td><p>The (relative or absolute) file or directory path from which to
+load an existing YAML manifest file. If the path is a directory, the
+filename <code>manifest.yml</code> will be added to the end of the path.</p></td>
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p><code>yaml_skeleton</code> returns the filename, invisibly.
+<code>tableau_manifest_from_yaml</code> returns a manifest object that is suitable for
+passing to <code><a href='tableau_extension.html'>tableau_extension()</a></code>.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Call <code>yaml_skeleton()</code> from the R console to create a manifest.yml file.</p>
+<p>Call <code>tableau_manifest_from_yaml()</code> from your app.R to load it, and pass the
+resulting object to <code><a href='tableau_extension.html'>tableau_extension()</a></code>.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>See the <a href='https://rstudio.github.io/shinytableau/articles/shinytableau.html'>Getting Started guide</a>
+to learn more.</p>
+<p>If the YAML file approach is inconvenient for some reason, you can also use
+<code><a href='tableau_manifest.html'>tableau_manifest()</a></code> to programmatically create a manifest.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Generate a YAML manifest file in the</span>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'># Generate a YAML manifest file in the</span>
 <span class='co'># root directory of the project</span>
-<span class='co'># yaml_skeleton()</span>
+<span class='fu'>yaml_skeleton</span>()
 
 <span class='co'># Generate the skeleton YAML manifest</span>
 <span class='co'># file (called `manifest.yml`) in the</span>
 <span class='co'># `app` subdirectory</span>
-<span class='co'># yaml_skeleton(filename = "app/manifest.yml")</span>
-
+<span class='fu'>yaml_skeleton</span>(filename = <span class='st'>"app/manifest.yml"</span>)
+}
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
