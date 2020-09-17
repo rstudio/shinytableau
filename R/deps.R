@@ -9,9 +9,7 @@ tableau_extensions_api_lib <- function() {
   )
 }
 
-#' @export
 shinytableau_lib <- function() {
-
 
   # debugPath <- file.path(here::here(), "inst/assets")
   # if (dir.exists(debugPath) && dir.exists(file.path(here::here(), "inst/lib/tableau-extensions"))) {

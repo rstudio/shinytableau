@@ -86,8 +86,37 @@ tableau_extension <- function(manifest, ui, server, config_ui = NULL,
   )
 }
 
+#' Specify options for `tableau_extension`
+#'
+#' Use this function to modify the configuration options available for your
+#' Tableau extension. Pass the resulting value as the `options` argument to
+#' [tableau_extension()].
+#'
+#' @param config_width,config_height Numeric value specifying the initial width
+#'   and height of the extension's configuration dialog (if any). In pixels.
+#' @param prompt_for_config If the extension provides a configuration dialog
+#'   (i.e. [tableau_extension()] is called with a `config_ui` argument),
+#'   `prompt_for_config=TRUE` (the default) means that a newly added extension
+#'   should not even attempt to render its `ui` and `server` in the dashboard;
+#'   instead, a message instructing the Tableau user to use the configuration
+#'   dialog is displayed instead.
+#'
+#'   Use `prompt_for_config=FALSE` if the extension is able to run even without
+#'   initial configuration.
+#' @param standalone Some shinytableau projects might not be extensions at all,
+#'   but rather apps that can run both inside and outside of Tableau dashboards.
+#'   Such apps should use `standalone=TRUE`. The default is `FALSE`, indicating
+#'   that the app is a true Tableau extension and should not attempt to run
+#'   outside of a Tableau dashboard.
+#'
+#'   See the vignette on standalone apps for more information. TODO
 #' @param ... Options to pass through to [shiny::runApp] (e.g. `port`,
-#'   `launch.browser`, `host`, `quiet`).
+#'   `launch.browser`, `host`, `quiet`). For local development purposes, it's a
+#'   good idea to assign `port` to a hardcoded number between 1025 and 49151
+#'   that is unique for each extension.
+#'
+#' @return A list object, suitable for passing to `tableau_extension(options = ...)`.
+#'
 #' @export
 ext_options <- function(config_width = 600, config_height = 400,
   prompt_for_config = TRUE, standalone = FALSE, ...) {

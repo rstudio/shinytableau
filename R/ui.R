@@ -94,6 +94,17 @@ author_html <- function(manifest) {
   author
 }
 
+#' Close Tableau extension's configuration dialog
+#'
+#' Invoke from within `config_server` function to close the configuration
+#' dialog. Most extensions should not need to call this, as shinytableau will
+#' automatically call it when the configuration dialog's OK or Cancel buttons
+#' are pressed.
+#'
+#' @param payload Not currently used by shinytableau.
+#' @param session The Shiny `session` object. (You should probably just use the
+#'   default.)
+#'
 #' @export
 tableau_close_dialog <- function(payload = "", session = shiny::getDefaultReactiveDomain()) {
   session <- unwrap_session(session)
