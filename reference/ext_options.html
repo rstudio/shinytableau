@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • shinytableau</title>
+<title>Specify options for tableau_extension — ext_options • shinytableau</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,10 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Specify options for tableau_extension — ext_options" />
+<meta property="og:description" content="Use this function to modify the configuration options available for your
+Tableau extension. Pass the resulting value as the options argument to
+tableau_extension()." />
 
 
 
@@ -58,7 +61,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -106,102 +109,69 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Specify options for <code>tableau_extension</code></h1>
+    
+    <div class="hidden name"><code>ext_options.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Use this function to modify the configuration options available for your
+Tableau extension. Pass the resulting value as the <code>options</code> argument to
+<code><a href='tableau_extension.html'>tableau_extension()</a></code>.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>ext_options</span>(
+  config_width = <span class='fl'>600</span>,
+  config_height = <span class='fl'>400</span>,
+  prompt_for_config = <span class='fl'>TRUE</span>,
+  standalone = <span class='fl'>FALSE</span>,
+  <span class='kw'>...</span>
+)</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="choose_data.html">choose_data_ui()</a></code> <code><a href="choose_data.html">choose_data()</a></code> </p>
-        </td>
-        <td><p>Shiny module to allow easy selecting of Tableau data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="choose_data_options.html">choose_data_options()</a></code> </p>
-        </td>
-        <td><p>Options for the <code>choose_data</code> module</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ext_options.html">ext_options()</a></code> </p>
-        </td>
-        <td><p>Specify options for <code>tableau_extension</code></p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="restore_inputs.html">restore_inputs()</a></code> </p>
-        </td>
-        <td><p>Prepopulate Shiny inputs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_close_dialog.html">tableau_close_dialog()</a></code> </p>
-        </td>
-        <td><p>Close Tableau extension's configuration dialog</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_extension.html">tableau_extension()</a></code> </p>
-        </td>
-        <td><p>Create a Tableau Extension object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_manifest.html">tableau_manifest()</a></code> </p>
-        </td>
-        <td><p>Generate a Tableau Extension Manifest</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_select_marks_by_brush_async.html">tableau_select_marks_by_brush_async()</a></code> </p>
-        </td>
-        <td><p>Update a worksheet's selection using a <code>plotOutput</code> ggplot2 brush</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_setting.html">tableau_setting()</a></code> <code><a href="tableau_setting.html">tableau_settings_all()</a></code> </p>
-        </td>
-        <td><p>Read Tableau extension settings</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="update_tableau_settings_async.html">update_tableau_settings_async()</a></code> </p>
-        </td>
-        <td><p>Write Tableau extension settings</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="yaml_skeleton.html">yaml_skeleton()</a></code> <code><a href="yaml_skeleton.html">tableau_manifest_from_yaml()</a></code> </p>
-        </td>
-        <td><p>Create and use a skeleton YAML manifest file</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>config_width, config_height</th>
+      <td><p>Numeric value specifying the initial width
+and height of the extension's configuration dialog (if any). In pixels.</p></td>
+    </tr>
+    <tr>
+      <th>prompt_for_config</th>
+      <td><p>If the extension provides a configuration dialog
+(i.e. <code><a href='tableau_extension.html'>tableau_extension()</a></code> is called with a <code>config_ui</code> argument),
+<code>prompt_for_config=TRUE</code> (the default) means that a newly added extension
+should not even attempt to render its <code>ui</code> and <code>server</code> in the dashboard;
+instead, a message instructing the Tableau user to use the configuration
+dialog is displayed instead.</p>
+<p>Use <code>prompt_for_config=FALSE</code> if the extension is able to run even without
+initial configuration.</p></td>
+    </tr>
+    <tr>
+      <th>standalone</th>
+      <td><p>Some shinytableau projects might not be extensions at all,
+but rather apps that can run both inside and outside of Tableau dashboards.
+Such apps should use <code>standalone=TRUE</code>. The default is <code>FALSE</code>, indicating
+that the app is a true Tableau extension and should not attempt to run
+outside of a Tableau dashboard.</p>
+<p>See the vignette on standalone apps for more information. TODO</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Options to pass through to <a href='https://shiny.rstudio.com/reference/shiny/latest/runApp.html'>shiny::runApp</a> (e.g. <code>port</code>,
+<code>launch.browser</code>, <code>host</code>, <code>quiet</code>). For local development purposes, it's a
+good idea to assign <code>port</code> to a hardcoded number between 1025 and 49151
+that is unique for each extension.</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A list object, suitable for passing to <code><a href='tableau_extension.html'>tableau_extension(options = ...)</a></code>.</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

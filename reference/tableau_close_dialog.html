@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • shinytableau</title>
+<title>Close Tableau extension's configuration dialog — tableau_close_dialog • shinytableau</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,11 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Close Tableau extension's configuration dialog — tableau_close_dialog" />
+<meta property="og:description" content="Invoke from within config_server function to close the configuration
+dialog. Most extensions should not need to call this, as shinytableau will
+automatically call it when the configuration dialog's OK or Cancel buttons
+are pressed." />
 
 
 
@@ -58,7 +62,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -106,102 +110,38 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Close Tableau extension's configuration dialog</h1>
+    
+    <div class="hidden name"><code>tableau_close_dialog.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Invoke from within <code>config_server</code> function to close the configuration
+dialog. Most extensions should not need to call this, as shinytableau will
+automatically call it when the configuration dialog's OK or Cancel buttons
+are pressed.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>tableau_close_dialog</span>(payload = <span class='st'>""</span>, session = <span class='kw'>shiny</span>::<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span>())</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="choose_data.html">choose_data_ui()</a></code> <code><a href="choose_data.html">choose_data()</a></code> </p>
-        </td>
-        <td><p>Shiny module to allow easy selecting of Tableau data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="choose_data_options.html">choose_data_options()</a></code> </p>
-        </td>
-        <td><p>Options for the <code>choose_data</code> module</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ext_options.html">ext_options()</a></code> </p>
-        </td>
-        <td><p>Specify options for <code>tableau_extension</code></p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="restore_inputs.html">restore_inputs()</a></code> </p>
-        </td>
-        <td><p>Prepopulate Shiny inputs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_close_dialog.html">tableau_close_dialog()</a></code> </p>
-        </td>
-        <td><p>Close Tableau extension's configuration dialog</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_extension.html">tableau_extension()</a></code> </p>
-        </td>
-        <td><p>Create a Tableau Extension object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_manifest.html">tableau_manifest()</a></code> </p>
-        </td>
-        <td><p>Generate a Tableau Extension Manifest</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_select_marks_by_brush_async.html">tableau_select_marks_by_brush_async()</a></code> </p>
-        </td>
-        <td><p>Update a worksheet's selection using a <code>plotOutput</code> ggplot2 brush</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_setting.html">tableau_setting()</a></code> <code><a href="tableau_setting.html">tableau_settings_all()</a></code> </p>
-        </td>
-        <td><p>Read Tableau extension settings</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="update_tableau_settings_async.html">update_tableau_settings_async()</a></code> </p>
-        </td>
-        <td><p>Write Tableau extension settings</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="yaml_skeleton.html">yaml_skeleton()</a></code> <code><a href="yaml_skeleton.html">tableau_manifest_from_yaml()</a></code> </p>
-        </td>
-        <td><p>Create and use a skeleton YAML manifest file</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>payload</th>
+      <td><p>Not currently used by shinytableau.</p></td>
+    </tr>
+    <tr>
+      <th>session</th>
+      <td><p>The Shiny <code>session</code> object. (You should probably just use the
+default.)</p></td>
+    </tr>
     </table>
-  </div>
 
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

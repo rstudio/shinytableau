@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • shinytableau</title>
+<title>Write Tableau extension settings — update_tableau_settings_async • shinytableau</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,10 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Write Tableau extension settings — update_tableau_settings_async" />
+<meta property="og:description" content="Call update_tableau_settings_async() from an extension's config_server
+function to write settings that can be read, now and in the future, by
+tableau_setting()." />
 
 
 
@@ -58,7 +61,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -106,102 +109,66 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Write Tableau extension settings</h1>
+    
+    <div class="hidden name"><code>update_tableau_settings_async.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Call <code>update_tableau_settings_async()</code> from an extension's <code>config_server</code>
+function to write settings that can be read, now and in the future, by
+<code><a href='tableau_setting.html'>tableau_setting()</a></code>.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>update_tableau_settings_async</span>(
+  <span class='kw'>...</span>,
+  add. = <span class='fl'>FALSE</span>,
+  session. = <span class='kw'>shiny</span>::<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span>()
+)</pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="choose_data.html">choose_data_ui()</a></code> <code><a href="choose_data.html">choose_data()</a></code> </p>
-        </td>
-        <td><p>Shiny module to allow easy selecting of Tableau data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="choose_data_options.html">choose_data_options()</a></code> </p>
-        </td>
-        <td><p>Options for the <code>choose_data</code> module</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ext_options.html">ext_options()</a></code> </p>
-        </td>
-        <td><p>Specify options for <code>tableau_extension</code></p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="restore_inputs.html">restore_inputs()</a></code> </p>
-        </td>
-        <td><p>Prepopulate Shiny inputs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_close_dialog.html">tableau_close_dialog()</a></code> </p>
-        </td>
-        <td><p>Close Tableau extension's configuration dialog</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_extension.html">tableau_extension()</a></code> </p>
-        </td>
-        <td><p>Create a Tableau Extension object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_manifest.html">tableau_manifest()</a></code> </p>
-        </td>
-        <td><p>Generate a Tableau Extension Manifest</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_select_marks_by_brush_async.html">tableau_select_marks_by_brush_async()</a></code> </p>
-        </td>
-        <td><p>Update a worksheet's selection using a <code>plotOutput</code> ggplot2 brush</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_setting.html">tableau_setting()</a></code> <code><a href="tableau_setting.html">tableau_settings_all()</a></code> </p>
-        </td>
-        <td><p>Read Tableau extension settings</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="update_tableau_settings_async.html">update_tableau_settings_async()</a></code> </p>
-        </td>
-        <td><p>Write Tableau extension settings</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="yaml_skeleton.html">yaml_skeleton()</a></code> <code><a href="yaml_skeleton.html">tableau_manifest_from_yaml()</a></code> </p>
-        </td>
-        <td><p>Create and use a skeleton YAML manifest file</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>...</th>
+      <td><p>Settings to be persisted, as named arguments. The value should be
+suitable for encoding as JSON using <code><a href='https://rdrr.io/pkg/jsonlite/man/fromJSON.html'>jsonlite::toJSON(auto_unbox = TRUE)</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>add.</th>
+      <td><p>A logical (<code>TRUE</code>/<code>FALSE</code>) value. If <code>FALSE</code> (the default), the
+settings provided in <code>...</code> should replace all existing settings for this
+extension. If <code>TRUE</code>, the settings provided in <code>...</code> are merged with the
+settings that already exist.</p></td>
+    </tr>
+    <tr>
+      <th>session.</th>
+      <td><p>The Shiny <code>session</code> object. (You should probably just use the
+default.)</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A <a href='https://rdrr.io/pkg/promises/man/promise.html'>promises::promise</a> object. See Details.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>While the settings reading functions---<code><a href='tableau_setting.html'>tableau_setting()</a></code> and
+<code>tableau_setting_all()</code>---are reactive, <code>update_tableau_settings_async()</code> is
+not. Calling it does not cause any reactive dependencies to be taken.</p>
+<p>As implied by the function name, <code>update_tableau_settings_async()</code> does its
+work <a href='https://rstudio.github.io/promises/'>asynchronously</a> (as the actual
+persisting of settings must happen through the Tableau Extension API in the
+web browser, not directly in R). You can usually ignore this fact, except
+that you should ensure that if this function is being called from within an
+<code>observe()</code> or <code>observeEvent()</code>, that the promise object it returns is the
+return value of the observer code block. (This is to alert Shiny to the fact
+that this observer can't really be considered done with its execution until
+the <code>update_tableau_settings_async()</code> task is completely finished.)</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

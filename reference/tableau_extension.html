@@ -132,7 +132,7 @@ manifest (required) and configuration dialog UI and server (optional).</p>
   <span class='kw'>server</span>,
   config_ui = <span class='kw'>NULL</span>,
   config_server = <span class='kw'>NULL</span>,
-  options = <span class='fu'>ext_options</span>()
+  options = <span class='fu'><a href='ext_options.html'>ext_options</a></span>()
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -176,12 +176,12 @@ to go with <code>config_ui</code>. The <code>iv</code> parameter is a
 <a href='https://rdrr.io/pkg/shinyvalidate/man/InputValidator.html'>shinyvalidate::InputValidator</a> object that will enable when the config
 dialog's OK or Apply buttons are clicked. The <code>config_server</code> function must
 return a zero-argument function that, when run, calls
-<code>update_tableau_settings_async()</code> to persist the user's configuration
+<code><a href='update_tableau_settings_async.html'>update_tableau_settings_async()</a></code> to persist the user's configuration
 preferences.</p></td>
     </tr>
     <tr>
       <th>options</th>
-      <td><p>See <code>ext_options()</code>.</p></td>
+      <td><p>See <code><a href='ext_options.html'>ext_options()</a></code>.</p></td>
     </tr>
     </table>
 

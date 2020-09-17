@@ -131,7 +131,7 @@
 }
 
 <span class="fu"><a href="../reference/tableau_extension.html">tableau_extension</a></span>(<span class="kw">manifest</span>, <span class="kw">ui</span>, <span class="kw">server</span>,
-  options = <span class="fu">ext_options</span>(port = <span class="fl">3456</span>)
+  options = <span class="fu"><a href="../reference/ext_options.html">ext_options</a></span>(port = <span class="fl">3456</span>)
 )
 </pre></div>
 <p>If you’ve written a Shiny app before, this code should look comfortingly familiar. The main differences are the <code>manifest</code> object, the <code>ui</code> being wrapped in <code>function(req) {...}</code> (optional in a regular Shiny app, but mandatory here), and where the last line is usually <code><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html">shinyApp(ui, server)</a></code> we now do <code><a href="../reference/tableau_extension.html">tableau_extension(manifest, ui, server)</a></code>.</p>
@@ -161,7 +161,7 @@
 
 <span class="kw">server</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">input</span>, <span class="kw">output</span>, <span class="kw">session</span>) {
   <span class="kw">output</span><span class="op">$</span><span class="kw">message</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPrint.html">renderText</a></span>({
-    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Hello, "</span>, <span class="fu">tableau_setting</span>(<span class="st">"greetee"</span>), <span class="st">"!"</span>)
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Hello, "</span>, <span class="fu"><a href="../reference/tableau_setting.html">tableau_setting</a></span>(<span class="st">"greetee"</span>), <span class="st">"!"</span>)
   })
 }
 
@@ -177,7 +177,7 @@
 
   <span class="co"># config_server must have a save_settings function</span>
   <span class="kw">save_settings</span> <span class="op">&lt;-</span> <span class="fu">function</span>() {
-    <span class="fu">update_tableau_settings_async</span>(
+    <span class="fu"><a href="../reference/update_tableau_settings_async.html">update_tableau_settings_async</a></span>(
       greetee = <span class="kw">input</span><span class="op">$</span><span class="kw">greetee</span>
     )
   }
@@ -187,7 +187,7 @@
 }
 
 <span class="fu"><a href="../reference/tableau_extension.html">tableau_extension</a></span>(<span class="kw">manifest</span>, <span class="kw">ui</span>, <span class="kw">server</span>, <span class="kw">config_ui</span>, <span class="kw">config_server</span>,
-  options = <span class="fu">ext_options</span>(port = <span class="fl">3456</span>)
+  options = <span class="fu"><a href="../reference/ext_options.html">ext_options</a></span>(port = <span class="fl">3456</span>)
 )
 </pre></div>
 <p>If your RStudio session is still running the previous version of the code we wrote, stop it now by either clicking in the Console pane and hitting Escape, or pressing the stop-sign icon in the Console toolbar. Then run the new code with Ctrl+Shift+Enter/Cmd+Shift+Return.</p>
@@ -226,7 +226,7 @@
 
   <span class="co"># config_server must have a save_settings function</span>
   <span class="kw">save_settings</span> <span class="op">&lt;-</span> <span class="fu">function</span>() {
-    <span class="fu">update_tableau_settings_async</span>(
+    <span class="fu"><a href="../reference/update_tableau_settings_async.html">update_tableau_settings_async</a></span>(
       greetee = <span class="kw">input</span><span class="op">$</span><span class="kw">greetee</span>
     )
   }
@@ -236,15 +236,15 @@
 }
 </pre></div>
 <p>(Advanced R users may be wondering if, rather than declaring and returning <code>save_settings</code>, simply having an anonymous function as the last expression would be sufficient. Yes, that works, but doing it the recommended way makes the intent more immediately obvious.)</p>
-<p>The values you pass to <code>update_tableau_settings_async()</code> will be saved as JSON objects, so it’s a good idea to keep things simple: atomic numeric, character, and logical vectors are safe to use, as are unnamed and named lists. <code>NULL</code> is fine too. It’s not a good idea to save more specialized objects like factors, data frames, environments, R6 objects. Even Date objects should probably be converted to character first, and parsed back into a Date by whomever is reading the setting.</p>
+<p>The values you pass to <code><a href="../reference/update_tableau_settings_async.html">update_tableau_settings_async()</a></code> will be saved as JSON objects, so it’s a good idea to keep things simple: atomic numeric, character, and logical vectors are safe to use, as are unnamed and named lists. <code>NULL</code> is fine too. It’s not a good idea to save more specialized objects like factors, data frames, environments, R6 objects. Even Date objects should probably be converted to character first, and parsed back into a Date by whomever is reading the setting.</p>
 <p>Speaking of reading settings…</p>
 </div>
 <div id="reading-settings" class="section level3">
 <h3 class="hasAnchor">
 <a href="#reading-settings" class="anchor"></a>Reading settings</h3>
 <p>Now that we’ve discussed how <code>config_ui</code> and <code>config_server</code> can let you write settings, we can talk about the much simpler topic of how to read settings from the extension object (i.e. <code>server</code>).</p>
-<p>The main way you’ll access settings is by calling <code>tableau_setting(setting_name)</code>, e.g. <code>tableau_setting("greetee")</code> in the example above. The important thing to note is that <code>tableau_setting</code> performs a <em>reactive</em> read, so whomever is doing the reading (i.e. reactive expression, reactive observer, or reactive output) will be triggered when the setting changes.</p>
-<p>You can call <code>tableau_settings_all()</code> to retrieve all of the current settings as a list. Generally you should try to use <code>tableau_setting</code> in favor of <code>tableau_settings_all</code>, because the latter takes a reactive dependency on <em>all</em> of the settings, even if you’re not actually interested in all of them.</p>
+<p>The main way you’ll access settings is by calling <code><a href="../reference/tableau_setting.html">tableau_setting(setting_name)</a></code>, e.g. <code><a href="../reference/tableau_setting.html">tableau_setting("greetee")</a></code> in the example above. The important thing to note is that <code>tableau_setting</code> performs a <em>reactive</em> read, so whomever is doing the reading (i.e. reactive expression, reactive observer, or reactive output) will be triggered when the setting changes.</p>
+<p>You can call <code><a href="../reference/tableau_setting.html">tableau_settings_all()</a></code> to retrieve all of the current settings as a list. Generally you should try to use <code>tableau_setting</code> in favor of <code>tableau_settings_all</code>, because the latter takes a reactive dependency on <em>all</em> of the settings, even if you’re not actually interested in all of them.</p>
 </div>
 </div>
 <div id="accessing-data" class="section level2">
