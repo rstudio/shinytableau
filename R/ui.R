@@ -55,7 +55,7 @@ display_with_deps <- function(ui, req) {
   }
 
   return(htmltools::tagList(
-    shinytableau::shinytableau_lib(),
+    shinytableau_lib(),
     ui
   ))
 }
