@@ -160,4 +160,18 @@ You can call `tableau_settings_all()` to retrieve all of the current settings as
 
 ## Accessing data
 
+Now that we've created an app that reads/writes settings, we're ready to take a big step forward and actually access a data table from Tableau.
+
+Tableau's Extension API allows dashboard extensions, like the ones we're creating, to access data from the workbook they're embedded in. Actually, there's one big caveat to that: we can't access just *any* data, we can only access data via worksheets that are present in our same dashboard.
+
+This means you can't start a new (empty) dashboard, put an extension object on it, and expect that extension object to be able to access any data. Instead, you need to add one or more worksheets to the dashboard first. Now, the extension object can access the data used by those worksheets.
+
+Each worksheet makes several related-but-distinct data tables available to our extensions.
+
+-   Summary data
+
+-   Underlying data
+
+-   
+
 ## Deployment/hosting
