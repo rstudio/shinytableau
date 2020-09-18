@@ -136,11 +136,11 @@ using this function is significantly more involved than, say, a simple
     <tr>
       <th>spec</th>
       <td><p>An argument that specifies what specific data should be
-retrieved. This can be specified in a number of ways:</p><ol>
+accessed. This can be specified in a number of ways:</p><ol>
 <li><p>The name of a setting, that was set using a value returned from
 <code><a href='choose_data_ui.html'>choose_data()</a></code>. This is the most common scenario for <code>server</code>.</p></li>
 <li><p>The object returned from <code><a href='choose_data_ui.html'>choose_data()</a></code> can be passed in directly. This
-is likely the approach you should take if you want to retrieve data in
+is likely the approach you should take if you want to access data in
 <code>config_server</code> based on unsaved config changes (e.g. to give the user a
 live preview of what their <code>choose_data</code> choices would yield).</p></li>
 <li><p>You can directly create a spec object using one of the helper functions
