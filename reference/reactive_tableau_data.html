@@ -181,14 +181,90 @@ is how to tell shinytableau what specific data table you want to access, and
 the second is actually accessing the data from R.</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Specifying a data table</h3>
 
 
-<p>As of today, Tableau's Extension API requires you to access any data tables
-via one of the worksheets on the same dashboard.</p>
+<p>If we want to access data from Tableau, the Tableau Extension API only allows
+us to do so via one of the worksheets that are part of the same dashboard.</p>
+<p>Each worksheet makes three categories of data available to us:</p><ol>
+<li><p><strong>Summary data:</strong> The data in its final form before visualization. If the
+visualization aggregates measures, then the summary data contains the data
+after aggregation has been performed. If the worksheet has an active
+selection, then by default, only the selected data is returned (set the
+<code>ignoreSelection</code> option to <code>TRUE</code> to retrieve all data).</p></li>
+<li><p><strong>Underlying data:</strong> The underlying data that is used in the visualization,
+before aggregation operations are performed but after tables are joined.</p>
+<p>By default, only the columns that are used in the worksheet are included
+(set <code>includeAllColumns</code> to <code>TRUE</code> if you need them all). If the worksheet
+has an active selection, then by default, only the selected data is
+returned (set the <code>ignoreSelection</code> option to <code>TRUE</code> to retrieve all
+data).</p></li>
+<li><p><strong>Data source:</strong> You can also access the raw data from the data source(s)
+used by the worksheet. This data is unaffected by the worksheet settings.
+Tableau data sources are broken into one or more logical tables, like how
+a relational database has multiple tables.</p></li>
+</ol>
+
+<p>As an R user, you may find this analogy based on the examples from
+<a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>dplyr::mutate-joins</a> to be helpful in explaining the relationship between
+data source, underlying, and summary data:</p><pre><span class='co'># Data source</span>
+<span class='kw'>logical1</span> <span class='op'>&lt;-</span> <span class='kw'>band_members</span>
+<span class='kw'>logical2</span> <span class='op'>&lt;-</span> <span class='kw'>band_instruments</span>
+
+<span class='co'># Underlying is joined/selected, but not aggregated</span>
+<span class='kw'>underlying</span> <span class='op'>&lt;-</span> <span class='kw'>band_members</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>full_join</span>(<span class='kw'>band_instruments</span>, by = <span class='st'>"name"</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>select</span>(<span class='kw'>band</span>, <span class='kw'>name</span>)
+
+<span class='co'># Summary is underlying plus aggregation</span>
+<span class='kw'>summary</span> <span class='op'>&lt;-</span> <span class='kw'>underlying</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>group_by</span>(<span class='kw'>band</span>) <span class='op'>%&gt;%</span>
+  <span class='fu'>tally</span>(name = <span class='st'>"COUNT(name)"</span>)
+</pre>
+
+<p>The existence of these three levels of data granularity, plus the fact that
+the underlying and data source levels need additional specification to narrow
+down which of the multiple data tables at each level are desired, means that
+providing clear instructions to <code>reactive_tableau_data</code> is surprisingly
+complicated.</p>
+<p>Now that you have some context, see the description for the <code>spec</code> parameter,
+above, for specific instructions on the different ways to specify data
+tables, based on current user input, previously saved configuration, or
+programmatically.</p>
+
+<h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Accessing a data table</h3>
+
+
+<p>We turn our attention now to consuming data from <code>reactive_tableau_data()</code>.
+Given the following code snippet, one that might appear in <code>config_server</code>:</p><pre><span class='kw'>data_spec</span> <span class='op'>&lt;-</span> <span class='fu'><a href='choose_data_ui.html'>choose_data</a></span>(<span class='st'>"mydata"</span>)
+<span class='kw'>data</span> <span class='op'>&lt;-</span> <span class='fu'>reactive_tableau_data</span>(<span class='kw'>data_spec</span>)
+</pre>
+
+<p>The <code>data</code> variable created here has two complications.</p>
+<p>First, it's reactive; like all reactive expressions, you must call <code>data</code> as
+a function to get at its value. It must be reactive because Tableau data can
+change (based on selection and filtering, if nothing else), and also, the
+user's choices can change as well (in the example, the <code>data_spec</code> object is
+also reactive).</p>
+<p>Second, and more seriously, reading Tableau data is asynchronous, so when you
+invoke <code><a href='https://rdrr.io/r/utils/data.html'>data()</a></code> what you get back is not a data frame, but the <a href='https://rstudio.github.io/promises/articles/overview.html'>promise of a data frame</a>.
+Working with promises has its own learning curve, so it's regrettable that
+they play such a prominent role in reading Tableau data. If this is a new
+topic for you, <a href='https://rstudio.com/resources/rstudioconf-2018/scaling-shiny-apps-with-async-programming/'>start with this talk</a>
+and then read through the various articles on the <a href='https://rstudio.github.io/promises/'>promises website</a>.</p>
+<p>The bottom line with promises is that you can use any of the normal functions
+you usually use for manipulating, analyzing, and visualizing data frames, but
+the manner in which you invoke those functions will be a bit different.
+Instead of calling <code><a href='https://rdrr.io/r/base/print.html'>print(data())</a></code>, for example, you'll need to first change
+to the more pipe-oriented <code>data() %&gt;% print()</code> and then replace the magrittr
+pipe with the promise-pipe like <code>data() %...&gt;% print()</code>. There's much more to
+the story, though; for all but the simplest scenarios, you'll need to check
+out the resources linked in the previous paragraph.</p>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>data_spec_x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='choose_data_ui.html'>choose_data</a></span>(<span class='st'>"x"</span>, iv = <span class='kw'>iv</span>)
-</div><div class='output co'>#&gt; <span class='error'>Error in callModule(module, id, session = session): session must be a ShinySession or session_proxy object.</span></div><div class='input'><span class='kw'>data_x</span> <span class='op'>&lt;-</span> <span class='fu'>reactive_tableau_data</span>(<span class='kw'>data_spec_x</span>)
-</div><div class='output co'>#&gt; <span class='error'>Error in unwrap_session(session): shinytableau session not initialized. Are you trying to use tableau functions outside of a shinytableau extension?</span></div><div class='input'>
+    <pre class="examples"><div class='input'><span class='co'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='kw'>data_spec_x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='choose_data_ui.html'>choose_data</a></span>(<span class='st'>"x"</span>, iv = <span class='kw'>iv</span>)
+<span class='kw'>data_x</span> <span class='op'>&lt;-</span> <span class='fu'>reactive_tableau_data</span>(<span class='kw'>data_spec_x</span>)
+}
+
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
