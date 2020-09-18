@@ -198,6 +198,29 @@ reactive_tableau_data <- function(spec, options = list(), session = shiny::getDe
   })
 }
 
+#' Create data spec objects programmatically
+#'
+#' A data spec object is a pointer to a specific data table in a Tableau
+#' dashboard. It is analogous to a file path or a URL, except instead of a
+#' simple string, it is a structured object consisting of multiple arguments.
+#' The components of each data spec object will vary, depending on the type of
+#' data being requested: summary, underlying, or data source. See the Details
+#' section of [reactive_tableau_data()] for more information.
+#'
+#' @param worksheet The name (as character vector) or number (as integer) of the
+#'   worksheet. If a number is given, it will immediately be resolved to a
+#'   worksheet name.
+#' @param underlyingTableId,dataSourceId,logicalTableId The id (as character
+#'   vector) or number (as integer) of the specific underlying table/data
+#'   source/logical table to read. If a number is given, it will immediately be
+#'   resolved to an id.
+#' @param session The Shiny `session` object. (You should probably just use the
+#'   default.)
+#'
+#' @return A spec object, suitable for the `spec` argument to
+#'   [reactive_tableau_data()] or persisting via
+#'   [update_tableau_settings_async()].
+#'
 #' @export
 spec_summary <- function(worksheet = 1L, session = shiny::getDefaultReactiveDomain()) {
   worksheet <- resolve_worksheet(worksheet, session = session)
