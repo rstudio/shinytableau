@@ -39,6 +39,7 @@ Suggests:
     knitr,
     rmarkdown,
     ggplot2,
+    dplyr,
     summarytools
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr

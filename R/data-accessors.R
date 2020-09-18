@@ -27,8 +27,99 @@ tableau_worksheet_info <- function(name, session = shiny::getDefaultReactiveDoma
 #'
 #' ### Specifying a data table
 #'
-#' As of today, Tableau's Extension API requires you to access any data tables
-#' via one of the worksheets on the same dashboard.
+#' If we want to access data from Tableau, the Tableau Extension API only allows
+#' us to do so via one of the worksheets that are part of the same dashboard.
+#'
+#' Each worksheet makes three categories of data available to us:
+#'
+#' 1. **Summary data:** The data in its final form before visualization. If the
+#'    visualization aggregates measures, then the summary data contains the data
+#'    after aggregation has been performed. If the worksheet has an active
+#'    selection, then by default, only the selected data is returned (set the
+#'    `ignoreSelection` option to `TRUE` to retrieve all data).
+#'
+#' 2. **Underlying data:** The underlying data that is used in the visualization,
+#'    before aggregation operations are performed but after tables are joined.
+#'
+#'    By default, only the columns that are used in the worksheet are included
+#'    (set `includeAllColumns` to `TRUE` if you need them all). If the worksheet
+#'    has an active selection, then by default, only the selected data is
+#'    returned (set the `ignoreSelection` option to `TRUE` to retrieve all
+#'    data).
+#'
+#' 3. **Data source:** You can also access the raw data from the data source(s)
+#'    used by the worksheet. This data is unaffected by the worksheet settings.
+#'    Tableau data sources are broken into one or more logical tables, like how
+#'    a relational database has multiple tables.
+#'
+#' As an R user, you may find this analogy based on the examples from
+#' [dplyr::mutate-joins] to be helpful in explaining the relationship between
+#' data source, underlying, and summary data:
+#'
+#' ```
+#' # Data source
+#' logical1 <- band_members
+#' logical2 <- band_instruments
+#'
+#' # Underlying is joined/selected, but not aggregated
+#' underlying <- band_members %>%
+#'   full_join(band_instruments, by = "name") %>%
+#'   select(band, name)
+#'
+#' # Summary is underlying plus aggregation
+#' summary <- underlying %>%
+#'   group_by(band) %>%
+#'   tally(name = "COUNT(name)")
+#' ```
+#'
+#' The existence of these three levels of data granularity, plus the fact that
+#' the underlying and data source levels need additional specification to narrow
+#' down which of the multiple data tables at each level are desired, means that
+#' providing clear instructions to `reactive_tableau_data` is surprisingly
+#' complicated.
+#'
+#' Now that you have some context, see the description for the `spec` parameter,
+#' above, for specific instructions on the different ways to specify data
+#' tables, based on current user input, previously saved configuration, or
+#' programmatically.
+#'
+#' ### Accessing a data table
+#'
+#' We turn our attention now to consuming data from `reactive_tableau_data()`.
+#' Given the following code snippet, one that might appear in `config_server`:
+#'
+#' ```
+#' data_spec <- choose_data("mydata")
+#' data <- reactive_tableau_data(data_spec)
+#' ```
+#'
+#' The `data` variable created here has two complications.
+#'
+#' First, it's reactive; like all reactive expressions, you must call `data` as
+#' a function to get at its value. It must be reactive because Tableau data can
+#' change (based on selection and filtering, if nothing else), and also, the
+#' user's choices can change as well (in the example, the `data_spec` object is
+#' also reactive).
+#'
+#' Second, and more seriously, reading Tableau data is asynchronous, so when you
+#' invoke `data()` what you get back is not a data frame, but the [promise of a
+#' data frame](https://rstudio.github.io/promises/articles/overview.html).
+#' Working with promises has its own learning curve, so it's regrettable that
+#' they play such a prominent role in reading Tableau data. If this is a new
+#' topic for you, [start with this
+#' talk](https://rstudio.com/resources/rstudioconf-2018/scaling-shiny-apps-with-async-programming/)
+#' and then read through the various articles on the [promises
+#' website](https://rstudio.github.io/promises/).
+#'
+#' The bottom line with promises is that you can use any of the normal functions
+#' you usually use for manipulating, analyzing, and visualizing data frames, but
+#' the manner in which you invoke those functions will be a bit different.
+#' Instead of calling `print(data())`, for example, you'll need to first change
+#' to the more pipe-oriented `data() %>% print()` and then replace the magrittr
+#' pipe with the promise-pipe like `data() %...>% print()`. There's much more to
+#' the story, though; for all but the simplest scenarios, you'll need to check
+#' out the resources linked in the previous paragraph.
+#'
 #'
 #' @param spec An argument that specifies what specific data should be
 #'   retrieved. This can be specified in a number of ways:
@@ -70,8 +161,10 @@ tableau_worksheet_info <- function(name, session = shiny::getDefaultReactiveDoma
 #'   default.)
 #'
 #' @examples
+#' \dontrun{
 #' data_spec_x <- choose_data("x", iv = iv)
 #' data_x <- reactive_tableau_data(data_spec_x)
+#' }
 #'
 #' @import promises
 #' @export
