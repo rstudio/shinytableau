@@ -12,12 +12,12 @@ reactive_tableau_data(
 }
 \arguments{
 \item{spec}{An argument that specifies what specific data should be
-retrieved. This can be specified in a number of ways:
+accessed. This can be specified in a number of ways:
 \enumerate{
 \item The name of a setting, that was set using a value returned from
 \code{\link[=choose_data]{choose_data()}}. This is the most common scenario for \code{server}.
 \item The object returned from \code{\link[=choose_data]{choose_data()}} can be passed in directly. This
-is likely the approach you should take if you want to retrieve data in
+is likely the approach you should take if you want to access data in
 \code{config_server} based on unsaved config changes (e.g. to give the user a
 live preview of what their \code{choose_data} choices would yield).
 \item You can directly create a spec object using one of the helper functions

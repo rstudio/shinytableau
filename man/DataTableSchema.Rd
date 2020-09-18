@@ -24,7 +24,7 @@ field is called \code{name} but it comes from the Tableau Extension API).}
 data frame row describes a column in the data table. The data frame
 contains these columns:
 \itemize{
-\item \code{dataType} - character - \code{"float"}, \code{"integer"}, \code{"string"}, \code{"boolean"}, \code{"date"}, or \code{"datetime"}.
+\item \code{dataType} - character - \code{"bool"}, \code{"date"}, \code{"date-time"}, \code{"float"}, \code{"int"}, \code{"spatial"}, or \code{"string"}.
 \item \code{fieldName} - character - The name of the column.
 \item \code{index} - integer - The column number.
 \item \code{isReferenced} - logical - If \code{TRUE}, then the column is referenced in the worksheet.

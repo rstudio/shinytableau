@@ -122,13 +122,13 @@ tableau_worksheet_info <- function(name, session = shiny::getDefaultReactiveDoma
 #'
 #'
 #' @param spec An argument that specifies what specific data should be
-#'   retrieved. This can be specified in a number of ways:
+#'   accessed. This can be specified in a number of ways:
 #'
 #'   1. The name of a setting, that was set using a value returned from
 #'   [choose_data()]. This is the most common scenario for `server`.
 #'
 #'   2. The object returned from [choose_data()] can be passed in directly. This
-#'   is likely the approach you should take if you want to retrieve data in
+#'   is likely the approach you should take if you want to access data in
 #'   `config_server` based on unsaved config changes (e.g. to give the user a
 #'   live preview of what their `choose_data` choices would yield).
 #'
@@ -299,10 +299,32 @@ resolve_worksheet <- function(worksheet, session = shiny::getDefaultReactiveDoma
   }
 }
 
+#' Construct a reactive expression that reads Tableau data schema
+#'
+#' Creates a reactive expression that returns schema data for the specified
+#' Tableau data table, including the names and data types of columns. Basically,
+#' this is a convenience wrapper that takes a `spec` object in any of its
+#' various forms, invokes either [tableau_worksheet_info()] or
+#' [tableau_datasource_info()] as appropriate, and extracts the specific
+#' sub-object that matches `spec`.
+#'
+#' @param spec See [reactive_tableau_data()].
+#' @param session The Shiny `session` object. (You should probably just use the
+#'   default.)
+#'
+#' @return A named list, as described in the [DataTableSchema] topic.
+#'
 #' @export
 reactive_tableau_schema <- function(spec, session = shiny::getDefaultReactiveDomain()) {
 
   session <- unwrap_session(session)
+
+  if (is.character(spec) && length(spec) == 1) {
+    setting_name <- spec
+    spec <- shiny::reactive({
+      tableau_setting(setting_name, session = session)
+    })
+  }
 
   if (!is.function(spec)) {
     value <- spec
@@ -398,7 +420,7 @@ tableau_datasources <- function(session = shiny::getDefaultReactiveDomain()) {
 #'   data frame row describes a column in the data table. The data frame
 #'   contains these columns:
 #'
-#'   * `dataType` - character - `"float"`, `"integer"`, `"string"`, `"boolean"`, `"date"`, or `"datetime"`.
+#'   * `dataType` - character - `"bool"`, `"date"`, `"date-time"`, `"float"`, `"int"`, `"spatial"`, or `"string"`.
 #'   * `fieldName` - character - The name of the column.
 #'   * `index` - integer - The column number.
 #'   * `isReferenced` - logical - If `TRUE`, then the column is referenced in the worksheet.
