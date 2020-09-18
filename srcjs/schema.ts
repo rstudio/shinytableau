@@ -5,7 +5,8 @@ interface FieldInfo {
   readonly aggregation: string;
   // Tableau errors with "Field.columnType API not yet implemented"
   // readonly columnType: "continuous" | "discrete";
-  readonly dataSourceId: string;
+  // Not useful
+  // readonly dataSourceId: string;
   readonly description?: string;
   readonly id: string;
   readonly isCalculatedField: boolean;
@@ -138,19 +139,18 @@ async function collectDataSource(ds: DataSource): Promise<DataSourceInfo> {
     id: ds.id,
     fields: ds.fields.map(f => ({
       aggregation: f.aggregation,
-      dataSourceId: f.dataSource.id,
       id: f.id,
+      name: f.name,
+      description: f.description ?? "",
+      role: f.role,
       isCalculatedField: f.isCalculatedField,
       isCombinedField: f.isCombinedField,
       isGenerated: f.isGenerated,
-      isHidden: f.isHidden,
-      name: f.name,
-      role: f.role,
-      description: f.description
+      isHidden: f.isHidden
     })),
     isExtract: ds.isExtract,
     name: ds.name,
-    extractUpdateTime: ds.extractUpdateTime,
+    extractUpdateTime: ds.extractUpdateTime ?? null,
     logicalTables: await Promise.all((await ds.getLogicalTablesAsync()).map(async tbl => {
       return dataTableToInfo(await ds.getLogicalTableDataAsync(tbl.id, {
         ignoreAliases: false,

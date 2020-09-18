@@ -11,12 +11,17 @@
     value$worksheets <- lapply(value$worksheets, function(worksheet) {
       worksheet$summary$columns <- long_to_wide(worksheet$summary$columns)
       worksheet$underlyingTables <- lapply(worksheet$underlyingTables, data_table_info)
+      # Not sure why this is serializing as a list(character()), but it is
+      worksheet$dataSourceIds <- unlist(worksheet$dataSourceIds)
       worksheet
     })
 
     value$dataSources <- lapply(value$dataSources, function(ds) {
       ds$fields <- long_to_wide(ds$fields)
       ds$logicalTables <- lapply(ds$logicalTables, data_table_info)
+      if (!is.null(ds$extractUpdateTime)) {
+        ds$extractUpdateTime <- strptime(ds$extractUpdateTime, "%m/%d/%Y %r")
+      }
       ds
     })
 
@@ -25,7 +30,7 @@
 }
 
 long_to_wide <- function(lst) {
-  tibble::as_tibble(do.call(rbind, lst))
+  tibble::as_tibble(do.call(rbind, lapply(lst, tibble::as_tibble)))
 }
 
 data_table_info <- function(table) {

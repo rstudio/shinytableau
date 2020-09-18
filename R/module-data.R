@@ -130,7 +130,7 @@ choose_data <- function(id, options = choose_data_options(), iv = NULL,
     underlying_result <- optional_chooser("underlying", NULL, shiny::reactive({
       shiny::req(agg_result() == "underlying")
       tables <- worksheet()[["underlyingTables"]]
-      stats::setNames(pluck(tables, "id"), pluck(tables, "name"))
+      stats::setNames(pluck(tables, "id"), pluck(tables, "caption"))
     }))
 
     underlying <- shiny::reactive({
@@ -146,12 +146,12 @@ choose_data <- function(id, options = choose_data_options(), iv = NULL,
 
     logical_result <- optional_chooser("logical", NULL, r_choices = shiny::reactive({
       tables <- datasources[[datasource_result()]][["logicalTables"]]
-      stats::setNames(pluck(tables, "id"), pluck(tables, "name"))
+      stats::setNames(pluck(tables, "id"), pluck(tables, "caption"))
     }))
 
     logical_table <- shiny::reactive({
       tables <- datasources[[datasource_result()]][["logicalTables"]]
-      lookup(tables, "name", logical_result())
+      lookup(tables, "id", logical_result())
     })
 
     selected <- shiny::reactive({
@@ -163,18 +163,15 @@ choose_data <- function(id, options = choose_data_options(), iv = NULL,
     })
 
     spec <- shiny::reactive({
-      c(
-        list(worksheet = input$worksheet),
-        list(source = agg_result()),
-        if (agg_result() == "underlying") {
-          list(table = underlying_result())
-        },
-        if (agg_result() == "datasource") {
-          list(
-            ds = datasource_result(),
-            table = logical_result()
-          )
-        }
+      switch(agg_result(),
+        summary = spec_summary(input$worksheet),
+        underlying = spec_underlying(input$worksheet,
+          underlyingTableId = underlying_result()
+        ),
+        datasource = spec_datasource(input$worksheet,
+          dataSourceId = datasource_result(),
+          logicalTableId = logical_result()
+        )
       )
     })
 

@@ -374,23 +374,26 @@ function dataTableToInfo(dt, id, caption) {
 }
 exports.dataTableToInfo = dataTableToInfo;
 async function collectDataSource(ds) {
+    var _a;
     return {
         id: ds.id,
-        fields: ds.fields.map(f => ({
-            aggregation: f.aggregation,
-            dataSourceId: f.dataSource.id,
-            id: f.id,
-            isCalculatedField: f.isCalculatedField,
-            isCombinedField: f.isCombinedField,
-            isGenerated: f.isGenerated,
-            isHidden: f.isHidden,
-            name: f.name,
-            role: f.role,
-            description: f.description
-        })),
+        fields: ds.fields.map(f => {
+            var _a;
+            return ({
+                aggregation: f.aggregation,
+                id: f.id,
+                name: f.name,
+                description: (_a = f.description) !== null && _a !== void 0 ? _a : "",
+                role: f.role,
+                isCalculatedField: f.isCalculatedField,
+                isCombinedField: f.isCombinedField,
+                isGenerated: f.isGenerated,
+                isHidden: f.isHidden
+            });
+        }),
         isExtract: ds.isExtract,
         name: ds.name,
-        extractUpdateTime: ds.extractUpdateTime,
+        extractUpdateTime: (_a = ds.extractUpdateTime) !== null && _a !== void 0 ? _a : null,
         logicalTables: await Promise.all((await ds.getLogicalTablesAsync()).map(async (tbl) => {
             return dataTableToInfo(await ds.getLogicalTableDataAsync(tbl.id, {
                 ignoreAliases: false,
