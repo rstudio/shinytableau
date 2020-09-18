@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • shinytableau</title>
+<title>Get info about available data sources in this Tableau dashboard — tableau_datasources • shinytableau</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,9 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Get info about available data sources in this Tableau dashboard — tableau_datasources" />
+<meta property="og:description" content="For advanced use only; most shinytableau extensions should use the
+choose_data() module to allow the user to specify a data source." />
 
 
 
@@ -58,7 +60,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -106,120 +108,65 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Get info about available data sources in this Tableau dashboard</h1>
+    
+    <div class="hidden name"><code>tableau_datasources.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>For advanced use only; most shinytableau extensions should use the
+<code><a href='choose_data_ui.html'>choose_data()</a></code> module to allow the user to specify a data source.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>tableau_datasources</span>(session = <span class='kw'>shiny</span>::<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span>())
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="DataTableSchema.html">DataTableSchema</a></code> </p>
-        </td>
-        <td><p>Data table schema object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="choose_data.html">choose_data_ui()</a></code> <code><a href="choose_data.html">choose_data()</a></code> </p>
-        </td>
-        <td><p>Shiny module to allow easy selecting of Tableau data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="choose_data_options.html">choose_data_options()</a></code> </p>
-        </td>
-        <td><p>Options for the <code>choose_data</code> module</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ext_options.html">ext_options()</a></code> </p>
-        </td>
-        <td><p>Specify options for <code>tableau_extension</code></p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="reactive_tableau_data.html">reactive_tableau_data()</a></code> </p>
-        </td>
-        <td><p>Construct a reactive expression that reads Tableau data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="restore_inputs.html">restore_inputs()</a></code> </p>
-        </td>
-        <td><p>Prepopulate Shiny inputs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_close_dialog.html">tableau_close_dialog()</a></code> </p>
-        </td>
-        <td><p>Close Tableau extension's configuration dialog</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_datasources.html">tableau_datasources()</a></code> <code><a href="tableau_datasources.html">tableau_datasource_info()</a></code> </p>
-        </td>
-        <td><p>Get info about available data sources in this Tableau dashboard</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_extension.html">tableau_extension()</a></code> </p>
-        </td>
-        <td><p>Create a Tableau Extension object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_manifest.html">tableau_manifest()</a></code> </p>
-        </td>
-        <td><p>Generate a Tableau Extension Manifest</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_select_marks_by_brush_async.html">tableau_select_marks_by_brush_async()</a></code> </p>
-        </td>
-        <td><p>Update a worksheet's selection using a <code>plotOutput</code> ggplot2 brush</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_setting.html">tableau_setting()</a></code> <code><a href="tableau_setting.html">tableau_settings_all()</a></code> </p>
-        </td>
-        <td><p>Read Tableau extension settings</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="update_tableau_settings_async.html">update_tableau_settings_async()</a></code> </p>
-        </td>
-        <td><p>Write Tableau extension settings</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="yaml_skeleton.html">yaml_skeleton()</a></code> <code><a href="yaml_skeleton.html">tableau_manifest_from_yaml()</a></code> </p>
-        </td>
-        <td><p>Create and use a skeleton YAML manifest file</p></td>
-      </tr>
-    </tbody>
+<span class='fu'>tableau_datasource_info</span>(<span class='kw'>id</span>, session = <span class='kw'>shiny</span>::<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span>())</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>session</th>
+      <td><p>The Shiny <code>session</code> object. (You should probably just use the
+default.)</p></td>
+    </tr>
+    <tr>
+      <th>id</th>
+      <td><p>A data source ID, as returned by <code>tableau_datasources()</code> or
+<code>tableau_worksheet_info()</code><code>$dataSourceIds</code>.</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p><code>tableau_datasources()</code> returns a character vector whose elements are
+data source IDs.</p>
+<p><code>tableau_datasource_info()</code> returns the metadata and schema for a specific
+data source. Note that an extension instance can only access data sources
+that are actually used by worksheets in the same dashboard. The return
+value is a named list that contains the following fields:</p><ul>
+<li><p><strong><code>id</code></strong> - Unique ID for this data source.</p></li>
+<li><p><strong><code>fields</code></strong> - data frame where each row is one of the fields in the data source, and these columns:</p><ul>
+<li><p><code>aggregation</code> - character - The type of aggregation used for this field. Possible values listed <a href='https://tableau.github.io/extensions-api/docs/enums/tableau.fieldaggregationtype.html'>here</a>, e.g. <code>"attr"</code>, <code>"avg"</code>, <code>"count"</code>, ...</p></li>
+<li><p><code>id</code> - character - The field id.</p></li>
+<li><p><code>name</code> - character - The caption for this field.</p></li>
+<li><p><code>description</code> - character - User description of the field, or <code>""</code> if there is none.</p></li>
+<li><p><code>role</code> - character - <code>"dimension"</code>, <code>"measure"</code>, or <code>"unknown"</code>.</p></li>
+<li><p><code>isCalculatedField</code> - logical - Whether the field is a table calculation.</p></li>
+<li><p><code>isCombinedField</code> - logical - Whether the field is a combination of multiple fields.</p></li>
+<li><p><code>isGenerated</code> - logical - Whether this field is generated by Tableau. Tableau generates a number of fields for a data source, such as Number of Records, or Measure Values. This property can be used to distinguish between those fields and fields that come from the underlying data connection, or were created by a user.</p></li>
+<li><p><code>isHidden</code> - logical - Whether this field is hidden.</p></li>
+</ul></li>
+<li><p><strong><code>isExtract</code></strong> - <code>TRUE</code> if this data source is an extract, <code>FALSE</code> otherwise.</p></li>
+<li><p><strong><code>name</code></strong> - The user friendly name of the data source as seen in the UI.</p></li>
+<li><p><strong><code>extractUpdateTime</code></strong> - A <a href='https://rdrr.io/r/base/DateTimeClasses.html'>POSIXlt</a> indicating the time of extract, or <code>NULL</code> if the data source is live.</p></li>
+<li><p><strong><code>logicalTables</code></strong> - An unnamed list; each element is a <a href='DataTableSchema.html'>data table schema</a>.</p></li>
+</ul>
+
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

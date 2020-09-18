@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • shinytableau</title>
+<title>Data table schema object — DataTableSchema • shinytableau</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,9 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Data table schema object — DataTableSchema" />
+<meta property="og:description" content="An object that describes the schema of a data table, like a worksheet's
+summary data or underlying data, or a logical table from a data source." />
 
 
 
@@ -58,7 +60,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -106,120 +108,52 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Data table schema object</h1>
+    
+    <div class="hidden name"><code>DataTableSchema.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>An object that describes the schema of a data table, like a worksheet's
+summary data or underlying data, or a logical table from a data source.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="DataTableSchema.html">DataTableSchema</a></code> </p>
-        </td>
-        <td><p>Data table schema object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="choose_data.html">choose_data_ui()</a></code> <code><a href="choose_data.html">choose_data()</a></code> </p>
-        </td>
-        <td><p>Shiny module to allow easy selecting of Tableau data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="choose_data_options.html">choose_data_options()</a></code> </p>
-        </td>
-        <td><p>Options for the <code>choose_data</code> module</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ext_options.html">ext_options()</a></code> </p>
-        </td>
-        <td><p>Specify options for <code>tableau_extension</code></p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="reactive_tableau_data.html">reactive_tableau_data()</a></code> </p>
-        </td>
-        <td><p>Construct a reactive expression that reads Tableau data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="restore_inputs.html">restore_inputs()</a></code> </p>
-        </td>
-        <td><p>Prepopulate Shiny inputs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_close_dialog.html">tableau_close_dialog()</a></code> </p>
-        </td>
-        <td><p>Close Tableau extension's configuration dialog</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_datasources.html">tableau_datasources()</a></code> <code><a href="tableau_datasources.html">tableau_datasource_info()</a></code> </p>
-        </td>
-        <td><p>Get info about available data sources in this Tableau dashboard</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_extension.html">tableau_extension()</a></code> </p>
-        </td>
-        <td><p>Create a Tableau Extension object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_manifest.html">tableau_manifest()</a></code> </p>
-        </td>
-        <td><p>Generate a Tableau Extension Manifest</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_select_marks_by_brush_async.html">tableau_select_marks_by_brush_async()</a></code> </p>
-        </td>
-        <td><p>Update a worksheet's selection using a <code>plotOutput</code> ggplot2 brush</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_setting.html">tableau_setting()</a></code> <code><a href="tableau_setting.html">tableau_settings_all()</a></code> </p>
-        </td>
-        <td><p>Read Tableau extension settings</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="update_tableau_settings_async.html">update_tableau_settings_async()</a></code> </p>
-        </td>
-        <td><p>Write Tableau extension settings</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="yaml_skeleton.html">yaml_skeleton()</a></code> <code><a href="yaml_skeleton.html">tableau_manifest_from_yaml()</a></code> </p>
-        </td>
-        <td><p>Create and use a skeleton YAML manifest file</p></td>
-      </tr>
-    </tbody>
-    </table>
+
+    <h2 class="hasAnchor" id="fields"><a class="anchor" href="#fields"></a>Fields</h2>
+
+    
+
+<dl>
+<dt><code>id</code></dt><dd><p>Character vector indicating the ID of the underlying data table or
+logical table. (Not present for summary data.)</p></dd>
+
+<dt><code>caption</code></dt><dd><p>Character vector with a human-readable description of the
+underlying data table or logical table. (Not present for summary data.)</p></dd>
+
+<dt><code>name</code></dt><dd><p>Character vector with either <code>"Underlying Data Table"</code> or
+<code>"Summary Data Table"</code> (yes, literally those strings; not sure why this
+field is called <code>name</code> but it comes from the Tableau Extension API).</p></dd>
+
+<dt><code>columns</code></dt><dd><p>A data frame that describes the columns in this table. Each
+data frame row describes a column in the data table. The data frame
+contains these columns:
+<ul>
+<li><p><code>dataType</code> - character - <code>"float"</code>, <code>"integer"</code>, <code>"string"</code>, <code>"boolean"</code>, <code>"date"</code>, or <code>"datetime"</code>.</p></li>
+<li><p><code>fieldName</code> - character - The name of the column.</p></li>
+<li><p><code>index</code> - integer - The column number.</p></li>
+<li><p><code>isReferenced</code> - logical - If <code>TRUE</code>, then the column is referenced in the worksheet.</p></li>
+</ul></p></dd>
+
+</dl>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Data table schema objects are obtained via
+<code>tableau_worksheet_info()</code> and <code><a href='tableau_datasources.html'>tableau_datasource_info()</a></code>.</p></div>
+
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
