@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • shinytableau</title>
+<title>Create data spec objects programmatically — spec_summary • shinytableau</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,13 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Create data spec objects programmatically — spec_summary" />
+<meta property="og:description" content="A data spec object is a pointer to a specific data table in a Tableau
+dashboard. It is analogous to a file path or a URL, except instead of a
+simple string, it is a structured object consisting of multiple arguments.
+The components of each data spec object will vary, depending on the type of
+data being requested: summary, underlying, or data source. See the Details
+section of reactive_tableau_data() for more information." />
 
 
 
@@ -58,7 +64,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -106,126 +112,67 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Create data spec objects programmatically</h1>
+    
+    <div class="hidden name"><code>spec_summary.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>A data spec object is a pointer to a specific data table in a Tableau
+dashboard. It is analogous to a file path or a URL, except instead of a
+simple string, it is a structured object consisting of multiple arguments.
+The components of each data spec object will vary, depending on the type of
+data being requested: summary, underlying, or data source. See the Details
+section of <code><a href='reactive_tableau_data.html'>reactive_tableau_data()</a></code> for more information.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>spec_summary</span>(worksheet = <span class='fl'>1L</span>, session = <span class='kw'>shiny</span>::<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span>())
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="DataTableSchema.html">DataTableSchema</a></code> </p>
-        </td>
-        <td><p>Data table schema object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="choose_data.html">choose_data_ui()</a></code> <code><a href="choose_data.html">choose_data()</a></code> </p>
-        </td>
-        <td><p>Shiny module to allow easy selecting of Tableau data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="choose_data_options.html">choose_data_options()</a></code> </p>
-        </td>
-        <td><p>Options for the <code>choose_data</code> module</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="ext_options.html">ext_options()</a></code> </p>
-        </td>
-        <td><p>Specify options for <code>tableau_extension</code></p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="reactive_tableau_data.html">reactive_tableau_data()</a></code> </p>
-        </td>
-        <td><p>Construct a reactive expression that reads Tableau data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="restore_inputs.html">restore_inputs()</a></code> </p>
-        </td>
-        <td><p>Prepopulate Shiny inputs</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="spec_summary.html">spec_summary()</a></code> <code><a href="spec_summary.html">spec_underlying()</a></code> <code><a href="spec_summary.html">spec_datasource()</a></code> </p>
-        </td>
-        <td><p>Create data spec objects programmatically</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_close_dialog.html">tableau_close_dialog()</a></code> </p>
-        </td>
-        <td><p>Close Tableau extension's configuration dialog</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_datasources.html">tableau_datasources()</a></code> <code><a href="tableau_datasources.html">tableau_datasource_info()</a></code> </p>
-        </td>
-        <td><p>Get info about available data sources in this Tableau dashboard</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_extension.html">tableau_extension()</a></code> </p>
-        </td>
-        <td><p>Create a Tableau Extension object</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_manifest.html">tableau_manifest()</a></code> </p>
-        </td>
-        <td><p>Generate a Tableau Extension Manifest</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_select_marks_by_brush_async.html">tableau_select_marks_by_brush_async()</a></code> </p>
-        </td>
-        <td><p>Update a worksheet's selection using a <code>plotOutput</code> ggplot2 brush</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tableau_setting.html">tableau_setting()</a></code> <code><a href="tableau_setting.html">tableau_settings_all()</a></code> </p>
-        </td>
-        <td><p>Read Tableau extension settings</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="update_tableau_settings_async.html">update_tableau_settings_async()</a></code> </p>
-        </td>
-        <td><p>Write Tableau extension settings</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="yaml_skeleton.html">yaml_skeleton()</a></code> <code><a href="yaml_skeleton.html">tableau_manifest_from_yaml()</a></code> </p>
-        </td>
-        <td><p>Create and use a skeleton YAML manifest file</p></td>
-      </tr>
-    </tbody>
+<span class='fu'>spec_underlying</span>(
+  worksheet = <span class='fl'>1L</span>,
+  underlyingTableId = <span class='fl'>1L</span>,
+  session = <span class='kw'>shiny</span>::<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span>()
+)
+
+<span class='fu'>spec_datasource</span>(
+  worksheet = <span class='fl'>1L</span>,
+  dataSourceId = <span class='fl'>1L</span>,
+  logicalTableId = <span class='fl'>1L</span>,
+  session = <span class='kw'>shiny</span>::<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span>()
+)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>worksheet</th>
+      <td><p>The name (as character vector) or number (as integer) of the
+worksheet. If a number is given, it will immediately be resolved to a
+worksheet name.</p></td>
+    </tr>
+    <tr>
+      <th>session</th>
+      <td><p>The Shiny <code>session</code> object. (You should probably just use the
+default.)</p></td>
+    </tr>
+    <tr>
+      <th>underlyingTableId, dataSourceId, logicalTableId</th>
+      <td><p>The id (as character
+vector) or number (as integer) of the specific underlying table/data
+source/logical table to read. If a number is given, it will immediately be
+resolved to an id.</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A spec object, suitable for the <code>spec</code> argument to
+<code><a href='reactive_tableau_data.html'>reactive_tableau_data()</a></code> or persisting via
+<code><a href='update_tableau_settings_async.html'>update_tableau_settings_async()</a></code>.</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
