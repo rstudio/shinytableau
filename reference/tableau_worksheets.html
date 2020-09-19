@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Construct a reactive expression that reads Tableau data schema — reactive_tableau_schema • shinytableau</title>
+<title>Get info about available worksheets in this Tableau dashboard — tableau_worksheets • shinytableau</title>
 
 
 <!-- jquery -->
@@ -39,13 +39,9 @@
 
 
 
-<meta property="og:title" content="Construct a reactive expression that reads Tableau data schema — reactive_tableau_schema" />
-<meta property="og:description" content="Creates a reactive expression that returns schema data for the specified
-Tableau data table, including the names and data types of columns. Basically,
-this is a convenience wrapper that takes a spec object in any of its
-various forms, invokes either tableau_worksheet_info() or
-tableau_datasource_info() as appropriate, and extracts the specific
-sub-object that matches spec." />
+<meta property="og:title" content="Get info about available worksheets in this Tableau dashboard — tableau_worksheets" />
+<meta property="og:description" content="For advanced use only; most shinytableau extensions should use the
+choose_data() module to allow the user to specify a worksheet." />
 
 
 
@@ -114,39 +110,50 @@ sub-object that matches spec." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Construct a reactive expression that reads Tableau data schema</h1>
+    <h1>Get info about available worksheets in this Tableau dashboard</h1>
     
-    <div class="hidden name"><code>reactive_tableau_schema.Rd</code></div>
+    <div class="hidden name"><code>tableau_worksheets.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Creates a reactive expression that returns schema data for the specified
-Tableau data table, including the names and data types of columns. Basically,
-this is a convenience wrapper that takes a <code>spec</code> object in any of its
-various forms, invokes either <code><a href='tableau_worksheets.html'>tableau_worksheet_info()</a></code> or
-<code><a href='tableau_datasources.html'>tableau_datasource_info()</a></code> as appropriate, and extracts the specific
-sub-object that matches <code>spec</code>.</p>
+    <p>For advanced use only; most shinytableau extensions should use the
+<code><a href='choose_data_ui.html'>choose_data()</a></code> module to allow the user to specify a worksheet.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>reactive_tableau_schema</span>(<span class='kw'>spec</span>, session = <span class='kw'>shiny</span>::<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span>())</pre>
+    <pre class="usage"><span class='fu'>tableau_worksheets</span>(session = <span class='kw'>shiny</span>::<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span>())
+
+<span class='fu'>tableau_worksheet_info</span>(<span class='kw'>name</span>, session = <span class='kw'>shiny</span>::<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span>())</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>spec</th>
-      <td><p>See <code><a href='reactive_tableau_data.html'>reactive_tableau_data()</a></code>.</p></td>
-    </tr>
-    <tr>
       <th>session</th>
       <td><p>The Shiny <code>session</code> object. (You should probably just use the
 default.)</p></td>
+    </tr>
+    <tr>
+      <th>name</th>
+      <td><p>A worksheet name, as returned by <code>tableau_worksheets()</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A named list, as described in the <a href='DataTableSchema.html'>DataTableSchema</a> topic.</p>
+    <p><code>tableau_worksheets()</code> returns a character vector whose elements are
+worksheet names. Note that only worksheets that are included on the same
+dashboard will be listed, and these are the only worksheets we can access.</p>
+<p><code>tableau_worksheet_info()</code> returns metadata for a specific worksheet. The
+return value is a named list that contains the following fields:</p><ul>
+<li><p><strong><code>name</code></strong> - The name of the worksheet.</p></li>
+<li><p><strong><code>summary</code></strong> - The <a href='DataTableSchema.html'>data table schema object</a> for the
+worksheet's summary-level data table.</p></li>
+<li><p><strong><code>dataSourceIds</code></strong> - Character vector of data source IDs used by this
+worksheet. See <code><a href='tableau_datasources.html'>tableau_datasource_info()</a></code>.</p></li>
+<li><p><strong><code>underlyingTables</code></strong> - Unnamed list, each element is a <a href='DataTableSchema.html'>data table schema object</a> of one of the worksheet's underlying
+data tables.</p></li>
+</ul>
+
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
