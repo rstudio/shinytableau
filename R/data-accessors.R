@@ -4,11 +4,40 @@ schema <- function(session) {
   shiny::isolate(session$input[["shinytableau-schema"]])
 }
 
+#' Get info about available worksheets in this Tableau dashboard
+#'
+#' For advanced use only; most shinytableau extensions should use the
+#' [choose_data()] module to allow the user to specify a worksheet.
+#'
+#' @param session The Shiny `session` object. (You should probably just use the
+#'   default.)
+#' @param name A worksheet name, as returned by `tableau_worksheets()`.
+#'
+#' @return `tableau_worksheets()` returns a character vector whose elements are
+#'   worksheet names. Note that only worksheets that are included on the same
+#'   dashboard will be listed, and these are the only worksheets we can access.
+#'
+#'   `tableau_worksheet_info()` returns metadata for a specific worksheet. The
+#'   return value is a named list that contains the following fields:
+#'
+#'   * **`name`** - The name of the worksheet.
+#'
+#'   * **`summary`** - The [data table schema object][DataTableSchema] for the
+#'     worksheet's summary-level data table.
+#'
+#'   * **`dataSourceIds`** - Character vector of data source IDs used by this
+#'     worksheet. See [tableau_datasource_info()].
+#'
+#'   * **`underlyingTables`** - Unnamed list, each element is a [data table
+#'     schema object][DataTableSchema] of one of the worksheet's underlying
+#'     data tables.
+#'
 #' @export
 tableau_worksheets <- function(session = shiny::getDefaultReactiveDomain()) {
   names(schema(session)[["worksheets"]])
 }
 
+#' @rdname tableau_worksheets
 #' @export
 tableau_worksheet_info <- function(name, session = shiny::getDefaultReactiveDomain()) {
   schema(session)[["worksheets"]][[name]]
