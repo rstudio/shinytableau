@@ -111,6 +111,43 @@ tableau_close_dialog <- function(payload = "", session = shiny::getDefaultReacti
   session$sendCustomMessage("shinytableau-close-dialog", list(payload = payload))
 }
 
+#' Create a hyperlink to embedding instructions
+#'
+#' Use this function to create a link that [`standalone = TRUE`][ext_options]
+#' apps can present in their UI, that will bring the user to the Tableau
+#' extension information page (where the manifest information and .trex file
+#' download button are found).
+#'
+#' @param ... Attributes and children of the element; these are passed through
+#'   to [htmltools::a()].
+#' @param target The value of the `target` attribute. The default value of
+#'   `"_blank"` will cause the link to open in a new browser tab or window. Pass
+#'   `NULL` or `"_self"` instead to open in the current frame, or `"_top"` to
+#'   use the current browser tab but to break out of any iframe.
+#' @param button If `"primary"` or `"default"`, Bootstrap CSS classes will be
+#'   added to make the link look like a button.
+#'
+#' @return An HTML object, suitable for including in Shiny UI.
+#'
+#' @seealso You can use [tableau_is_embedded()] to prevent the link from
+#'   appearing if we're already running in a Tableau dashboard. See the example
+#'   below.
+#'
+#' @examples
+#' ui <- function(req) {
+#'   fluidPage(
+#'
+#'     # If we're not currently running in a Tableau dashboard, insert a link
+#'     if (!tableau_is_embedded()) {
+#'       absolutePanel(top = 10, right = 10,
+#'         tableau_install_link("Embed this app in Tableau!")
+#'       )
+#'     },
+#'
+#'     # Other UI...
+#'   )
+#' }
+#'
 #' @export
 tableau_install_link <- function(..., target = "_blank", button = c("no", "primary", "default")) {
   button <- match.arg(button)
@@ -120,5 +157,16 @@ tableau_install_link <- function(..., target = "_blank", button = c("no", "prima
     NULL
   )
 
-  shiny::tags$a(href = "?mode=info", target = target, class = button_class, ...)
+  htmltools::a(href = "?mode=info", target = target, class = button_class, ...)
+}
+
+#' @export
+tableau_is_embedded <- function() {
+  session <- getDefaultReactiveDomain()
+  if (is.null(session)) {
+    FALSE
+  } else {
+    qs <- isolate(parseQueryString(getDefaultReactiveDomain()$clientData$url_search))
+    identical(qs[["mode"]], "embed")
+  }
 }
