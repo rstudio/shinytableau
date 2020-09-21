@@ -76,8 +76,8 @@ restore_inputs <- function(..., session. = shiny::getDefaultReactiveDomain()) {
   # Pretty sure Shiny always has a RestoreContext available
   stopifnot(!is.null(session.$restoreContext))
 
-  session.$restoreContext$active <- TRUE
-  session.$restoreContext$input <- shiny:::RestoreInputSet$new(rlang::list2(...))
+  inputs <- rlang::list2(...)
+  session.$restoreContext$set(active = TRUE, input = inputs)
   invisible(session.)
 }
 

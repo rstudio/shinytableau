@@ -22,7 +22,7 @@ Imports:
     jsonlite (>= 1.7.0),
     promises,
     rlang (>= 0.4.6),
-    shiny (>= 1.5.0.9001),
+    shiny (>= 1.5.0.9002),
     uuid (>= 0.1-4),
     yaml (>= 2.2.1),
     shinyvalidate,
