@@ -1,4 +1,3 @@
-#' @export
 tableau_spinner <- function(fill = TRUE) {
   htmltools::div(class = "tableau-spinner",
     class = if (isTRUE(fill)) "tableau-spinner-fill",

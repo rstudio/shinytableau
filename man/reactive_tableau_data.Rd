@@ -21,7 +21,7 @@ is likely the approach you should take if you want to access data in
 \code{config_server} based on unsaved config changes (e.g. to give the user a
 live preview of what their \code{choose_data} choices would yield).
 \item You can directly create a spec object using one of the helper functions
-\code{\link[=spec_summary]{spec_summary()}}, \code{\link[=spec_underlying]{spec_underlying()}}, or \code{\link[=spec_logical]{spec_logical()}}. For cases where
+\code{\link[=spec_summary]{spec_summary()}}, \code{\link[=spec_underlying]{spec_underlying()}}, or \code{\link[=spec_datasource]{spec_datasource()}}. For cases where
 the data is not selected based on \code{\link[=choose_data]{choose_data()}} at all, but
 programmatically determined or hardcoded. (This should not be common.)
 }}

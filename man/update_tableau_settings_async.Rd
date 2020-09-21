@@ -32,7 +32,7 @@ function to write settings that can be read, now and in the future, by
 }
 \details{
 While the settings reading functions---\code{\link[=tableau_setting]{tableau_setting()}} and
-\code{\link[=tableau_setting_all]{tableau_setting_all()}}---are reactive, \code{update_tableau_settings_async()} is
+\code{\link[=tableau_settings_all]{tableau_settings_all()}}---are reactive, \code{update_tableau_settings_async()} is
 not. Calling it does not cause any reactive dependencies to be taken.
 
 As implied by the function name, \code{update_tableau_settings_async()} does its

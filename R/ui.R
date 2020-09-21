@@ -160,13 +160,24 @@ tableau_install_link <- function(..., target = "_blank", button = c("no", "prima
   htmltools::a(href = "?mode=info", target = target, class = button_class, ...)
 }
 
+#' Determine whether a standalone app is running in Tableau
+#'
+#' For extensions that use [`ext_options(standalone = TRUE)`][ext_options], the
+#' `ui` and `server` objects are invoked in both standalone mode (outside of a
+#' Tableau dashboard) and embedded mode (inside a dashboard). The
+#' `tableau_is_embedded()` function can be used to distinguish between the two
+#' cases, in case you want to vary the UI elements and/or behavior for each.
+#'
+#' @return `TRUE` if running in Tableau, `FALSE` if not or if it cannot be
+#'   determined.
+#'
 #' @export
 tableau_is_embedded <- function() {
-  session <- getDefaultReactiveDomain()
+  session <- shiny::getDefaultReactiveDomain()
   if (is.null(session)) {
     FALSE
   } else {
-    qs <- isolate(parseQueryString(getDefaultReactiveDomain()$clientData$url_search))
+    qs <- shiny::isolate(shiny::parseQueryString(shiny::getDefaultReactiveDomain()$clientData$url_search))
     identical(qs[["mode"]], "embed")
   }
 }

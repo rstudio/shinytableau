@@ -162,7 +162,7 @@ tableau_worksheet_info <- function(name, session = shiny::getDefaultReactiveDoma
 #'   live preview of what their `choose_data` choices would yield).
 #'
 #'   3. You can directly create a spec object using one of the helper functions
-#'   [spec_summary()], [spec_underlying()], or [spec_logical()]. For cases where
+#'   [spec_summary()], [spec_underlying()], or [spec_datasource()]. For cases where
 #'   the data is not selected based on [choose_data()] at all, but
 #'   programmatically determined or hardcoded. (This should not be common.)
 #'

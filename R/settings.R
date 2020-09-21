@@ -54,7 +54,7 @@ tableau_setting <- function(name, default = NULL, session = shiny::getDefaultRea
 #' [tableau_setting()].
 #'
 #' While the settings reading functions---[tableau_setting()] and
-#' [tableau_setting_all()]---are reactive, `update_tableau_settings_async()` is
+#' [tableau_settings_all()]---are reactive, `update_tableau_settings_async()` is
 #' not. Calling it does not cause any reactive dependencies to be taken.
 #'
 #' As implied by the function name, `update_tableau_settings_async()` does its
