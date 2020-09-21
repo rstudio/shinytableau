@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Create a hyperlink to embedding instructions — tableau_install_link • shinytableau</title>
+<title>Determine whether a standalone app is running in Tableau — tableau_is_embedded • shinytableau</title>
 
 
 <!-- jquery -->
@@ -39,11 +39,12 @@
 
 
 
-<meta property="og:title" content="Create a hyperlink to embedding instructions — tableau_install_link" />
-<meta property="og:description" content="Use this function to create a link that standalone = TRUE
-apps can present in their UI, that will bring the user to the Tableau
-extension information page (where the manifest information and .trex file
-download button are found)." />
+<meta property="og:title" content="Determine whether a standalone app is running in Tableau — tableau_is_embedded" />
+<meta property="og:description" content="For extensions that use ext_options(standalone = TRUE), the
+ui and server objects are invoked in both standalone mode (outside of a
+Tableau dashboard) and embedded mode (inside a dashboard). The
+tableau_is_embedded() function can be used to distinguish between the two
+cases, in case you want to vary the UI elements and/or behavior for each." />
 
 
 
@@ -106,71 +107,27 @@ download button are found)." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Create a hyperlink to embedding instructions</h1>
+    <h1>Determine whether a standalone app is running in Tableau</h1>
     
-    <div class="hidden name"><code>tableau_install_link.Rd</code></div>
+    <div class="hidden name"><code>tableau_is_embedded.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Use this function to create a link that <code><a href='ext_options.html'>standalone = TRUE</a></code>
-apps can present in their UI, that will bring the user to the Tableau
-extension information page (where the manifest information and .trex file
-download button are found).</p>
+    <p>For extensions that use <code><a href='ext_options.html'>ext_options(standalone = TRUE)</a></code>, the
+<code>ui</code> and <code>server</code> objects are invoked in both standalone mode (outside of a
+Tableau dashboard) and embedded mode (inside a dashboard). The
+<code>tableau_is_embedded()</code> function can be used to distinguish between the two
+cases, in case you want to vary the UI elements and/or behavior for each.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tableau_install_link</span>(
-  <span class='kw'>...</span>,
-  target = <span class='st'>"_blank"</span>,
-  button = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"no"</span>, <span class='st'>"primary"</span>, <span class='st'>"default"</span>)
-)</pre>
+    <pre class="usage"><span class='fu'>tableau_is_embedded</span>()</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>...</th>
-      <td><p>Attributes and children of the element; these are passed through
-to <code><a href='https://rdrr.io/pkg/htmltools/man/builder.html'>htmltools::a()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>target</th>
-      <td><p>The value of the <code>target</code> attribute. The default value of
-<code>"_blank"</code> will cause the link to open in a new browser tab or window. Pass
-<code>NULL</code> or <code>"_self"</code> instead to open in the current frame, or <code>"_top"</code> to
-use the current browser tab but to break out of any iframe.</p></td>
-    </tr>
-    <tr>
-      <th>button</th>
-      <td><p>If <code>"primary"</code> or <code>"default"</code>, Bootstrap CSS classes will be
-added to make the link look like a button.</p></td>
-    </tr>
-    </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An HTML object, suitable for including in Shiny UI.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <p><code>TRUE</code> if running in Tableau, <code>FALSE</code> if not or if it cannot be
+determined.</p>
 
-    <div class='dont-index'><p>You can use <code><a href='tableau_is_embedded.html'>tableau_is_embedded()</a></code> to prevent the link from
-appearing if we're already running in a Tableau dashboard. See the example
-below.</p></div>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>ui</span> <span class='op'>&lt;-</span> <span class='fu'>function</span>(<span class='kw'>req</span>) {
-  <span class='fu'>fluidPage</span>(
-
-    <span class='co'># If we're not currently running in a Tableau dashboard, insert a link</span>
-    <span class='co'>if</span> (<span class='op'>!</span><span class='fu'><a href='tableau_is_embedded.html'>tableau_is_embedded</a></span>()) {
-      <span class='fu'>absolutePanel</span>(top = <span class='fl'>10</span>, right = <span class='fl'>10</span>,
-        <span class='fu'>tableau_install_link</span>(<span class='st'>"Embed this app in Tableau!"</span>)
-      )
-    },
-
-    <span class='co'># Other UI...</span>
-  )
-}
-
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
