@@ -116,11 +116,11 @@ function to write settings that can be read, now and in the future, by
 <code><a href='tableau_setting.html'>tableau_setting()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>update_tableau_settings_async</span>(
-  <span class='kw'>...</span>,
-  add. = <span class='fl'>FALSE</span>,
-  session. = <span class='kw'>shiny</span>::<span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span>()
-)</pre>
+    <pre class="usage"><span class='fu'>update_tableau_settings_async</span><span class='op'>(</span>
+  <span class='va'>...</span>,
+  add. <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  session. <span class='op'>=</span> <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -146,7 +146,7 @@ default.)</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <a href='https://rdrr.io/pkg/promises/man/promise.html'>promises::promise</a> object. See Details.</p>
+    <p>A <a href='https://rstudio.github.io/promises/reference/promise.html'>promises::promise</a> object. See Details.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>While the settings reading functions---<code><a href='tableau_setting.html'>tableau_setting()</a></code> and

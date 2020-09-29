@@ -70,6 +70,15 @@
 
     
     
+<style type="text/css">
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 12pt;
+  line-height: 1.5;
+}
+</style>
 <p>Tableau version 2020.3 introduced a new extensibility feature called Dashboard Extensions. This feature lets programmers use JavaScript to create custom objects that normal Tableau users can drop into their Tableau dashboard layouts, providing custom visualizations and interactive features beyond Tableau’s native capabilities.</p>
 <p>The {shinytableau} package allows you to easily create Tableau dashboard extensions using the power of R and Shiny. In typical Shiny fashion, it’s not necessary to know web technologies like HTML, JavaScript, and CSS to create compelling Tableau extensions.</p>
 <div id="example-violin-plot" class="section level2">
@@ -79,10 +88,9 @@
 <p>I would be remiss not to mention the heroics that Tableau consultant Gwilym Lockwood went through to <a href="https://gwilymlockwood.com/2018/07/03/language-sex-violins-other-how-to-create-violin-plots-in-tableau/">create a violin plot in Tableau</a>. The blog post is worth a read, but the takeaway is that you’d have to <em>really</em> want a violin plot to go through all of those steps.</p>
 <p>In R, on the other hand, there are several packages that provide violin plots; a cursory search turned up <a href="https://cran.r-project.org/web/packages/vioplot/vignettes/violin_customisation.html">vioplot</a>, <a href="https://plotly.com/r/violin/">plotly</a>, <a href="https://rpkgs.datanovia.com/ggpubr/reference/ggviolin.html">ggpubr</a>, and <a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">ggplot2</a>. Here’s how you might create a violin plot in ggplot2, using the <code>mtcars</code> data set, showing the horsepower (<code>hp</code>) distribution for each cylinder count (<code>cyl</code>):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu">ggplot</span>(<span class="kw">mtcars</span>, <span class="fu">aes</span>(x = <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="kw">cyl</span>), y = <span class="kw">hp</span>)) <span class="op">+</span>
-  <span class="fu">geom_violin</span>()
-</pre></div>
-<p><img src="shinytableau_files/figure-html/unnamed-chunk-2-1.png" width="480"></p>
+<span class="fu">ggplot</span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">hp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_violin</span><span class="op">(</span><span class="op">)</span></pre></div>
+<p><img src="shinytableau_files/figure-html/unnamed-chunk-3-1.png" width="480"></p>
 <p>With shinytableau, we can wrap this R code into an easy-to-use Tableau dashboard extension that can be used by Tableau users that don’t even know what R is. They don’t need to modify the code to point to the data source and variables they want to plot, because you’re going to provide them with a GUI for that. They don’t need to think about how to configure R on their server, because you can deploy it just once for all users of the extension.</p>
 <p>Take a look at what it’s like to use a shinytableau extension:</p>
 <p>(screencast)</p>
@@ -103,32 +111,31 @@
 <p>Let’s start by creating the simplest possible Tableau extension: one that will display the string <code>"Hello, world!"</code>. First, create a new, empty RStudio project (File | New Project… | New Directory | New Project).</p>
 <p>Then call:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw">shinytableau</span>::<span class="fu"><a href="../reference/yaml_skeleton.html">yaml_skeleton</a></span>()
-</pre></div>
-<p>This will create an example <code>manifest.yml</code> file in your project, which controls the metadata that is displayed to Tableau users when they install the extension. Besides the obvious fields like name, description, and author, you’ll also want to change the <code>extension_id</code> to a value unlikely to be used by anyone else, e.g. replacing <code>com.example</code> with your company’s <a href="https://en.wikipedia.org/wiki/Reverse_domain_name_notation">reverse domain name</a>.</p>
+<span class="fu">shinytableau</span><span class="fu">::</span><span class="fu"><a href="../reference/yaml_skeleton.html">yaml_skeleton</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<p>This will create an example <code>manifest.yml</code> file in your project, which controls the metadata that is displayed to Tableau users when they install the extension.</p>
+<p>Besides the obvious fields like name, description, and author, you’ll also want to change the <code>extension_id</code> to a value unlikely to be used by anyone else, e.g. replacing <code>com.example</code> with your company’s <a href="https://en.wikipedia.org/wiki/Reverse_domain_name_notation">reverse domain name</a>.</p>
 <p>Next, create a file called <code>app.R</code> in this directory, and make it look like the following:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="co"># filetype: shinyApp</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://shiny.rstudio.com">shiny</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">shinytableau</span>)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://shiny.rstudio.com">shiny</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">shinytableau</span><span class="op">)</span>
 
-<span class="kw">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yaml_skeleton.html">tableau_manifest_from_yaml</a></span>()
+<span class="va">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yaml_skeleton.html">tableau_manifest_from_yaml</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="kw">ui</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">req</span>) {
-  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span>(padding = <span class="fl">12</span>,
-    <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html">h2</a></span>(<span class="st">"Hello, world!"</span>)
-  )
-}
+<span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="fl">12</span>,
+    <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html">h2</a></span><span class="op">(</span><span class="st">"Hello, world!"</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">}</span>
 
-<span class="kw">server</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">input</span>, <span class="kw">output</span>, <span class="kw">session</span>) {
-}
+<span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
+<span class="op">}</span>
 
-<span class="fu"><a href="../reference/tableau_extension.html">tableau_extension</a></span>(<span class="kw">manifest</span>, <span class="kw">ui</span>, <span class="kw">server</span>,
-  options = <span class="fu"><a href="../reference/ext_options.html">ext_options</a></span>(port = <span class="fl">3456</span>)
-)
-</pre></div>
-<p>If you’ve written a Shiny app before, this code should look comfortingly familiar. The main differences are the <code>manifest</code> object, the <code>ui</code> being wrapped in <code>function(req) {...}</code> (optional in a regular Shiny app, but mandatory here), and where the last line is usually <code><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html">shinyApp(ui, server)</a></code> we now do <code><a href="../reference/tableau_extension.html">tableau_extension(manifest, ui, server)</a></code>.</p>
+<span class="fu"><a href="../reference/tableau_extension.html">tableau_extension</a></span><span class="op">(</span><span class="va">manifest</span>, <span class="va">ui</span>, <span class="va">server</span>,
+  options <span class="op">=</span> <span class="fu"><a href="../reference/ext_options.html">ext_options</a></span><span class="op">(</span>port <span class="op">=</span> <span class="fl">3456</span><span class="op">)</span>
+<span class="op">)</span></pre></div>
+<p>If you’ve written a Shiny app before, this code should look comfortingly familiar. The main differences are the <code>manifest</code> object, the <code>ui</code> being wrapped in <code>function(req) {...}</code> (optional in a regular Shiny app, but mandatory here), and where the last line is usually <code><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html">shinyApp(ui, server)</a></code> we instead have <code><a href="../reference/tableau_extension.html">tableau_extension(manifest, ui, server)</a></code>.</p>
 <p>There are two other small differences worth noting. First, the file starts with the comment <code># filetype: shinyApp</code>; this is a hint to the RStudio IDE that even though the file doesn’t look like a Shiny app (because it doesn’t end with <code><a href="https://shiny.rstudio.com/reference/shiny/latest/shinyApp.html">shinyApp(ui, server)</a></code>), it actually is. Second, the call to <code>tableau_extension</code> includes a hardcoded port number. For local development purposes, it’s a good idea to hardcode the port to a unique value (between 1025 and 49151) for each extension.</p>
 <p>Now, press Ctrl+Shift+Enter (or Cmd+Shift+Return on Mac) and you should see the info page for this extension appear. Download the .trex file, drag an Extension onto a Tableau dashboard, choose the .trex file, and you should see “Hello, world!” in your dashboard.</p>
 <p><img src="tutorial-1.png" width="573"></p>
@@ -141,49 +148,48 @@
 <div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="co"># filetype: shinyApp</span>
 
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://shiny.rstudio.com">shiny</a></span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">shinytableau</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw">shinyvalidate</span>)
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://shiny.rstudio.com">shiny</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">shinytableau</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">shinyvalidate</span><span class="op">)</span>
 
-<span class="kw">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yaml_skeleton.html">tableau_manifest_from_yaml</a></span>()
+<span class="va">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yaml_skeleton.html">tableau_manifest_from_yaml</a></span><span class="op">(</span><span class="op">)</span>
 
-<span class="kw">ui</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">req</span>) {
-  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span>(padding = <span class="fl">12</span>,
-    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textOutput.html">textOutput</a></span>(<span class="st">"message"</span>, container = <span class="kw">h2</span>)
-  )
-}
+<span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="fl">12</span>,
+    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textOutput.html">textOutput</a></span><span class="op">(</span><span class="st">"message"</span>, container <span class="op">=</span> <span class="va">h2</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">}</span>
 
-<span class="kw">server</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">input</span>, <span class="kw">output</span>, <span class="kw">session</span>) {
-  <span class="kw">output</span><span class="op">$</span><span class="kw">message</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPrint.html">renderText</a></span>({
-    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"Hello, "</span>, <span class="fu"><a href="../reference/tableau_setting.html">tableau_setting</a></span>(<span class="st">"greetee"</span>), <span class="st">"!"</span>)
-  })
-}
+<span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">output</span><span class="op">$</span><span class="va">message</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPrint.html">renderText</a></span><span class="op">(</span><span class="op">{</span>
+    <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Hello, "</span>, <span class="fu"><a href="../reference/tableau_setting.html">tableau_setting</a></span><span class="op">(</span><span class="st">"greetee"</span><span class="op">)</span>, <span class="st">"!"</span><span class="op">)</span>
+  <span class="op">}</span><span class="op">)</span>
+<span class="op">}</span>
 
-<span class="kw">config_ui</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">req</span>) {
-  <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tag.html">tagList</a></span>(
-    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textInput.html">textInput</a></span>(<span class="st">"greetee"</span>, <span class="st">"Whom would you like to greet?"</span>, <span class="st">"world"</span>)
-  )
-}
+<span class="va">config_ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tag.html">tagList</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textInput.html">textInput</a></span><span class="op">(</span><span class="st">"greetee"</span>, <span class="st">"Whom would you like to greet?"</span>, <span class="st">"world"</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">}</span>
 
-<span class="kw">config_server</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">input</span>, <span class="kw">output</span>, <span class="kw">session</span>, <span class="kw">iv</span>) {
+<span class="va">config_server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">iv</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># Ensure that the user provides a value for input$greetee</span>
-  <span class="kw">iv</span><span class="op">$</span><span class="fu">add_rule</span>(<span class="st">"greetee"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shinyvalidate/man/sv_required.html">sv_required</a></span>())
+  <span class="va">iv</span><span class="op">$</span><span class="fu">add_rule</span><span class="op">(</span><span class="st">"greetee"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shinyvalidate/man/sv_required.html">sv_required</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 
   <span class="co"># config_server must have a save_settings function</span>
-  <span class="kw">save_settings</span> <span class="op">&lt;-</span> <span class="fu">function</span>() {
-    <span class="fu"><a href="../reference/update_tableau_settings_async.html">update_tableau_settings_async</a></span>(
-      greetee = <span class="kw">input</span><span class="op">$</span><span class="kw">greetee</span>
-    )
-  }
+  <span class="va">save_settings</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
+    <span class="fu"><a href="../reference/update_tableau_settings_async.html">update_tableau_settings_async</a></span><span class="op">(</span>
+      greetee <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">greetee</span>
+    <span class="op">)</span>
+  <span class="op">}</span>
 
   <span class="co"># config_server must always return the save_settings function</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="kw">save_settings</span>)
-}
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">save_settings</span><span class="op">)</span>
+<span class="op">}</span>
 
-<span class="fu"><a href="../reference/tableau_extension.html">tableau_extension</a></span>(<span class="kw">manifest</span>, <span class="kw">ui</span>, <span class="kw">server</span>, <span class="kw">config_ui</span>, <span class="kw">config_server</span>,
-  options = <span class="fu"><a href="../reference/ext_options.html">ext_options</a></span>(port = <span class="fl">3456</span>)
-)
-</pre></div>
+<span class="fu"><a href="../reference/tableau_extension.html">tableau_extension</a></span><span class="op">(</span><span class="va">manifest</span>, <span class="va">ui</span>, <span class="va">server</span>, <span class="va">config_ui</span>, <span class="va">config_server</span>,
+  options <span class="op">=</span> <span class="fu"><a href="../reference/ext_options.html">ext_options</a></span><span class="op">(</span>port <span class="op">=</span> <span class="fl">3456</span><span class="op">)</span>
+<span class="op">)</span></pre></div>
 <p>If your RStudio session is still running the previous version of the code we wrote, stop it now by either clicking in the Console pane and hitting Escape, or pressing the stop-sign icon in the Console toolbar. Then run the new code with Ctrl+Shift+Enter/Cmd+Shift+Return.</p>
 <p>You should see something like the following screenshot: the extension object shows only the name of the extension, and a message that you need to configure the extension.</p>
 <p><img src="tutorial-2a.png" width="573"></p>
@@ -201,12 +207,11 @@
 <p>As we said about <code>ui</code> above, <code>config_ui</code> needs to be a <code>function(req) { ... }</code> that returns some UI object, not just the UI object itself as you can do in a normal Shiny app.</p>
 <p>Also, most Shiny <code>ui</code> (including shinytableau ones) should have a <code>fluidPage</code>, <code>fillPage</code>, or other page function as their outermost call, but this isn’t the case with <code>config_ui</code>. The UI you return from <code>config_ui</code> will be inserted into a configuration dialog UI that shinytableau creates for you. So instead of <code><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage()</a></code>, use <code><a href="https://rdrr.io/pkg/htmltools/man/tag.html">tagList()</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw">config_ui</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">req</span>) {
-  <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tag.html">tagList</a></span>(
-    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textInput.html">textInput</a></span>(<span class="st">"greetee"</span>, <span class="st">"Whom would you like to greet?"</span>, <span class="st">"world"</span>)
-  )
-}
-</pre></div>
+<span class="va">config_ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tag.html">tagList</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textInput.html">textInput</a></span><span class="op">(</span><span class="st">"greetee"</span>, <span class="st">"Whom would you like to greet?"</span>, <span class="st">"world"</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">}</span></pre></div>
 </div>
 <div id="config_server" class="section level4">
 <h4 class="hasAnchor">
@@ -214,21 +219,20 @@
 <p>There are two new requirements for <code>config_server</code> versus a regular <code>server</code>. First, a normal Shiny <code>server</code> is a function that takes <code>input</code>, <code>output</code>, and <code>session</code> arguments; a <code>config_server</code> takes an additional <code>iv</code> argument. This represents an <code>InputValidator</code> object from the <a href="https://rstudio.github.io/shinyvalidate/articles/shinyvalidate.html">shinyvalidate</a> package. You use <code>iv</code> to tell shinytableau which user inputs <em>must</em> be provided, and any validation rules that must be enforced. Any required inputs that are missing, or failing validation rules, will display errors in the form and prevent the OK and Apply buttons from taking effect.</p>
 <p>Second, a <code>config_server</code> function must declare a <code>save_settings</code> function, and must return this function. This is in contrast to regular Shiny server functions, which do not return anything<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. The <code>save_settings</code> function should take no arguments and, when called, should call <a href="https://rstudio.github.io/shinytableau/reference/update_tableau_settings_aync.html"><code>update_tableau_settings_async</code></a> to persist whatever settings the user has specified. In this case, we’re taking the user input, <code>input$greetee</code>, and persisting that as a setting named <code>greetee</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="kw">config_server</span> <span class="op">&lt;-</span> <span class="fu">function</span>(<span class="kw">input</span>, <span class="kw">output</span>, <span class="kw">session</span>, <span class="kw">iv</span>) {
+<span class="va">config_server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">iv</span><span class="op">)</span> <span class="op">{</span>
   <span class="co"># Ensure that the user provides a value for input$greetee</span>
-  <span class="kw">iv</span><span class="op">$</span><span class="fu">add_rule</span>(<span class="st">"greetee"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shinyvalidate/man/sv_required.html">sv_required</a></span>())
+  <span class="va">iv</span><span class="op">$</span><span class="fu">add_rule</span><span class="op">(</span><span class="st">"greetee"</span>, <span class="fu"><a href="https://rdrr.io/pkg/shinyvalidate/man/sv_required.html">sv_required</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 
   <span class="co"># config_server must have a save_settings function</span>
-  <span class="kw">save_settings</span> <span class="op">&lt;-</span> <span class="fu">function</span>() {
-    <span class="fu"><a href="../reference/update_tableau_settings_async.html">update_tableau_settings_async</a></span>(
-      greetee = <span class="kw">input</span><span class="op">$</span><span class="kw">greetee</span>
-    )
-  }
+  <span class="va">save_settings</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
+    <span class="fu"><a href="../reference/update_tableau_settings_async.html">update_tableau_settings_async</a></span><span class="op">(</span>
+      greetee <span class="op">=</span> <span class="va">input</span><span class="op">$</span><span class="va">greetee</span>
+    <span class="op">)</span>
+  <span class="op">}</span>
   
   <span class="co"># config_server must always return the save_settings function</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/function.html">return</a></span>(<span class="kw">save_settings</span>)
-}
-</pre></div>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">save_settings</span><span class="op">)</span>
+<span class="op">}</span></pre></div>
 <p>(Advanced R users may be wondering if, rather than declaring and returning <code>save_settings</code>, simply having an anonymous function as the last expression would be sufficient. Yes, that works, but doing it the recommended way makes the intent more immediately obvious.)</p>
 <p>The values you pass to <code><a href="../reference/update_tableau_settings_async.html">update_tableau_settings_async()</a></code> will be saved as JSON objects, so it’s a good idea to keep things simple: atomic numeric, character, and logical vectors are safe to use, as are unnamed and named lists. <code>NULL</code> is fine too. It’s not a good idea to save more specialized objects like factors, data frames, environments, R6 objects. Even Date objects should probably be converted to character first, and parsed back into a Date by whomever is reading the setting.</p>
 <p>Speaking of reading settings…</p>
@@ -241,22 +245,218 @@
 <p>You can call <code><a href="../reference/tableau_setting.html">tableau_settings_all()</a></code> to retrieve all of the current settings as a list. Generally you should try to use <code>tableau_setting</code> in favor of <code>tableau_settings_all</code>, because the latter takes a reactive dependency on <em>all</em> of the settings, even if you’re not actually interested in all of them.</p>
 </div>
 </div>
-<div id="accessing-data" class="section level2">
+<div id="accessing-data-from-tableau" class="section level2">
 <h2 class="hasAnchor">
-<a href="#accessing-data" class="anchor"></a>Accessing data</h2>
-<p>Now that we’ve created an app that reads/writes settings, we’re ready to take a big step forward and actually access a data table from Tableau.</p>
-<p>Tableau’s Extension API allows dashboard extensions, like the ones we’re creating, to access data from the workbook they’re embedded in. Actually, there’s one big caveat to that: we can’t access just <em>any</em> data, we can only access data via worksheets that are present in our same dashboard.</p>
-<p>This means you can’t start a new (empty) dashboard, put an extension object on it, and expect that extension object to be able to access any data. Instead, you need to add one or more worksheets to the dashboard first. Now, the extension object can access the data used by those worksheets.</p>
-<p>Each worksheet makes several related-but-distinct data tables available to our extensions.</p>
-<ul>
-<li><p>Summary data</p></li>
-<li><p>Underlying data</p></li>
+<a href="#accessing-data-from-tableau" class="anchor"></a>Accessing data from Tableau</h2>
+<p>Now that we’ve created an app that reads/writes settings, we’re ready to take a big step forward and actually access a data table from Tableau. Our next example app will ask the Tableau dashboard author to choose a data table, and it will show a rich summary of each column of data, using the <a href="https://github.com/dcomtois/summarytools">summarytools</a> R package.</p>
+<p>TODO screencast or screenshots</p>
+<div class="sourceCode" id="cb7"><pre class="downlit">
+<span class="co"># filetype: shinyApp</span>
+
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://shiny.rstudio.com">shiny</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">shinytableau</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/promises">promises</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/dcomtois/summarytools">summarytools</a></span><span class="op">)</span>
+
+<span class="va">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yaml_skeleton.html">tableau_manifest_from_yaml</a></span><span class="op">(</span><span class="op">)</span>
+
+<span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fluidPage.html">fluidPage</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fluidPage.html">fluidRow</a></span><span class="op">(</span>
+      <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/column.html">column</a></span><span class="op">(</span><span class="fl">12</span>,
+        <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/htmlOutput.html">uiOutput</a></span><span class="op">(</span><span class="st">"summary"</span><span class="op">)</span>
+      <span class="op">)</span>
+    <span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">}</span>
+
+<span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reactive_tableau_data.html">reactive_tableau_data</a></span><span class="op">(</span><span class="st">"data_spec"</span><span class="op">)</span>
+
+  <span class="va">output</span><span class="op">$</span><span class="va">summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderUI.html">renderUI</a></span><span class="op">(</span><span class="op">{</span>
+    <span class="co"># From https://cran.r-project.org/web/packages/summarytools/vignettes/Introduction.html#creating-shiny-apps</span>
+    <span class="fu"><a href="https://rdrr.io/r/stats/Fdist.html">df</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%...&gt;%</span>
+      <span class="fu"><a href="https://rdrr.io/pkg/summarytools/man/dfSummary.html">dfSummary</a></span><span class="op">(</span>varnumbers <span class="op">=</span> <span class="cn">FALSE</span>, valid.col <span class="op">=</span> <span class="cn">FALSE</span>, graph.magnif <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">%...&gt;%</span>
+      <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"render"</span>, headings <span class="op">=</span> <span class="cn">TRUE</span>, bootstrap.css <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+  <span class="op">}</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="va">config_ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tag.html">tagList</a></span><span class="op">(</span>
+    <span class="fu"><a href="../reference/choose_data_ui.html">choose_data_ui</a></span><span class="op">(</span><span class="st">"data_spec"</span>, <span class="st">"Choose data"</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">}</span>
+
+<span class="va">config_server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span>, <span class="va">iv</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">data_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/choose_data_ui.html">choose_data</a></span><span class="op">(</span><span class="st">"data_spec"</span>, iv <span class="op">=</span> <span class="va">iv</span><span class="op">)</span>
+
+  <span class="va">save_settings</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
+    <span class="fu"><a href="../reference/update_tableau_settings_async.html">update_tableau_settings_async</a></span><span class="op">(</span>
+      data_spec <span class="op">=</span> <span class="fu">data_spec</span><span class="op">(</span><span class="op">)</span>
+    <span class="op">)</span>
+  <span class="op">}</span>
+  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">save_settings</span><span class="op">)</span>
+<span class="op">}</span>
+
+<span class="fu"><a href="../reference/tableau_extension.html">tableau_extension</a></span><span class="op">(</span><span class="va">manifest</span>, <span class="va">ui</span>, <span class="va">server</span>, <span class="va">config_ui</span>, <span class="va">config_server</span>,
+  options <span class="op">=</span> <span class="fu"><a href="../reference/ext_options.html">ext_options</a></span><span class="op">(</span>port <span class="op">=</span> <span class="fl">4567</span><span class="op">)</span>
+<span class="op">)</span></pre></div>
+<p>In order to understand how this example app works, we’ll first need to look at how Tableau data is organized.</p>
+<div id="categories-of-data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#categories-of-data" class="anchor"></a>Categories of data</h3>
+<p>Tableau’s Extension API allows dashboard extensions, like the ones we’re creating, to access data from the workbook they’re embedded in. Actually, there’s one big caveat to that: we can’t access just <em>any</em> data, we can <em>only</em> access data via worksheets that are present in our same dashboard.</p>
+<p>This means you can’t start a new (empty) dashboard, put an extension object on it, and expect that extension object to be able to access any data. Instead, <strong>you need to add one or more worksheets to the dashboard first</strong>. Now, the extension object can access the data used by those worksheets.</p>
+<p>Each worksheet makes three categories of data available to us:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Summary data:</strong> The data in its final form before visualization. If the visualization aggregates measures, then the summary data contains the data after aggregation has been performed. If the worksheet has an active selection, then by default, only the selected data is returned (set the <code>ignoreSelection</code> option to <code>TRUE</code> to retrieve all data).</p></li>
 <li>
-</ul>
+<p><strong>Underlying data:</strong> The underlying data that is used in the visualization, before aggregation operations are performed but after tables are joined.</p>
+<p>By default, only the columns that are used in the worksheet are included (set <code>includeAllColumns</code> to <code>TRUE</code> if you need them all). If the worksheet has an active selection, then by default, only the selected data is returned (set the <code>ignoreSelection</code> option to <code>TRUE</code> to retrieve all data).</p>
+</li>
+<li><p><strong>Data source:</strong> You can also access the raw data from the data source(s) used by the worksheet. This data is unaffected by the worksheet settings. Tableau data sources are broken into one or more logical tables, like how a relational database has multiple tables.</p></li>
+</ol>
+<p>As an R user, you may find this analogy based on the examples from [dplyr::mutate-joins] to be helpful in explaining the relationship between data source, underlying, and summary data:</p>
+<pre><code># Data source
+logical1 &lt;- band_members
+logical2 &lt;- band_instruments
+
+# Underlying is joined/selected, but not aggregated
+underlying &lt;- band_members %&gt;%
+  full_join(band_instruments, by = "name") %&gt;%
+  select(band, name)
+
+# Summary is underlying plus aggregation
+summary &lt;- underlying %&gt;%
+  group_by(band) %&gt;%
+  tally(name = "COUNT(name)")</code></pre>
+<p>The existence of these three levels of data granularity, plus the fact that the underlying and data source levels need additional specification to narrow down which of the multiple data tables at each level are desired, means that it’s surprisingly complicated to specify what data you want:</p>
+<p>(Deep breath…)</p>
+<p>First, you need to identify the worksheet you care about. Then, whether you want summary, underlying, or data source data. If underlying, there may be more than one table involved, in which case you’ll need to specify which one. If data source, there may be multiple data sources to choose from, and potentially more than one logical table per data source.</p>
+<p>Don’t worry, you don’t need to remember all of that.</p>
+<p>Most shinytableau extensions are going to want to let the Tableau dashboard author choose the data they’re interested in. Constructing the UI to lead the user through the above chain of decisions is complicated; therefore, we’ve done it for you by providing a <code>choose_data</code> Shiny module that you can use in your config dialogs.</p>
 </div>
-<div id="deploymenthosting" class="section level2">
+<div id="the-choose_data-module" class="section level3">
+<h3 class="hasAnchor">
+<a href="#the-choose_data-module" class="anchor"></a>The <code>choose_data</code> module</h3>
+<p>Like most <a href="https://shiny.rstudio.com/articles/modules.html">Shiny modules</a>, the <code>choose_data</code> module is actually two functions: a UI function, <code>choose_data_ui</code>; and a server function, <code>choose_data</code>. In the example above, they’re invoked like this in the <code>config_ui</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit">
+<span class="fu"><a href="../reference/choose_data_ui.html">choose_data_ui</a></span><span class="op">(</span><span class="st">"data_spec"</span>, <span class="st">"Choose data"</span><span class="op">)</span></pre></div>
+<p>and this in the <code>config_server</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="downlit">
+<span class="va">data_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/choose_data_ui.html">choose_data</a></span><span class="op">(</span><span class="st">"data_spec"</span>, iv <span class="op">=</span> <span class="va">iv</span><span class="op">)</span></pre></div>
+<p>The <code>"data_spec"</code> string is just an id that needs to match between the two function calls. If you want to present multiple data choosers simultaneously, just call <code>choose_data_ui</code> and <code>choose_data</code> multiple times, using a different id for each pair of calls.</p>
+<p>The return value of <code>choose_data</code>, which we’ve named <code>data_spec</code> here, is a reactive expression that returns a “spec” object, whose purpose we will discuss in a moment.</p>
+<p>As the author of the extension, you may want to restrict the Tableau authors’ choices to ones that make sense. For example, if your extension is only designed to work with underlying data and not summary or data source data, you can remove the latter choices using <code>choose_data_options</code>:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit">
+<span class="va">data_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/choose_data_ui.html">choose_data</a></span><span class="op">(</span><span class="st">"data_spec"</span>,
+  options <span class="op">=</span> <span class="fu"><a href="../reference/choose_data_options.html">choose_data_options</a></span><span class="op">(</span>aggregation <span class="op">=</span> <span class="st">"underlying"</span><span class="op">)</span>,
+  iv <span class="op">=</span> <span class="va">iv</span><span class="op">)</span></pre></div>
+<p>Once the user has confirmed their choice, this extension saves the resulting spec as a setting:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit">
+<span class="va">save_settings</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="../reference/update_tableau_settings_async.html">update_tableau_settings_async</a></span><span class="op">(</span>
+    data_spec <span class="op">=</span> <span class="fu">data_spec</span><span class="op">(</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">}</span></pre></div>
+<p>Note that we want to persist the <em>value</em> of the <code>data_spec</code> reactive expression, so we call it like a function: <code>data_spec()</code>.</p>
+</div>
+<div id="accessing-a-data-table" class="section level3">
+<h3 class="hasAnchor">
+<a href="#accessing-a-data-table" class="anchor"></a>Accessing a data table</h3>
+<p>We turn our attention now to consuming data, using the <code><a href="../reference/reactive_tableau_data.html">reactive_tableau_data()</a></code> function. This function is called from the <code>server</code> and <code>config_server</code> functions, and returns a reactive expression that can be used to access the actual data (though there are complications in actually getting the data, more on this below).</p>
+<div id="calling-reactive_tableau_data" class="section level4">
+<h4 class="hasAnchor">
+<a href="#calling-reactive_tableau_data" class="anchor"></a>Calling <code>reactive_tableau_data()</code>
+</h4>
+<p>The first argument you need to pass to <code><a href="../reference/reactive_tableau_data.html">reactive_tableau_data()</a></code> is <code>spec</code>; it specifies what data you’re looking for, and you can provide it in a number of ways.</p>
+<ol style="list-style-type: decimal">
+<li>
+<p>You can pass <strong>the <code>data_spec</code> reactive expression returned from <code><a href="../reference/choose_data_ui.html">choose_data()</a></code></strong>. This approach should be used when you want your config dialog to show a real-time preview of the choices returned by <code>choose_data</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit">
+<span class="va">data_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/choose_data_ui.html">choose_data</a></span><span class="op">(</span><span class="st">"data_spec"</span><span class="op">)</span>
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reactive_tableau_data.html">reactive_tableau_data</a></span><span class="op">(</span><span class="va">data_spec</span><span class="op">)</span></pre></div>
+<p>Note that we’re not passing <code>data_spec()</code>, but <code>data_spec</code>. This is because we want to pass not just a <em>snapshot</em> of the user’s choices, but to give this <code>reactive_tableau_data</code> access to the current <em>and future</em> choices.</p>
+</li>
+<li>
+<p>You can pass <strong>the name of a setting</strong> where a spec object has been persisted. This approach is what you’re generally going to want to do from <code>server</code>.</p>
+<p>From the example above:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit">
+<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reactive_tableau_data.html">reactive_tableau_data</a></span><span class="op">(</span><span class="st">"data_spec"</span><span class="op">)</span></pre></div>
+<p>(This is essentially a shorthand for <code>reactive_tableau_data(reactive(tableau_setting("data_spec"))))</code>, which is a construction so awkward that, even now, it’s difficult for me to not delete this sentence.)</p>
+</li>
+<li><p>Finally, you can construct a spec object <strong>from scratch</strong> using one of the <code><a href="../reference/spec_summary.html">spec_summary()</a></code>, <code><a href="../reference/spec_summary.html">spec_underlying()</a></code>, or <code><a href="../reference/spec_summary.html">spec_datasource()</a></code> functions. You’ll need to provide the name of the worksheet/underlying table/etc. This could be useful for extensions that are created specifically for a particular dashboard.</p></li>
+</ol>
+</div>
+<div id="using-the-return-value" class="section level4">
+<h4 class="hasAnchor">
+<a href="#using-the-return-value" class="anchor"></a>Using the return value</h4>
+<p>The value returned by <code>reactive_tableau_data</code> has a couple of complications. Let’s look again at the <code>server</code> of our data summary example extension (where <code>df</code> is the <code>reactive_tableau_data</code> return value):</p>
+<div class="sourceCode" id="cb15"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/stats/Fdist.html">df</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%...&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/summarytools/man/dfSummary.html">dfSummary</a></span><span class="op">(</span>varnumbers <span class="op">=</span> <span class="cn">FALSE</span>, valid.col <span class="op">=</span> <span class="cn">FALSE</span>, graph.magnif <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">%...&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"render"</span>, headings <span class="op">=</span> <span class="cn">TRUE</span>, bootstrap.css <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></pre></div>
+<p>First, because it’s a reactive expression, <code>df</code> needs to be called like a function if you want to access its value. This is par for the course when writing a Shiny app.</p>
+<p>Second, the value returned by <code><a href="https://rdrr.io/r/stats/Fdist.html">df()</a></code> is still not the data frame object we’re trying to get to. Instead, it’s a <strong>promise object</strong>, from the <a href="https://rstudio.github.io/promises/">promises package</a>. Promises operate quite contrary to the normal programmer’s intuition, so if this is your first exposure to promises and asynchronous programming, it’s imperative that you read at least the <a href="https://rstudio.github.io/promises/articles/intro.html">introduction</a> and <a href="https://rstudio.github.io/promises/articles/overview.html">overview</a> vignettes.</p>
+<p>For simple pipelines like the above, you can replace <code><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></code> with <code><a href="https://rstudio.github.io/promises/reference/pipes.html">%...&gt;%</a></code> and it will generally work. If you need to reference the data frame multiple times, as one often does, then you can use this form:</p>
+<div class="sourceCode" id="cb16"><pre class="downlit">
+<span class="fu"><a href="https://rdrr.io/r/stats/Fdist.html">df</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rstudio.github.io/promises/reference/then.html">then</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="va">actual_data_frame</span><span class="op">)</span> <span class="op">{</span>
+  <span class="co"># Do various things with actual_data_frame</span>
+<span class="op">}</span><span class="op">)</span></pre></div>
+<p>(Please change <code>actual_data_frame</code> to whatever variable name is suitable for your app.)</p>
+</div>
+</div>
+</div>
+<div id="ui-considerations-dashboard-view" class="section level2">
 <h2 class="hasAnchor">
-<a href="#deploymenthosting" class="anchor"></a>Deployment/hosting</h2>
+<a href="#ui-considerations-dashboard-view" class="anchor"></a>UI considerations: Dashboard view</h2>
+<p>When creating the <code>ui</code> for an extension, you use the same technology and techniques as when creating the <code>ui</code> for a regular Shiny app. But unlike most Shiny apps, the entire UI will be embedded in a rectangle on a dashboard, so some different user experience considerations come into play.</p>
+<div id="filling-available-space" class="section level3">
+<h3 class="hasAnchor">
+<a href="#filling-available-space" class="anchor"></a>Filling available space</h3>
+<p>For one thing, it’s common for dashboard tiles to be 1/4 screen size, or even smaller. When screen real estate is in such short supply, it’s important for shinytableau extensions to make the most of the area they have. A typical <a href="http://shiny.rstudio-staging.com/tutorial/written-tutorial/lesson2/"><code>fluidPage</code>/<code>sidebarLayout</code> arrangement</a> is not going to be optimal here.</p>
+<p>If your extension’s purpose is to display a visualization that is amenable to fluid resizing—a plot or map, for instance—then you should generally fill the available space. You can achieve this by using <a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html"><code>fillPage</code></a> as your outermost UI element, and be sure to also set the height of your visualization to <code>height="100%"</code> (which is supported by <code>plotOutput</code> and most HTML widgets):</p>
+<div class="sourceCode" id="cb17"><pre class="downlit">
+<span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"plot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">}</span></pre></div>
+<p>If you want to divide the space between multiple visualizations, while still filling the available space, you can use <a href="https://shiny.rstudio.com/articles/gadget-ui.html#fillrowfillcol"><code>fillRow</code> or <code>fillCol</code></a> as the direct child of <code>fillPage</code>.</p>
+</div>
+<div id="scrollable-extensions" class="section level3">
+<h3 class="hasAnchor">
+<a href="#scrollable-extensions" class="anchor"></a>Scrollable extensions</h3>
+<p>Some shinytableau extensions will not be suitable for filling the available space, as in our Data Summary example (TODO: link). This is because the extension’s UI does not have a naturally fluid height; it’s simply a table of data, that has its own strong opinion about what height it needs based on its content.</p>
+<p>For such situations, we go back to using <code>fluidPage</code> page, which will automatically display a vertical scrollbar if one is necessary.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit">
+<span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fluidPage.html">fluidPage</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/htmlOutput.html">uiOutput</a></span><span class="op">(</span><span class="st">"summary"</span><span class="op">)</span>
+  <span class="op">)</span>
+<span class="op">}</span></pre></div>
+<p>If your <code>fluidPage</code>-based layout includes <code>plotOutput</code> or HTML Widget outputs, you will not be able to use <code>height="100%"</code> as we did in the previous section; instead, you will need to either accept the default height or provide a number of pixels.</p>
+</div>
+</div>
+<div id="deployment-and-hosting" class="section level2">
+<h2 class="hasAnchor">
+<a href="#deployment-and-hosting" class="anchor"></a>Deployment and hosting</h2>
+<p>So far, we’ve been running our shinytableau extensions locally from within RStudio. Needless to say, this isn’t a suitable deployment strategy for putting extensions into production—you don’t want Tableau dashboards to stop working just because you closed your laptop and went home!</p>
+<p>Deploying shinytableau extensions is <em>mostly</em> no different than deploying any other kind of Shiny app. The three main options offered by RStudio are:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>ShinyApps.io</strong> for cloud hosting of Shiny apps. This is definitely the easiest to get started, as there’s no software to install and configure, and you deploy your app by clicking a button in the RStudio IDE. Free and paid plans are available.</p></li>
+<li><p><strong>Shiny Server</strong> is our open-source solution for on-premises deployment. A Linux server is required, and you’ll need to install R and any R packages used by your Shiny apps. Deployment of apps is performed by copying files to the server and editing config files (similar to Nginx or Apache).</p></li>
+<li><p><strong>RStudio Connect</strong> is our flagship publishing platform. With RStudio Connect, you can share Shiny applications, R Markdown reports, dashboards, plots, and more in one convenient place. Like ShinyApps.io, Shiny apps are deployed with push-button publishing from the RStudio IDE</p></li>
+</ol>
+<div id="authentication" class="section level3">
+<h3 class="hasAnchor">
+<a href="#authentication" class="anchor"></a>Authentication</h3>
+<p>Authentication for shinytableau extensions is a bit more complicated than that of regular Shiny apps, and several different factors must be considered to balance your security needs with a smooth end-user experience. (Note that ShinyApps.io and RStudio Connect offer built-in support for authentication, but Shiny Server Open Source does not.)</p>
+<p>The first question to consider is <strong>whether your shinytableau extension needs authentication</strong> at all. We anticipate that many or most shinytableau extensions will not have direct access to their own data, but instead read the data from the Tableau dashboard’s worksheets. If that is the case, and there’s no danger in having an unauthorized or even malicious user embedding the shinytableau extension in their own Tableau dashboard, then consider allowing anonymous access to your deployed extension. This will sidestep most of the issues in this section.</p>
+<p>Second, it’s important to note that <strong>Safari 13.1 and newer prevent shinytableau authentication from working</strong> (this only affects Tableau Server and Tableau Online, not Tableau Desktop). This is because shinytableau extensions run within an <code>&lt;iframe&gt;</code>, and will generally run on a different domain than the enclosing page (the Tableau dashboard); this configuration results in our authentication cookies being considered <em>third-party cookies</em>, which Safari 13.1 <a href="https://webkit.org/blog/10218/full-third-party-cookie-blocking-and-more/">aggressively blocks</a>. At the time of this writing, we do not have a solution for this problem, other than to ask users to turn off Safari 13.1’s third-party cookie blocking by going into Preferences | Privacy and unchecking “Prevent cross-site tracking”. Unfortunately, this preference cannot be set on a per-site basis.</p>
+<p>Third, embedded auth flow TODO</p>
+<p>Fourth, load balancing cookie TODO</p>
+</div>
 </div>
 <div class="footnotes">
 <hr>
