@@ -364,4 +364,62 @@ df() %>% then(function(actual_data_frame) {
 
 (Please change `actual_data_frame` to whatever variable name is suitable for your app.)
 
-## Deployment/hosting
+## UI considerations: Dashboard view
+
+When creating the `ui` for an extension, you use the same technology and techniques as when creating the `ui` for a regular Shiny app. But unlike most Shiny apps, the entire UI will be embedded in a rectangle on a dashboard, so some different user experience considerations come into play.
+
+### Filling available space
+
+For one thing, it's common for dashboard tiles to be 1/4 screen size, or even smaller. When screen real estate is in such short supply, it's important for shinytableau extensions to make the most of the area they have. A typical [`fluidPage`/`sidebarLayout` arrangement](http://shiny.rstudio-staging.com/tutorial/written-tutorial/lesson2/) is not going to be optimal here.
+
+If your extension's purpose is to display a visualization that is amenable to fluid resizing---a plot or map, for instance---then you should generally fill the available space. You can achieve this by using [`fillPage`](https://shiny.rstudio.com/reference/shiny/latest/fillPage.html) as your outermost UI element, and be sure to also set the height of your visualization to `height="100%"` (which is supported by `plotOutput` and most HTML widgets):
+
+```{r eval=FALSE}
+ui <- function(req) {
+  fillPage(
+    plotOutput("plot", height = "100%")
+  )
+}
+```
+
+If you want to divide the space between multiple visualizations, while still filling the available space, you can use [`fillRow` or `fillCol`](https://shiny.rstudio.com/articles/gadget-ui.html#fillrowfillcol) as the direct child of `fillPage`.
+
+### Scrollable extensions
+
+Some shinytableau extensions will not be suitable for filling the available space, as in our Data Summary example (TODO: link). This is because the extension's UI does not have a naturally fluid height; it's simply a table of data, that has its own strong opinion about what height it needs based on its content.
+
+For such situations, we go back to using `fluidPage` page, which will automatically display a vertical scrollbar if one is necessary.
+
+```{r eval=FALSE}
+ui <- function(req) {
+  fluidPage(
+    uiOutput("summary")
+  )
+}
+```
+
+If your `fluidPage`-based layout includes `plotOutput` or HTML Widget outputs, you will not be able to use `height="100%"` as we did in the previous section; instead, you will need to either accept the default height or provide a number of pixels.
+
+## Deployment and hosting
+
+So far, we've been running our shinytableau extensions locally from within RStudio. Needless to say, this isn't a suitable deployment strategy for putting extensions into production---you don't want Tableau dashboards to stop working just because you closed your laptop and went home!
+
+Deploying shinytableau extensions is *mostly* no different than deploying any other kind of Shiny app. The three main options offered by RStudio are:
+
+1.  **ShinyApps.io** for cloud hosting of Shiny apps. This is definitely the easiest to get started, as there's no software to install and configure, and you deploy your app by clicking a button in the RStudio IDE. Free and paid plans are available.
+
+2.  **Shiny Server** is our open-source solution for on-premises deployment. A Linux server is required, and you'll need to install R and any R packages used by your Shiny apps. Deployment of apps is performed by copying files to the server and editing config files (similar to Nginx or Apache).
+
+3.  **RStudio Connect** is our flagship publishing platform. With RStudio Connect, you can share Shiny applications, R Markdown reports, dashboards, plots, and more in one convenient place. Like ShinyApps.io, Shiny apps are deployed with push-button publishing from the RStudio IDE
+
+### Authentication
+
+Authentication for shinytableau extensions is a bit more complicated than that of regular Shiny apps, and several different factors must be considered to balance your security needs with a smooth end-user experience. (Note that ShinyApps.io and RStudio Connect offer built-in support for authentication, but Shiny Server Open Source does not.)
+
+The first question to consider is **whether your shinytableau extension needs authentication** at all. We anticipate that many or most shinytableau extensions will not have direct access to their own data, but instead read the data from the Tableau dashboard's worksheets. If that is the case, and there's no danger in having an unauthorized or even malicious user embedding the shinytableau extension in their own Tableau dashboard, then consider allowing anonymous access to your deployed extension. This will sidestep most of the issues in this section.
+
+Second, it's important to note that **Safari 13.1 and newer prevent shinytableau authentication from working** (this only affects Tableau Server and Tableau Online, not Tableau Desktop). This is because shinytableau extensions run within an `<iframe>`, and will generally run on a different domain than the enclosing page (the Tableau dashboard); this configuration results in our authentication cookies being considered *third-party cookies*, which Safari 13.1 [aggressively blocks](https://webkit.org/blog/10218/full-third-party-cookie-blocking-and-more/). At the time of this writing, we do not have a solution for this problem, other than to ask users to turn off Safari 13.1's third-party cookie blocking by going into Preferences \| Privacy and unchecking "Prevent cross-site tracking". Unfortunately, this preference cannot be set on a per-site basis.
+
+Third, embedded auth flow TODO
+
+Fourth, load balancing cookie TODO
