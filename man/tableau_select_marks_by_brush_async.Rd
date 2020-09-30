@@ -4,7 +4,11 @@
 \alias{tableau_select_marks_by_brush_async}
 \title{Update a worksheet's selection using a \code{plotOutput} ggplot2 brush}
 \usage{
-tableau_select_marks_by_brush_async(worksheet, brush)
+tableau_select_marks_by_brush_async(
+  worksheet,
+  brush,
+  session = shiny::getDefaultReactiveDomain()
+)
 }
 \arguments{
 \item{worksheet}{Single-element character vector naming the worksheet whose
@@ -16,6 +20,9 @@ name.}
 \item{brush}{\code{input$YOUR_BRUSH_ID}, where \code{YOUR_BRUSH_ID} is the identifier
 passed as \code{plotOutput}'s \code{brush} argument (or passed to
 \code{\link[shiny:brushOpts]{shiny::brushOpts()}}, if you did it that way).}
+
+\item{session}{The Shiny \code{session} object. (You should probably just use the
+default.)}
 }
 \value{
 A \link[promises:promise]{promises::promise} object. The promise object will not resolve to

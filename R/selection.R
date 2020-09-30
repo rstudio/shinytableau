@@ -18,6 +18,8 @@
 #' @param brush `input$YOUR_BRUSH_ID`, where `YOUR_BRUSH_ID` is the identifier
 #'   passed as `plotOutput`'s `brush` argument (or passed to
 #'   [shiny::brushOpts()], if you did it that way).
+#' @param session The Shiny `session` object. (You should probably just use the
+#'   default.)
 #'
 #' @details
 #' Currently this function only works with plots based on ggplot2, not base
@@ -29,7 +31,8 @@
 #'   a useful value, but you can use it to handle errors.
 #'
 #' @export
-tableau_select_marks_by_brush_async <- function(worksheet, brush) {
+tableau_select_marks_by_brush_async <- function(worksheet, brush,
+  session = shiny::getDefaultReactiveDomain()) {
 
   # The Tableau extension API has a buggy worksheet.selectMarksByValueAsync
   # implementation. While the method takes an array of SelectionCriteria, that
@@ -84,10 +87,11 @@ tableau_select_marks_by_brush_async <- function(worksheet, brush) {
   })
   criteria <- do.call(rbind, criteria)
   if (length(unique(criteria$type)) == 1) {
-    begin_request("selectMarksByValue", worksheet, criteria$normal, "select-replace")
+    begin_request("selectMarksByValue", worksheet, criteria$normal, "select-replace",
+      session. = session)
   } else {
-    begin_request("selectMarksByValue2", worksheet, criteria$normal[[1]], criteria$inverted[-1])
+    begin_request("selectMarksByValue2", worksheet, criteria$normal[[1]], criteria$inverted[-1],
+      session. = session)
   }
 
 }
-
