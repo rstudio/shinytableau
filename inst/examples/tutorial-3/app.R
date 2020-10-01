@@ -9,11 +9,7 @@ manifest <- tableau_manifest_from_yaml()
 
 ui <- function(req) {
   fluidPage(
-    fluidRow(
-      column(12,
-        uiOutput("summary")
-      )
-    )
+    uiOutput("summary")
   )
 }
 
