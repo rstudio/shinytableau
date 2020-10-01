@@ -55,6 +55,10 @@ tableau_extension <- function(manifest, ui, server, config_ui = NULL,
   # `options = ext_options()`.
   options <- merge_defaults(options, ext_options())
 
+  if (isTRUE(options[["use_theme"]])) {
+    thematic::thematic_on(font = "Open Sans", bg = "white", fg = "black")
+  }
+
   if (!is.null(config_ui) && !is.function(config_ui)) {
     stop("The `config_ui` argument, if provided, must be a function ",
       "that takes a single argument", call. = FALSE)
@@ -119,7 +123,7 @@ tableau_extension <- function(manifest, ui, server, config_ui = NULL,
 #'
 #' @export
 ext_options <- function(config_width = 600, config_height = 400,
-  prompt_for_config = TRUE, standalone = FALSE, ...) {
+  prompt_for_config = TRUE, standalone = FALSE, use_theme = TRUE, ...) {
   if (!is.numeric(config_width) || length(config_width) != 1) {
     stop("config_width must be a single number")
   }
@@ -132,12 +136,16 @@ ext_options <- function(config_width = 600, config_height = 400,
   if (!is.logical(standalone) || length(standalone) != 1) {
     stop("standalone must be TRUE or FALSE")
   }
+  if (!is.logical(use_theme) || length(use_theme) != 1) {
+    stop("use_theme must be TRUE or FALSE")
+  }
 
   rlang::list2(
     config_width = config_width,
     config_height = config_height,
     prompt_for_config = prompt_for_config,
     standalone = standalone,
+    use_theme = use_theme,
     ...
   )
 }

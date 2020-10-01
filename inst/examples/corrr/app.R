@@ -24,8 +24,6 @@ server <- function(input, output, session) {
 
     df() %...>% {
 
-      thematic::thematic_on(font = "Open Sans", bg = "white", fg = "black")
-
       get_r_column_names_types <- function(tbl) {
 
         suppressWarnings(

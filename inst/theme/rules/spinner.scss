@@ -1,0 +1,74 @@
+.tableau-spinner {
+  position: relative;
+  background-color: white;
+  width: 50px;
+  height: 50px;
+  z-index: 1000;
+  box-sizing: content-box;
+  border: 8px solid white;
+  border-radius: 12px;
+  opacity: 0.9;
+
+  &.tableau-spinner-fill {
+    position: fixed;
+    left: calc(50vw - 25px);
+    top: calc(43vh - 25px);
+  }
+
+  .rotator {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    animation: spin-animation 1s linear infinite;
+
+    .slice {
+      position: absolute;
+      background-color: rgb(97, 101, 112);
+      height: 50%;
+      width: 50%;
+    }
+    .gradient {
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 100%;
+      background: linear-gradient(to right,
+        rgba(97, 101, 112, 0) 0%,
+        rgba(97, 101, 112, 0.04) 15%,
+        rgba(97, 101, 112, 0.16) 30%,
+        rgba(97, 101, 112, 0.36) 45%,
+        rgba(97, 101, 112, 0.64) 61%,
+        rgb(97, 101, 112) 76%
+      )
+    }
+    .bottom-left {
+      bottom: 0;
+      left: 0;
+      border-radius: 0 0 0 100%;
+    }
+    .bottom-right {
+      bottom: 0;
+      right: 0;
+      border-radius: 0 0 100% 0;
+    }
+    .center {
+      background-color: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      right: 4px;
+      bottom: 4px;
+    }
+  }
+}
+
+@keyframes spin-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -18,6 +18,7 @@ tableau_ui <- function(manifest, embed_ui, config_ui, standalone_ui, options = e
   force(options)
 
   trex_initialized <- FALSE
+  use_theme <- options[["use_theme"]]
 
   function(req) {
     mode <- mode_from_querystring(req[["QUERY_STRING"]], options)
@@ -31,32 +32,34 @@ tableau_ui <- function(manifest, embed_ui, config_ui, standalone_ui, options = e
             config_height = options[["config_height"]]
           ))
         )),
-        display_with_deps(embed_ui, req)
+        display_with_deps(embed_ui, req, use_theme)
       )
     } else if (identical(mode, "configure")) {
       if (!is.null(config_ui)) {
-        display_with_deps(config_ui, req)
+        display_with_deps(config_ui, req, use_theme)
       } else {
         "This extension has no settings to configure"
       }
     } else if (identical(mode, "trex")) {
       trex_handler(req, manifest, !is.null(config_ui))
     } else if (identical(mode, "info")) {
-      display_with_deps(welcome_ui(manifest), req)
+      display_with_deps(welcome_ui(manifest), req, use_theme)
     } else if (identical(mode, "standalone")) {
-      display_with_deps(standalone_ui, req)
+      display_with_deps(standalone_ui, req, use_theme)
     }
   }
 }
 
-display_with_deps <- function(ui, req) {
+display_with_deps <- function(ui, req, use_theme) {
+  # Has side effects (if use_theme==TRUE), so must execute first
+  lib <- shinytableau_lib(use_theme)
+
   if (is.function(ui)) {
     ui <- ui(req)
   }
 
   return(htmltools::tagList(
-    shinytableau_lib(),
-    ui
+    lib, ui
   ))
 }
 

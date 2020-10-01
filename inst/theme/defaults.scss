@@ -1,0 +1,36 @@
+$primary: #1a699e !default;
+$secondary: white !default;
+$body-color: #333 !default;
+
+$font-family-sans-serif: "Open Sans", sans-serif !default;
+
+$border-radius: 2px !default;
+
+// $input-btn-font-size: 12px !default;
+$input-btn-focus-box-shadow: 0 0 4px 0 #3498DB !default;
+
+$btn-font-weight: bold !default;
+$btn-padding-y: 3px !default;
+$btn-padding-x: 24px !default;
+
+$label-margin-bottom: 0 !default;
+// $label-font-size: 12px !default;
+
+$input-color: #333 !default;
+$input-border-color: #cbcbcb !default;
+$input-border-radius: 0 !default;
+$input-border-radius-lg: 0 !default;
+$input-border-radius-sm: 0 !default;
+$input-padding-x: 0.4rem !default;
+$input-padding-y: 0 !default;
+$input-height: 24px !default;
+
+$focus-color: #3498DB !default;
+$primary-dark: #15557f !default;
+$primary-light: #2a79af !default;
+
+// Tighten up well padding. (card-spacer-y appears to have no effect on wells)
+$card-spacer-x: 0.75rem !default;
+$card-spacer-y: 0.5rem !default;
+
+$enable-transitions: false !default;

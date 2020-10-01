@@ -6,9 +6,7 @@ config_ui_template <- function() {
       miniUI::miniContentPanel(
         shiny::uiOutput(ns("ui"))
       ),
-      htmltools::tags$div(style = "text-align: right; padding: 8px 15px; height: 50px; border-top: 1px solid #DDD;",
-        shiny::uiOutput(ns("footer_ui"))
-      )
+      shiny::uiOutput(class = "button-bar", ns("footer_ui"))
     )
   )
 }
@@ -67,9 +65,13 @@ tableau_config_server <- function(ui_func, server_func) {
 
     output[[ns("footer_ui")]] <- shiny::renderUI({
       shiny::tagList(
-        shiny::actionButton(ns("ok"), "OK", class = "btn-primary"),
-        shiny::actionButton(ns("cancel"), "Cancel"),
-        shiny::actionButton(ns("apply"), "Apply")
+        htmltools::div(class = "button-bar-panel button-bar-left",
+          shiny::actionButton(ns("apply"), "Apply")
+        ),
+        htmltools::div(class = "button-bar-panel button-bar-right",
+          shiny::actionButton(ns("cancel"), "Cancel"),
+          shiny::actionButton(ns("ok"), "OK", class = "btn-primary")
+        )
       )
     })
 

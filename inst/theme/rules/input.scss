@@ -1,0 +1,9 @@
+.form-control {
+  &:hover {
+    background-color: #fafafa;
+    border-color: #333;
+  }
+  &:hover:focus {
+    border-color: $focus-color;
+  }
+}

@@ -1,0 +1,28 @@
+.selectize-control .selectize-input.full {
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid #CBCBCB;
+  background-color: #FAFAFA;
+  box-shadow: none;
+  /*
+  padding-left: 0px;
+  padding-right: 5px;
+  text-indent: 2px;
+  max-height: 30px;
+  margin-left: 10px;
+  margin-right: 20px;
+  */
+}
+
+.selectize-control .selectize-input.input-active {
+  cursor: pointer;
+}
+
+.selectize-control .selectize-dropdown {
+  border: 0;
+  border-radius: 0;
+  box-shadow: 2px 3px 12px 1px rgba(0,0,0,.22);
+  //background-color: #FFFFFF !important;
+  border: 1px solid #D4D4D4;
+  margin: 0;
+}
