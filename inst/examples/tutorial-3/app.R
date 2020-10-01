@@ -24,7 +24,8 @@ server <- function(input, output, session) {
     # From https://cran.r-project.org/web/packages/summarytools/vignettes/Introduction.html#creating-shiny-apps
     df() %...>%
       dfSummary(varnumbers = FALSE, valid.col = FALSE, graph.magnif = 0.8) %...>%
-      print(method = "render", headings = TRUE, bootstrap.css = FALSE)
+      print(method = "render", headings = TRUE, Data.frame = NULL,
+        footnote = NA, bootstrap.css = FALSE)
   })
 }
 
