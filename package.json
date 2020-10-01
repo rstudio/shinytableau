@@ -17,9 +17,7 @@
     "build": "tsc && yarn bundle",
     "watch": "tsc-watch --onSuccess \"yarn bundle\"",
     "bundle": "browserify build/index.js -o inst/assets/js/shinytableau.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "sass": "sass --update scss:inst/assets/css",
-    "sass-watch": "sass --watch scss:inst/assets/css"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "license": "MIT",
   "dependencies": {
@@ -29,7 +27,6 @@
     "@types/react-dom": "^16.9.8",
     "browserify": "^16.5.1",
     "browserify-global-shim": "^1.0.3",
-    "sass": "^1.26.10",
     "tsc-watch": "^4.2.9",
     "typescript": "^3.9.6"
   }
