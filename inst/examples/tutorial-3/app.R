@@ -14,7 +14,7 @@ ui <- function(req) {
 }
 
 server <- function(input, output, session) {
-  df <- reactive_tableau_data("data_spec")
+  df <- reactive_tableau_data("data_spec", list(includeAllColumns = TRUE))
 
   output$summary <- renderUI({
     # From https://cran.r-project.org/web/packages/summarytools/vignettes/Introduction.html#creating-shiny-apps
