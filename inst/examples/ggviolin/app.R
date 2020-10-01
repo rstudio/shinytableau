@@ -38,11 +38,15 @@ server <- function(input, output, session) {
 }
 
 config_ui <- function(req) {
-  tagList(
-    textInput("title", "Title"),
-    choose_data_ui("data", "Choose data"),
-    uiOutput("var_selection_ui"),
-    tableOutput("preview")
+  sidebarLayout(
+    sidebarPanel(
+      textInput("title", "Title"),
+      choose_data_ui("data", "Choose data"),
+      uiOutput("var_selection_ui")
+    ),
+    mainPanel(
+      tableOutput("preview")
+    )
   )
 }
 
@@ -84,5 +88,5 @@ config_server <- function(input, output, session, iv) {
 
 tableau_extension(
   manifest, ui, server, config_ui, config_server,
-  options = ext_options(config_width = 600, config_height = 600, port = 2468)
+  options = ext_options(config_width = 900, config_height = 600, port = 2468)
 )

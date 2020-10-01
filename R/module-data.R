@@ -39,7 +39,8 @@ choose_data_ui <- function(id, label = NULL) {
       htmltools::tags$label(class = "control-label", label)
     },
     htmltools::tags$div(class = "well",
-                    shiny::uiOutput(ns("worksheet_ui")),
+      style = "padding-bottom: 0;",
+      shiny::uiOutput(ns("worksheet_ui")),
       optional_chooser_ui(ns("agg")),
       optional_chooser_ui(ns("underlying")),
       optional_chooser_ui(ns("datasource")),
