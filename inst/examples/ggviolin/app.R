@@ -71,9 +71,10 @@ config_server <- function(input, output, session, iv) {
   schema <- reactive_tableau_schema(data_spec)
 
   output$var_selection_ui <- renderUI({
+    vars <- schema()$columns$fieldName
     tagList(
-      selectInput("xvar", "Dimension", schema()$columns$fieldName),
-      selectInput("yvar", "Measure", schema()$columns$fieldName)
+      selectInput("xvar", "Dimension", vars),
+      selectInput("yvar", "Measure", vars)
     )
   })
 

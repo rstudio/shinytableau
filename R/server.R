@@ -11,13 +11,18 @@ tableau_server <- function(embed_server, config_server, standalone_server, optio
 
   tableau_server_router <- function(input, output, session) {
     wrap_session(session)
-    init_rpc(session)
+    init_tableau <- function() {
+      init_rpc(session)
+      session$sendCustomMessage("shinytableau-init", list())
+    }
 
     mode <- mode_from_querystring(shiny::isolate(session$clientData$url_search), options)
 
     if (identical(mode, "embed")) {
+      init_tableau()
       load_after_settings(embed_server)
     } else if (identical(mode, "configure") && is.function(config_server)) {
+      init_tableau()
       load_after_settings(config_server)
     } else if (identical(mode, "standalone")) {
       standalone_server(input, output, session)

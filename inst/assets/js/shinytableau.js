@@ -85,11 +85,6 @@ async function initShinyTableau() {
     }
     console.timeEnd("shinytableau startup");
 }
-$(document).on("shiny:sessioninitialized", () => {
-    initShinyTableau().catch(err => {
-        console.error(err);
-    });
-});
 function configure() {
     let width = 600;
     let height = 400;
@@ -169,6 +164,11 @@ function trackSettings() {
         updateSettings(evt.newSettings);
     });
 }
+Shiny.addCustomMessageHandler("shinytableau-init", message => {
+    initShinyTableau().catch(err => {
+        console.error(err);
+    });
+});
 let responseUrl;
 Shiny.addCustomMessageHandler("shinytableau-rpc-init", ({ url }) => {
     responseUrl = url;

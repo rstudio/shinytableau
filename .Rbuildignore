@@ -16,3 +16,4 @@
 ^pkgdown$
 ^codecov\.yml$
 ^.github$
+^screenshot.png$
