@@ -78,22 +78,30 @@ body {
   font-size: 12pt;
   line-height: 1.5;
 }
+p>img:first-child:last-child {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border: none;
+}
 </style>
 <p>Tableau version 2020.3 introduced a new extensibility feature called Dashboard Extensions. This feature lets programmers use JavaScript to create custom objects that normal Tableau users can drop into their Tableau dashboard layouts, providing custom visualizations and interactive features beyond Tableau’s native capabilities.</p>
 <p>The {shinytableau} package allows you to easily create Tableau dashboard extensions using the power of R and Shiny. In typical Shiny fashion, it’s not necessary to know web technologies like HTML, JavaScript, and CSS to create compelling Tableau extensions.</p>
 <div id="example-violin-plot" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-violin-plot" class="anchor"></a>Example: Violin plot</h2>
-<p>At the time of this writing, Tableau doesn’t have built-in support for <a href="https://en.wikipedia.org/wiki/Violin_plot">violin plots</a>, only <a href="https://help.tableau.com/current/pro/desktop/en-us/buildexamples_boxplot.htm">box plots</a>. While box plots are more familiar, violin plots are more informative because they show you the entire distribution instead of merely quartiles. For example, the plots below show TODO:</p>
+<p>At the time of this writing, Tableau doesn’t have built-in support for <a href="https://en.wikipedia.org/wiki/Violin_plot">violin plots</a>, only <a href="https://help.tableau.com/current/pro/desktop/en-us/buildexamples_boxplot.htm">box plots</a>. While box plots are more familiar, violin plots are more informative because they show you the entire distribution instead of merely quartiles. For example, take a look at the same data drawn as a box plot (left) and a violin plot (right):</p>
+<p><img src="shinytableau_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p>The boxplot doesn’t give any hint that these values follow a bimodal distribution, while the violin plot makes it clear.</p>
 <p>I would be remiss not to mention the heroics that Tableau consultant Gwilym Lockwood went through to <a href="https://gwilymlockwood.com/2018/07/03/language-sex-violins-other-how-to-create-violin-plots-in-tableau/">create a violin plot in Tableau</a>. The blog post is worth a read, but the takeaway is that you’d have to <em>really</em> want a violin plot to go through all of those steps.</p>
 <p>In R, on the other hand, there are several packages that provide violin plots; a cursory search turned up <a href="https://cran.r-project.org/web/packages/vioplot/vignettes/violin_customisation.html">vioplot</a>, <a href="https://plotly.com/r/violin/">plotly</a>, <a href="https://rpkgs.datanovia.com/ggpubr/reference/ggviolin.html">ggpubr</a>, and <a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">ggplot2</a>. Here’s how you might create a violin plot in ggplot2, using the <code>mtcars</code> data set, showing the horsepower (<code>hp</code>) distribution for each cylinder count (<code>cyl</code>):</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="fu">ggplot</span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">hp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_violin</span><span class="op">(</span><span class="op">)</span></pre></div>
-<p><img src="shinytableau_files/figure-html/unnamed-chunk-3-1.png" width="480"></p>
+<p><img src="shinytableau_files/figure-html/unnamed-chunk-4-1.png" width="480"></p>
 <p>With shinytableau, we can wrap this R code into an easy-to-use Tableau dashboard extension that can be used by Tableau users that don’t even know what R is. They don’t need to modify the code to point to the data source and variables they want to plot, because you’re going to provide them with a GUI for that. They don’t need to think about how to configure R on their server, because you can deploy it just once for all users of the extension.</p>
 <p>Take a look at what it’s like to use a shinytableau extension:</p>
-<p>(screencast)</p>
+<p>(TODO: screencast)</p>
 <p>To recap:</p>
 <ol style="list-style-type: decimal">
 <li>Navigate to the shinytableau extension’s info page and click Download to save a .trex file to your hard drive.</li>

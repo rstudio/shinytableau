@@ -159,6 +159,12 @@ underlying tables.</strong> This option is ignored for summary tables.</p></li>
 <li><p><code>columnsToInclude</code> - Character vector of columns that should be included;
 leaving this option unspecified means all columns should be returned. Does
 not apply for summary and underlying, only datasource.</p></li>
+<li><p><code>truncation</code> - For underlying and datasource reads, Tableau will never,
+under any circumstances, return more than 10,000 rows of data. If <code>warn</code>
+(the default), when this condition occurs a warning will be displayed to
+the user and emitted as a warning in the R process, then the available
+data will be returned. If <code>ignore</code>, then no warning will be issued. If
+<code>error</code>, then an error will be raised.</p></li>
 </ul></td>
     </tr>
     <tr>

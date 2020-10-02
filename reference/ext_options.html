@@ -121,6 +121,7 @@ Tableau extension. Pass the resulting value as the <code>options</code> argument
   config_height <span class='op'>=</span> <span class='fl'>400</span>,
   prompt_for_config <span class='op'>=</span> <span class='cn'>TRUE</span>,
   standalone <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  use_theme <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -151,6 +152,14 @@ Such apps should use <code>standalone=TRUE</code>. The default is <code>FALSE</c
 that the app is a true Tableau extension and should not attempt to run
 outside of a Tableau dashboard.</p>
 <p>See the vignette on standalone apps for more information. TODO</p></td>
+    </tr>
+    <tr>
+      <th>use_theme</th>
+      <td><p>By default, shinytableau applies a customized version of
+Bootstrap 4 CSS to your extension's UI and config UI; the customizations
+are intended to complement Tableau's own UI conventions (though we cannot
+replicate them exactly due to licensing issues). Pass <code>FALSE</code> if you want
+to omit shinytableau's styles and just use your own.</p></td>
     </tr>
     <tr>
       <th>...</th>
