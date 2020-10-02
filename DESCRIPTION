@@ -50,6 +50,7 @@ Suggests:
     rmarkdown,
     ggplot2,
     dplyr,
-    summarytools
+    summarytools,
+    patchwork
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
