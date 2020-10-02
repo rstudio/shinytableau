@@ -2,7 +2,7 @@
 
 An R package that helps you create Tableau [dashboard extensions](https://help.tableau.com/current/pro/desktop/en-us/dashboard_extensions.htm), using the power of R and Shiny.
 
-![](screenshot.png){width="501"}
+<img src="screenshot.png" width="500" alt="A Tableau dashboard containing a ggplot2 plot"/>
 
 ## Motivation
 
