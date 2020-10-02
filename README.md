@@ -6,7 +6,7 @@ An R package that helps you create Tableau [dashboard extensions](https://help.t
 
 ## Motivation
 
-Many organizations rely on [Tableau](https://www.tableau.com/) to provide day-to-day insights from their data. Thanks to Tableau's point-and-click interface and focused feature set, it doesn't take too much skill to start producing attractive and useful visualizations and dashboards.
+Many organizations rely on [Tableau](https://www.tableau.com/) to provide day-to-day insights from their data. Thanks to Tableau's point-and-click interface and focused feature set, almost anyone can produce attractive and useful visualizations and dashboards.
 
 On the other hand, tasks that are routine to R users can sometimes be difficult or impossible to achieve with Tableau alone. So it's common to use R to preprocess data that is then fed to Tableau, or use Tableau's R integration features to fortify their data tables with columns calculated by R.
 
@@ -22,7 +22,7 @@ shinytableau makes it possible for a Tableau user to open up a rectangle in thei
 
 -   Display reactive outputs like tables, plots, and HTML widgets.
 
--   Performing arbitrary actions based on events (e.g. button clicks).
+-   Perform arbitrary actions based on events (e.g. button clicks).
 
 Plus, you gain a few additional Tableau-specific capabilities, including:
 
