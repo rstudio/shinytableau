@@ -41,6 +41,12 @@ underlying tables.} This option is ignored for summary tables.
 \item \code{columnsToInclude} - Character vector of columns that should be included;
 leaving this option unspecified means all columns should be returned. Does
 not apply for summary and underlying, only datasource.
+\item \code{truncation} - For underlying and datasource reads, Tableau will never,
+under any circumstances, return more than 10,000 rows of data. If \code{warn}
+(the default), when this condition occurs a warning will be displayed to
+the user and emitted as a warning in the R process, then the available
+data will be returned. If \code{ignore}, then no warning will be issued. If
+\code{error}, then an error will be raised.
 }}
 
 \item{session}{The Shiny \code{session} object. (You should probably just use the

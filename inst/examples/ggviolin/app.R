@@ -17,7 +17,9 @@ ui <- function(req) {
 }
 
 server <- function(input, output, session) {
-  df <- reactive_tableau_data("data_spec")
+  df <- reactive_tableau_data("data_spec",
+    options = list(includeAllColumns = TRUE)
+  )
 
   observeEvent(input$plot_brush, {
     worksheet <- req(tableau_setting("data_spec")$worksheet)
@@ -51,14 +53,15 @@ config_ui <- function(req) {
 }
 
 config_server <- function(input, output, session, iv) {
-  iv$add_rule("title", sv_required())
   iv$add_rule("xvar", sv_required())
   iv$add_rule("yvar", sv_required())
 
   data_spec <- choose_data("data", iv = iv)
 
 
-  data <- reactive_tableau_data(data_spec, options = list(maxRows = 5))
+  data <- reactive_tableau_data(data_spec,
+    options = list(includeAllColumns = TRUE, maxRows = 5)
+  )
 
   output$preview <- renderTable({
     data()

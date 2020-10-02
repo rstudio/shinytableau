@@ -9,6 +9,7 @@ ext_options(
   config_height = 400,
   prompt_for_config = TRUE,
   standalone = FALSE,
+  use_theme = TRUE,
   ...
 )
 }
@@ -33,6 +34,12 @@ that the app is a true Tableau extension and should not attempt to run
 outside of a Tableau dashboard.
 
 See the vignette on standalone apps for more information. TODO}
+
+\item{use_theme}{By default, shinytableau applies a customized version of
+Bootstrap 4 CSS to your extension's UI and config UI; the customizations
+are intended to complement Tableau's own UI conventions (though we cannot
+replicate them exactly due to licensing issues). Pass \code{FALSE} if you want
+to omit shinytableau's styles and just use your own.}
 
 \item{...}{Options to pass through to \link[shiny:runApp]{shiny::runApp} (e.g. \code{port},
 \code{launch.browser}, \code{host}, \code{quiet}). For local development purposes, it's a

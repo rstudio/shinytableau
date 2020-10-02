@@ -186,6 +186,13 @@ tableau_worksheet_info <- function(name, session = shiny::getDefaultReactiveDoma
 #'   leaving this option unspecified means all columns should be returned. Does
 #'   not apply for summary and underlying, only datasource.
 #'
+#'   * `truncation` - For underlying and datasource reads, Tableau will never,
+#'     under any circumstances, return more than 10,000 rows of data. If `warn`
+#'     (the default), when this condition occurs a warning will be displayed to
+#'     the user and emitted as a warning in the R process, then the available
+#'     data will be returned. If `ignore`, then no warning will be issued. If
+#'     `error`, then an error will be raised.
+#'
 #' @param session The Shiny `session` object. (You should probably just use the
 #'   default.)
 #'
@@ -197,7 +204,11 @@ tableau_worksheet_info <- function(name, session = shiny::getDefaultReactiveDoma
 #'
 #' @import promises
 #' @export
-reactive_tableau_data <- function(spec, options = list(), session = shiny::getDefaultReactiveDomain()) {
+reactive_tableau_data <- function(spec, options = list(),
+  session = shiny::getDefaultReactiveDomain()) {
+
+  force(spec)
+  force(options)
 
   session <- unwrap_session(session)
 
@@ -213,6 +224,11 @@ reactive_tableau_data <- function(spec, options = list(), session = shiny::getDe
     spec <- function() value
   }
 
+  options <- merge_defaults(options, list(
+    truncation = "warn"
+  ))
+  match.arg(options[["truncation"]], c("warn", "error", "ignore"))
+
   shiny::reactive({
     shiny::req(spec())
 
@@ -222,6 +238,27 @@ reactive_tableau_data <- function(spec, options = list(), session = shiny::getDe
     }
 
     tableau_get_data_async(spec(), options) %...>% {
+      if (isTRUE(.$isTotalRowCountLimited)) {
+        if (options[["truncate"]] == "warn") {
+          shiny::showNotification(
+            htmltools::tagList(
+              htmltools::strong("Warning:"),
+              " Incomplete data; only the first ",
+              nrow(.$data),
+              " rows of data can be retrieved from Tableau!"
+            ),
+            type = "warning",
+            session = session
+          )
+          warning("Tableau data was limited to first ", nrow(.$data), " rows")
+        } else if (options[["truncate"]] == "error") {
+          stop("The data requested contains too many rows (limit: ", nrow(.$data), ")")
+        } else if (options[["truncate"]] == "ignore") {
+          # Do nothing
+        } else {
+          warning("Unknown value for `truncate` option: ", options[["truncate"]])
+        }
+      }
       .$data
     }
   })
