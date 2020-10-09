@@ -8,7 +8,6 @@ ext_options(
   config_width = 600,
   config_height = 400,
   prompt_for_config = TRUE,
-  standalone = FALSE,
   use_theme = TRUE,
   ...
 )
@@ -26,14 +25,6 @@ dialog is displayed instead.
 
 Use \code{prompt_for_config=FALSE} if the extension is able to run even without
 initial configuration.}
-
-\item{standalone}{Some shinytableau projects might not be extensions at all,
-but rather apps that can run both inside and outside of Tableau dashboards.
-Such apps should use \code{standalone=TRUE}. The default is \code{FALSE}, indicating
-that the app is a true Tableau extension and should not attempt to run
-outside of a Tableau dashboard.
-
-See the vignette on standalone apps for more information. TODO}
 
 \item{use_theme}{By default, shinytableau applies a customized version of
 Bootstrap 4 CSS to your extension's UI and config UI; the customizations

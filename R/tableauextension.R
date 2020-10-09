@@ -76,13 +76,11 @@ tableau_extension <- function(manifest, ui, server, config_ui = NULL,
     tableau_ui(manifest,
       embed_ui_template(),
       config_ui_template(),
-      ui,
       options
     ),
     tableau_server(
       tableau_embed_server(manifest, ui, server, options),
       tableau_config_server(config_ui, config_server),
-      server,
       options
     ),
     options = options,
@@ -107,14 +105,6 @@ tableau_extension <- function(manifest, ui, server, config_ui = NULL,
 #'
 #'   Use `prompt_for_config=FALSE` if the extension is able to run even without
 #'   initial configuration.
-#' @param standalone Some shinytableau projects might not be extensions at all,
-#'   but rather apps that can run both inside and outside of Tableau dashboards.
-#'   Such apps should use `standalone=TRUE`. The default is `FALSE`, indicating
-#'   that the app is a true Tableau extension and should not attempt to run
-#'   outside of a Tableau dashboard.
-#'
-#'   See the vignette on standalone apps for more information. TODO
-#'
 #' @param use_theme By default, shinytableau applies a customized version of
 #'   Bootstrap 4 CSS to your extension's UI and config UI; the customizations
 #'   are intended to complement Tableau's own UI conventions (though we cannot
@@ -130,7 +120,7 @@ tableau_extension <- function(manifest, ui, server, config_ui = NULL,
 #'
 #' @export
 ext_options <- function(config_width = 600, config_height = 400,
-  prompt_for_config = TRUE, standalone = FALSE, use_theme = TRUE, ...) {
+  prompt_for_config = TRUE, use_theme = TRUE, ...) {
   if (!is.numeric(config_width) || length(config_width) != 1) {
     stop("config_width must be a single number")
   }
@@ -140,9 +130,6 @@ ext_options <- function(config_width = 600, config_height = 400,
   if (!is.logical(prompt_for_config) || length(prompt_for_config) != 1) {
     stop("prompt_for_config must be TRUE or FALSE")
   }
-  if (!is.logical(standalone) || length(standalone) != 1) {
-    stop("standalone must be TRUE or FALSE")
-  }
   if (!is.logical(use_theme) || length(use_theme) != 1) {
     stop("use_theme must be TRUE or FALSE")
   }
@@ -151,7 +138,6 @@ ext_options <- function(config_width = 600, config_height = 400,
     config_width = config_width,
     config_height = config_height,
     prompt_for_config = prompt_for_config,
-    standalone = standalone,
     use_theme = use_theme,
     ...
   )
@@ -161,8 +147,6 @@ mode_from_querystring <- function(querystring, options) {
   mode <- shiny::parseQueryString(querystring)$mode
   if (!is.null(mode)) {
     mode
-  } else if (isTRUE(options[["standalone"]])) {
-    "standalone"
   } else {
     "info"
   }

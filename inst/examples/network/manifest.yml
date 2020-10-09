@@ -7,7 +7,7 @@ extended_description: |
 author_name: Rich Iannone
 author_email: rich@rstudio.com
 author_organization: RStudio, PBC
-website: https://github.com/rstudio/shinytableau/tree/master/examples/network
+website: https://github.com/rstudio/shinytableau/tree/master/inst/examples/network
 icon:
   file: default_icon.png
   package: shinytableau

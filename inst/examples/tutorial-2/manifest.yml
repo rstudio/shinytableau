@@ -8,7 +8,7 @@ extended_description: |
 author_name: Joe Cheng
 author_email: joe@rstudio.com
 author_organization: RStudio, Inc.
-website: https://github.com/rstudio/shinytableau/tree/master/examples/tutorial-2
+website: https://github.com/rstudio/shinytableau/tree/master/inst/examples/tutorial-2
 icon:
   file: default_icon.png
   package: shinytableau

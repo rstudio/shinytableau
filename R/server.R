@@ -1,13 +1,11 @@
-tableau_server <- function(embed_server, config_server, standalone_server, options) {
+tableau_server <- function(embed_server, config_server, options) {
   force(embed_server)
   force(config_server)
-  force(standalone_server)
   force(options)
 
   # Check that server and config_server are functions and have the right params
   validate_server_function(embed_server, "embed_server")
   validate_server_function(config_server, "config_server", allowNULL = TRUE)
-  validate_server_function(standalone_server, "standalone_server")
 
   tableau_server_router <- function(input, output, session) {
     wrap_session(session)
@@ -24,8 +22,6 @@ tableau_server <- function(embed_server, config_server, standalone_server, optio
     } else if (identical(mode, "configure") && is.function(config_server)) {
       init_tableau()
       load_after_settings(config_server)
-    } else if (identical(mode, "standalone")) {
-      standalone_server(input, output, session)
     } else {
       # Do nothing
     }
