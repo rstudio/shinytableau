@@ -43,13 +43,15 @@ The {shinytableau} package allows you to easily create Tableau dashboard extensi
 
 At the time of this writing, Tableau doesn't have built-in support for [violin plots](https://en.wikipedia.org/wiki/Violin_plot), only [box plots](https://help.tableau.com/current/pro/desktop/en-us/buildexamples_boxplot.htm). While box plots are more familiar, violin plots are more informative because they show you the entire distribution instead of merely quartiles. For example, take a look at the same data drawn as a box plot (left) and a violin plot (right):
 
-```{r echo=FALSE}
+```{r echo=FALSE,eval=FALSE}
+# Don't execute during knit patchwork isn't yet on CRAN
 library(patchwork)
 no_x_axis <- theme_void()
 p1 <- ggplot(faithful, aes(x = 1, y = waiting)) + geom_boxplot() + xlab("") + no_x_axis
 p2 <- ggplot(faithful, aes(x = 1, y = waiting)) + geom_violin(draw_quantiles = c(0.25, 0.5, 0.75)) + no_x_axis
 p1 + p2
 ```
+![](box-vs-violin.png)
 
 The boxplot doesn't give any hint that these values follow a bimodal distribution, while the violin plot makes it clear.
 
