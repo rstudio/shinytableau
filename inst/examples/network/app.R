@@ -10,7 +10,7 @@ library(promises)
 manifest <- tableau_manifest_from_yaml("manifest.yml")
 
 ui <- function(req) {
-  fillPage(
+  fillPage(theme = shinytableau_theme(),
     fillCol(
       visNetworkOutput("vis", height = "100%")
     )

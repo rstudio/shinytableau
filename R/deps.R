@@ -9,7 +9,27 @@ tableau_extensions_api_lib <- function() {
   )
 }
 
-shinytableau_lib <- function(use_theme) {
+#' Bootstrap 4 theme for shinytableau
+#'
+#' Use the return value for `shinytableau_theme()` as the `theme` argument for
+#' [shiny::fillPage()], [shiny::fluidPage()], etc. to add some CSS rules that
+#' make some Shiny controls look more like Tableau. This is only necessary for
+#' `ui` objects, not `config_ui`, as the latter includes this automatically.
+#'
+#' @export
+shinytableau_theme <- function() {
+  theme <- bootstraplib::bs_theme("4+3")
+  theme <- bootstraplib::bs_add_layers(theme,
+    sass::sass_layer(
+      defaults = sass::sass_file(system.file("theme/defaults.scss", package = "shinytableau")),
+      declarations = sass::sass_file(system.file("theme/declarations.scss", package = "shinytableau")),
+      rules = sass::sass_file(system.file("theme/rules.scss", package = "shinytableau"))
+    )
+  )
+  theme
+}
+
+shinytableau_lib <- function() {
 
   # debugPath <- file.path(here::here(), "inst/assets")
   # if (dir.exists(debugPath) && dir.exists(file.path(here::here(), "inst/lib/tableau-extensions"))) {
@@ -27,16 +47,6 @@ shinytableau_lib <- function(use_theme) {
   #   ))
   # }
 
-  if (use_theme) {
-    # TODO: Don't break existing theme variables
-    bootstraplib::bs_theme_new()
-    bootstraplib::bs_theme_add(
-      defaults = sass::sass_file(system.file("theme/defaults.scss", package = "shinytableau")),
-      declarations = sass::sass_file(system.file("theme/declarations.scss", package = "shinytableau")),
-      rules = sass::sass_file(system.file("theme/rules.scss", package = "shinytableau"))
-    )
-  }
-
   list(
     tableau_extensions_api_lib(),
     htmltools::htmlDependency(
@@ -46,7 +56,6 @@ shinytableau_lib <- function(use_theme) {
       package = "shinytableau",
       script = "js/shinytableau.js",
       all_files = FALSE
-    ),
-    bootstraplib::bootstrap()
+    )
   )
 }

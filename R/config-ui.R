@@ -1,7 +1,7 @@
 config_ui_template <- function() {
   ns <- shiny::NS(c("shinytableau", "config"))
 
-  shiny::fillPage(
+  shiny::fillPage(theme = shinytableau_theme(),
     shiny::fillCol(flex = c(1, NA),
       miniUI::miniContentPanel(
         shiny::uiOutput(ns("ui"))

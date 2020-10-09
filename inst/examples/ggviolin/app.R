@@ -9,7 +9,7 @@ library(ggplot2)
 manifest <- tableau_manifest_from_yaml()
 
 ui <- function(req) {
-  fillPage(
+  fillPage(theme = shinytableau_theme(),
     plotOutput("plot", height = "100%",
       brush = brushOpts("plot_brush", resetOnNew = TRUE)
     )

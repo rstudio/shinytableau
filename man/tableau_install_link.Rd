@@ -33,7 +33,7 @@ download button are found).
 }
 \examples{
 ui <- function(req) {
-  fluidPage(
+  fluidPage(theme = shinytableau_theme(),
 
     # If we're not currently running in a Tableau dashboard, insert a link
     if (!tableau_is_embedded()) {

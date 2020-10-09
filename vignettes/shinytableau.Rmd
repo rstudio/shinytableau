@@ -25,6 +25,14 @@ p>img:first-child:last-child {
   margin-right: auto;
   border: none;
 }
+video {
+  display: block;
+  padding: 0;
+  border: 1px solid #AAA;
+  margin: 1em auto;
+  width: 100%;
+  box-sizing: border-box;
+}
 ```
 
 Tableau version 2020.3 introduced a new extensibility feature called Dashboard Extensions. This feature lets programmers use JavaScript to create custom objects that normal Tableau users can drop into their Tableau dashboard layouts, providing custom visualizations and interactive features beyond Tableau's native capabilities.
@@ -58,7 +66,9 @@ With shinytableau, we can wrap this R code into an easy-to-use Tableau dashboard
 
 Take a look at what it's like to use a shinytableau extension:
 
-(TODO: screencast)
+<video controls>
+<source src="shinytableau-captioned.webm" type="video/webm"/>
+</video>
 
 To recap:
 
@@ -203,7 +213,7 @@ library(summarytools)
 manifest <- tableau_manifest_from_yaml()
 
 ui <- function(req) {
-  fluidPage(
+  fluidPage(theme = shinytableau_theme(),
     fluidRow(
       column(12,
         uiOutput("summary")

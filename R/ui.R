@@ -32,27 +32,27 @@ tableau_ui <- function(manifest, embed_ui, config_ui, standalone_ui, options = e
             config_height = options[["config_height"]]
           ))
         )),
-        display_with_deps(embed_ui, req, use_theme)
+        display_with_deps(embed_ui, req)
       )
     } else if (identical(mode, "configure")) {
       if (!is.null(config_ui)) {
-        display_with_deps(config_ui, req, use_theme)
+        display_with_deps(config_ui, req)
       } else {
         "This extension has no settings to configure"
       }
     } else if (identical(mode, "trex")) {
       trex_handler(req, manifest, !is.null(config_ui))
     } else if (identical(mode, "info")) {
-      display_with_deps(welcome_ui(manifest), req, use_theme)
+      display_with_deps(welcome_ui(manifest), req)
     } else if (identical(mode, "standalone")) {
-      display_with_deps(standalone_ui, req, use_theme)
+      display_with_deps(standalone_ui, req)
     }
   }
 }
 
-display_with_deps <- function(ui, req, use_theme) {
+display_with_deps <- function(ui, req) {
   # Has side effects (if use_theme==TRUE), so must execute first
-  lib <- shinytableau_lib(use_theme)
+  lib <- shinytableau_lib()
 
   if (is.function(ui)) {
     ui <- ui(req)
@@ -66,7 +66,7 @@ display_with_deps <- function(ui, req, use_theme) {
 welcome_ui <- function(manifest) {
   trexfilename <- paste0(manifest[["name"]], ".trex")
 
-  htmltools::tagList(
+  shiny::fixedPage(theme = shinytableau_theme(),
     htmltools::includeCSS(system.file("welcome/welcome.css", package = "shinytableau")),
     htmltools::htmlTemplate(system.file("welcome/welcome.html", package = "shinytableau"),
       manifest = manifest,
@@ -138,7 +138,7 @@ tableau_close_dialog <- function(payload = "", session = shiny::getDefaultReacti
 #'
 #' @examples
 #' ui <- function(req) {
-#'   fluidPage(
+#'   fluidPage(theme = shinytableau_theme(),
 #'
 #'     # If we're not currently running in a Tableau dashboard, insert a link
 #'     if (!tableau_is_embedded()) {

@@ -7,7 +7,7 @@ library(shinyvalidate)
 manifest <- tableau_manifest_from_yaml()
 
 ui <- function(req) {
-  fillPage(padding = 12,
+  fillPage(theme = shinytableau_theme(), padding = 12,
     textOutput("message", container = h2)
   )
 }

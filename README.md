@@ -1,8 +1,14 @@
+---
+editor_options:
+  markdown:
+    mode: gfm
+---
+
 # shinytableau
 
 An R package that helps you create Tableau [dashboard extensions](https://help.tableau.com/current/pro/desktop/en-us/dashboard_extensions.htm), using the power of R and Shiny.
 
-<img src="screenshot.png" width="500" alt="A Tableau dashboard containing a ggplot2 plot"/>
+<img src="screenshot.png" alt="A Tableau dashboard containing a ggplot2 plot" width="500"/>
 
 ## Motivation
 
@@ -30,11 +36,11 @@ Plus, you gain a few additional Tableau-specific capabilities, including:
 
 -   Access data from such worksheets as an R data frame.
 
--   Provide a configuration dialog---also written in Shiny!---to give Tableau users a friendly UI for specifying settings for your extension, such as which worksheet to pull data from, what columns to use in your visualization, etc.
+-   Provide a configuration dialog (also written in Shiny) to give Tableau users a friendly UI for specifying settings for your extension, such as which worksheet to pull data from, what columns to use in your visualization, etc.
 
 ## How can I get started?
 
-First, this package isn't for everyone! If you're a Tableau user with no experience writing code for R and/or Shiny, this is not a great place to start.
+First, this package isn't for everyone! If you're a Tableau user with no experience writing code for R and/or Shiny, this is not a great place to start. Instead, we'd suggest checking out [*R for Data Science*](https://r4ds.had.co.nz/) and then [*Mastering Shiny*](https://mastering-shiny.org/).
 
 If you do know R and have written Shiny apps before, welcome! The [overview tutorial](https://rstudio.github.io/shinytableau/articles/shinytableau.html) is the place to start. You'll need a copy of Tableau Desktop, or access to Tableau Server or Tableau Online and an admin friendly enough to whitelist your extensions.
 
