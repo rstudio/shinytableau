@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Shiny module to allow easy selecting of Tableau data — choose_data_ui • shinytableau</title>
+<title>Bootstrap 4 theme for shinytableau — shinytableau_theme • shinytableau</title>
 
 
 <!-- jquery -->
@@ -39,12 +39,11 @@
 
 
 
-<meta property="og:title" content="Shiny module to allow easy selecting of Tableau data — choose_data_ui" />
-<meta property="og:description" content="A common task in configuration dialogs is telling the extension where it
-should pull data from: from which worksheet, whether to use summary or
-underlying data is desired, and for underlying data with multiple logical
-tables, which logical table. This Shiny module provides a drop-in component
-for prompting the user for these inputs in a consistent and usable way." />
+<meta property="og:title" content="Bootstrap 4 theme for shinytableau — shinytableau_theme" />
+<meta property="og:description" content="Use the return value for shinytableau_theme() as the theme argument for
+shiny::fillPage(), shiny::fluidPage(), etc. to add some CSS rules that
+make some Shiny controls look more like Tableau. This is only necessary for
+ui objects, not config_ui, as the latter includes this automatically." />
 
 
 
@@ -107,68 +106,21 @@ for prompting the user for these inputs in a consistent and usable way." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Shiny module to allow easy selecting of Tableau data</h1>
+    <h1>Bootstrap 4 theme for shinytableau</h1>
     
-    <div class="hidden name"><code>choose_data.Rd</code></div>
+    <div class="hidden name"><code>shinytableau_theme.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>A common task in configuration dialogs is telling the extension where it
-should pull data from: from which worksheet, whether to use summary or
-underlying data is desired, and for underlying data with multiple logical
-tables, which logical table. This Shiny module provides a drop-in component
-for prompting the user for these inputs in a consistent and usable way.</p>
+    <p>Use the return value for <code>shinytableau_theme()</code> as the <code>theme</code> argument for
+<code><a href='https://shiny.rstudio.com/reference/shiny/latest/fillPage.html'>shiny::fillPage()</a></code>, <code><a href='https://shiny.rstudio.com/reference/shiny/latest/fluidPage.html'>shiny::fluidPage()</a></code>, etc. to add some CSS rules that
+make some Shiny controls look more like Tableau. This is only necessary for
+<code>ui</code> objects, not <code>config_ui</code>, as the latter includes this automatically.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>choose_data_ui</span><span class='op'>(</span><span class='va'>id</span>, label <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+    <pre class="usage"><span class='fu'>shinytableau_theme</span><span class='op'>(</span><span class='op'>)</span></pre>
 
-<span class='fu'>choose_data</span><span class='op'>(</span>
-  <span class='va'>id</span>,
-  options <span class='op'>=</span> <span class='fu'><a href='choose_data_options.html'>choose_data_options</a></span><span class='op'>(</span><span class='op'>)</span>,
-  iv <span class='op'>=</span> <span class='cn'>NULL</span>,
-  session <span class='op'>=</span> <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>id</th>
-      <td><p>An identifier. Like a Shiny input or output id, corresponding UI
-(<code>choose_data_ui</code>) and server (<code>choose_data</code>) calls must use the same id,
-and the id must be unique within a scope (i.e. unique within the top-level
-Shiny server function, or unique within a given module server function).</p></td>
-    </tr>
-    <tr>
-      <th>label</th>
-      <td><p>Display label for the control, or <code>NULL</code> for no label.</p></td>
-    </tr>
-    <tr>
-      <th>options</th>
-      <td><p>See <code><a href='choose_data_options.html'>choose_data_options()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>iv</th>
-      <td><p>A <a href='https://rdrr.io/pkg/shinyvalidate/man/InputValidator.html'>shinyvalidate::InputValidator</a> object; almost certainly you'll
-want to use the one that shinytableau passes to you via the <code>iv</code> parameter
-of your <code>config_server</code> function (see the example below). If provided,
-<code>choose_data</code> will add validation rules to this object; specifically,
-validation will fail if the user does not select a worksheet.</p></td>
-    </tr>
-    <tr>
-      <th>session</th>
-      <td><p>The Shiny <code>session</code> object. (You should probably just use the
-default.)</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>For an example, look at the <code>config_ui</code> and <code>config_server</code> defined
-in the
-<a href='https://github.com/rstudio/shinytableau/tree/master/inst/examples/datasummary/'><code>datasummary</code> example app</a>,
-as well as the "Accessing Data" section of the
-<a href='https://rstudio.github.io/shinytableau/articles/shinytableau.html'>Getting Started guide</a>.</p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -84,14 +84,25 @@ p>img:first-child:last-child {
   margin-right: auto;
   border: none;
 }
+video {
+  display: block;
+  padding: 0;
+  border: 1px solid #AAA;
+  margin: 1em auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+.header-section-number::after, .toc-section-number::after {
+  content: '.';
+}
 </style>
 <p>Tableau version 2020.3 introduced a new extensibility feature called Dashboard Extensions. This feature lets programmers use JavaScript to create custom objects that normal Tableau users can drop into their Tableau dashboard layouts, providing custom visualizations and interactive features beyond Tableau’s native capabilities.</p>
 <p>The {shinytableau} package allows you to easily create Tableau dashboard extensions using the power of R and Shiny. In typical Shiny fashion, it’s not necessary to know web technologies like HTML, JavaScript, and CSS to create compelling Tableau extensions.</p>
-<div id="example-violin-plot" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-violin-plot" class="anchor"></a>Example: Violin plot</h2>
+<div id="motivating-example-violin-plot" class="section level1">
+<h1 class="hasAnchor">
+<a href="#motivating-example-violin-plot" class="anchor"></a>Motivating example: Violin plot</h1>
 <p>At the time of this writing, Tableau doesn’t have built-in support for <a href="https://en.wikipedia.org/wiki/Violin_plot">violin plots</a>, only <a href="https://help.tableau.com/current/pro/desktop/en-us/buildexamples_boxplot.htm">box plots</a>. While box plots are more familiar, violin plots are more informative because they show you the entire distribution instead of merely quartiles. For example, take a look at the same data drawn as a box plot (left) and a violin plot (right):</p>
-<p><img src="shinytableau_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<p><img src="box-vs-violin.png"></p>
 <p>The boxplot doesn’t give any hint that these values follow a bimodal distribution, while the violin plot makes it clear.</p>
 <p>I would be remiss not to mention the heroics that Tableau consultant Gwilym Lockwood went through to <a href="https://gwilymlockwood.com/2018/07/03/language-sex-violins-other-how-to-create-violin-plots-in-tableau/">create a violin plot in Tableau</a>. The blog post is worth a read, but the takeaway is that you’d have to <em>really</em> want a violin plot to go through all of those steps.</p>
 <p>In R, on the other hand, there are several packages that provide violin plots; a cursory search turned up <a href="https://cran.r-project.org/web/packages/vioplot/vignettes/violin_customisation.html">vioplot</a>, <a href="https://plotly.com/r/violin/">plotly</a>, <a href="https://rpkgs.datanovia.com/ggpubr/reference/ggviolin.html">ggpubr</a>, and <a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">ggplot2</a>. Here’s how you might create a violin plot in ggplot2, using the <code>mtcars</code> data set, showing the horsepower (<code>hp</code>) distribution for each cylinder count (<code>cyl</code>):</p>
@@ -101,8 +112,7 @@ p>img:first-child:last-child {
 <p><img src="shinytableau_files/figure-html/unnamed-chunk-4-1.png" width="480"></p>
 <p>With shinytableau, we can wrap this R code into an easy-to-use Tableau dashboard extension that can be used by Tableau users that don’t even know what R is. They don’t need to modify the code to point to the data source and variables they want to plot, because you’re going to provide them with a GUI for that. They don’t need to think about how to configure R on their server, because you can deploy it just once for all users of the extension.</p>
 <p>Take a look at what it’s like to use a shinytableau extension:</p>
-<p>(TODO: screencast)</p>
-<p>To recap:</p>
+<video controls><source src="shinytableau-captioned.webm" type="video/webm"></source></video><p>To recap:</p>
 <ol style="list-style-type: decimal">
 <li>Navigate to the shinytableau extension’s info page and click Download to save a .trex file to your hard drive.</li>
 <li>In a Tableau dashboard, drag an Extension object from the sidebar to the dashboard.</li>
@@ -112,9 +122,9 @@ p>img:first-child:last-child {
 <p>You (and other Tableau users) can use the same shinytableau extension across multiple dashboards. And just as a single Tableau dashboard can contain multiple (e.g.) bar chart sheets, each with its own view of the data, you can also have one shinytableau extension appear multiple times in a dashboard, with each instance configured differently.</p>
 <p>We’ll come back to violin plots later, but let’s look at some much simpler examples first.</p>
 </div>
-<div id="writing-your-first-extension" class="section level2">
-<h2 class="hasAnchor">
-<a href="#writing-your-first-extension" class="anchor"></a>Writing your first extension</h2>
+<div id="writing-your-first-extension" class="section level1">
+<h1 class="hasAnchor">
+<a href="#writing-your-first-extension" class="anchor"></a>Writing your first extension</h1>
 <p>Put simply, a shinytableau extension is a specially structured Shiny app. (If you haven’t written a Shiny app before, you’re <em>definitely</em> going to want to go through the <a href="https://shiny.rstudio.com/tutorial/">Shiny tutorial</a>, at the very least, before attempting to go further with shinytableau.)</p>
 <p>Let’s start by creating the simplest possible Tableau extension: one that will display the string <code>"Hello, world!"</code>. First, create a new, empty RStudio project (File | New Project… | New Directory | New Project).</p>
 <p>Then call:</p>
@@ -132,7 +142,7 @@ p>img:first-child:last-child {
 <span class="va">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yaml_skeleton.html">tableau_manifest_from_yaml</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="fl">12</span>,
+  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span><span class="op">(</span>theme <span class="op">=</span> <span class="fu"><a href="../reference/shinytableau_theme.html">shinytableau_theme</a></span><span class="op">(</span><span class="op">)</span>, padding <span class="op">=</span> <span class="fl">12</span>,
     <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/builder.html">h2</a></span><span class="op">(</span><span class="st">"Hello, world!"</span><span class="op">)</span>
   <span class="op">)</span>
 <span class="op">}</span>
@@ -148,9 +158,9 @@ p>img:first-child:last-child {
 <p>Now, press Ctrl+Shift+Enter (or Cmd+Shift+Return on Mac) and you should see the info page for this extension appear. Download the .trex file, drag an Extension onto a Tableau dashboard, choose the .trex file, and you should see “Hello, world!” in your dashboard.</p>
 <p><img src="tutorial-1.png" width="573"></p>
 </div>
-<div id="adding-configuration-settings" class="section level2">
-<h2 class="hasAnchor">
-<a href="#adding-configuration-settings" class="anchor"></a>Adding configuration settings</h2>
+<div id="adding-configuration-settings" class="section level1">
+<h1 class="hasAnchor">
+<a href="#adding-configuration-settings" class="anchor"></a>Adding configuration settings</h1>
 <p>Now we’ll see how configuration works by making our tiny extension only slightly more complex: instead of showing the hardcoded string “Hello, world!” we’ll allow the dashboard author to specify who is being greeted.</p>
 <p>We will use a configuration dialog to prompt the dashboard author for the greetee<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, save their input as a setting called <code>"greetee"</code>, and have the extension use that setting to dynamically render the greeting.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
@@ -163,7 +173,7 @@ p>img:first-child:last-child {
 <span class="va">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yaml_skeleton.html">tableau_manifest_from_yaml</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span><span class="op">(</span>padding <span class="op">=</span> <span class="fl">12</span>,
+  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span><span class="op">(</span>theme <span class="op">=</span> <span class="fu"><a href="../reference/shinytableau_theme.html">shinytableau_theme</a></span><span class="op">(</span><span class="op">)</span>, padding <span class="op">=</span> <span class="fl">12</span>,
     <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textOutput.html">textOutput</a></span><span class="op">(</span><span class="st">"message"</span>, container <span class="op">=</span> <span class="va">h2</span><span class="op">)</span>
   <span class="op">)</span>
 <span class="op">}</span>
@@ -205,13 +215,16 @@ p>img:first-child:last-child {
 <p><img src="tutorial-2b.png" width="421"></p>
 <p>Type in a value and click OK, and you should see the extension object instantly update to reflect your change.</p>
 <p><img src="tutorial-2c.png" width="573"></p>
-<p>Compared to the “Hello, World!” version, we’ve made a number of important changes.</p>
+<p>Compared to the “Hello, World!” version, we’ve made a number of important changes that accomplish two things: defining a configuration dialog, and reading settings that are set based on user input to that dialog.</p>
+<div id="displaying-configuration" class="section level2">
+<h2 class="hasAnchor">
+<a href="#displaying-configuration" class="anchor"></a>Displaying configuration</h2>
 <p>Most obviously, we now have <code>config_ui</code> and <code>config_server</code>, which together represent the configuration dialog. These two variables are passed to <code>tableau_extension</code> as the next two arguments after <code>ui</code> and <code>server</code>.</p>
 <p>The job of <code>config_ui</code>/<code>config_server</code> is to take input about the user’s preferences (in this case, what message should be displayed), and save them as <em>settings</em>. Each extension instance has its own set of settings; that is, if the same extension is dropped on a dashboard three times, then there are three extension instances, each with their own completely independent config dialogs and settings.</p>
 <p>There are several essential requirements for <code>config_ui</code> and <code>config_server</code> that you need to know about.</p>
-<div id="config_ui" class="section level4">
-<h4 class="hasAnchor">
-<a href="#config_ui" class="anchor"></a>config_ui</h4>
+<div id="config_ui" class="section level3">
+<h3 class="hasAnchor">
+<a href="#config_ui" class="anchor"></a>config_ui</h3>
 <p>As we said about <code>ui</code> above, <code>config_ui</code> needs to be a <code>function(req) { ... }</code> that returns some UI object, not just the UI object itself as you can do in a normal Shiny app.</p>
 <p>Also, most Shiny <code>ui</code> (including shinytableau ones) should have a <code>fluidPage</code>, <code>fillPage</code>, or other page function as their outermost call, but this isn’t the case with <code>config_ui</code>. The UI you return from <code>config_ui</code> will be inserted into a configuration dialog UI that shinytableau creates for you. So instead of <code><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage()</a></code>, use <code><a href="https://rdrr.io/pkg/htmltools/man/tag.html">tagList()</a></code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
@@ -221,9 +234,9 @@ p>img:first-child:last-child {
   <span class="op">)</span>
 <span class="op">}</span></pre></div>
 </div>
-<div id="config_server" class="section level4">
-<h4 class="hasAnchor">
-<a href="#config_server" class="anchor"></a>config_server</h4>
+<div id="config_server" class="section level3">
+<h3 class="hasAnchor">
+<a href="#config_server" class="anchor"></a>config_server</h3>
 <p>There are two new requirements for <code>config_server</code> versus a regular <code>server</code>. First, a normal Shiny <code>server</code> is a function that takes <code>input</code>, <code>output</code>, and <code>session</code> arguments; a <code>config_server</code> takes an additional <code>iv</code> argument. This represents an <code>InputValidator</code> object from the <a href="https://rstudio.github.io/shinyvalidate/articles/shinyvalidate.html">shinyvalidate</a> package. You use <code>iv</code> to tell shinytableau which user inputs <em>must</em> be provided, and any validation rules that must be enforced. Any required inputs that are missing, or failing validation rules, will display errors in the form and prevent the OK and Apply buttons from taking effect.</p>
 <p>Second, a <code>config_server</code> function must declare a <code>save_settings</code> function, and must return this function. This is in contrast to regular Shiny server functions, which do not return anything<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a>. The <code>save_settings</code> function should take no arguments and, when called, should call <a href="https://rstudio.github.io/shinytableau/reference/update_tableau_settings_aync.html"><code>update_tableau_settings_async</code></a> to persist whatever settings the user has specified. In this case, we’re taking the user input, <code>input$greetee</code>, and persisting that as a setting named <code>greetee</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
@@ -245,19 +258,20 @@ p>img:first-child:last-child {
 <p>The values you pass to <code><a href="../reference/update_tableau_settings_async.html">update_tableau_settings_async()</a></code> will be saved as JSON objects, so it’s a good idea to keep things simple: atomic numeric, character, and logical vectors are safe to use, as are unnamed and named lists. <code>NULL</code> is fine too. It’s not a good idea to save more specialized objects like factors, data frames, environments, R6 objects. Even Date objects should probably be converted to character first, and parsed back into a Date by whomever is reading the setting.</p>
 <p>Speaking of reading settings…</p>
 </div>
-<div id="reading-settings" class="section level3">
-<h3 class="hasAnchor">
-<a href="#reading-settings" class="anchor"></a>Reading settings</h3>
+</div>
+<div id="reading-settings" class="section level2">
+<h2 class="hasAnchor">
+<a href="#reading-settings" class="anchor"></a>Reading settings</h2>
 <p>Now that we’ve discussed how <code>config_ui</code> and <code>config_server</code> can let you write settings, we can talk about the much simpler topic of how to read settings from the extension object (i.e. <code>server</code>).</p>
 <p>The main way you’ll access settings is by calling <code><a href="../reference/tableau_setting.html">tableau_setting(setting_name)</a></code>, e.g. <code><a href="../reference/tableau_setting.html">tableau_setting("greetee")</a></code> in the example above. The important thing to note is that <code>tableau_setting</code> performs a <em>reactive</em> read, so whomever is doing the reading (i.e. reactive expression, reactive observer, or reactive output) will be triggered when the setting changes.</p>
 <p>You can call <code><a href="../reference/tableau_setting.html">tableau_settings_all()</a></code> to retrieve all of the current settings as a list. Generally you should try to use <code>tableau_setting</code> in favor of <code>tableau_settings_all</code>, because the latter takes a reactive dependency on <em>all</em> of the settings, even if you’re not actually interested in all of them.</p>
 </div>
 </div>
-<div id="accessing-data-from-tableau" class="section level2">
-<h2 class="hasAnchor">
-<a href="#accessing-data-from-tableau" class="anchor"></a>Accessing data from Tableau</h2>
-<p>Now that we’ve created an app that reads/writes settings, we’re ready to take a big step forward and actually access a data table from Tableau. Our next example app will ask the Tableau dashboard author to choose a data table, and it will show a rich summary of each column of data, using the <a href="https://github.com/dcomtois/summarytools">summarytools</a> R package.</p>
-<p>TODO screencast or screenshots</p>
+<div id="accessing-data-from-tableau" class="section level1">
+<h1 class="hasAnchor">
+<a href="#accessing-data-from-tableau" class="anchor"></a>Accessing data from Tableau</h1>
+<p><a name="datasummary"></a>Now that we’ve created an app that reads/writes settings, we’re ready to take a big step forward and actually access a data table from Tableau. Our next example app will ask the Tableau dashboard author to choose a data table, and it will show a rich summary of each column of data, using the <a href="https://github.com/dcomtois/summarytools">summarytools</a> R package.</p>
+<p><img src="../../../_temp/Library/shinytableau/examples/datasummary/screenshot.png" width="100%"></p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="co"># filetype: shinyApp</span>
 
@@ -269,23 +283,20 @@ p>img:first-child:last-child {
 <span class="va">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yaml_skeleton.html">tableau_manifest_from_yaml</a></span><span class="op">(</span><span class="op">)</span>
 
 <span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fluidPage.html">fluidPage</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fluidPage.html">fluidRow</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/column.html">column</a></span><span class="op">(</span><span class="fl">12</span>,
-        <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/htmlOutput.html">uiOutput</a></span><span class="op">(</span><span class="st">"summary"</span><span class="op">)</span>
-      <span class="op">)</span>
-    <span class="op">)</span>
+  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fluidPage.html">fluidPage</a></span><span class="op">(</span>theme <span class="op">=</span> <span class="fu"><a href="../reference/shinytableau_theme.html">shinytableau_theme</a></span><span class="op">(</span><span class="op">)</span>,
+    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/htmlOutput.html">uiOutput</a></span><span class="op">(</span><span class="st">"summary"</span><span class="op">)</span>
   <span class="op">)</span>
 <span class="op">}</span>
 
 <span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
-  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reactive_tableau_data.html">reactive_tableau_data</a></span><span class="op">(</span><span class="st">"data_spec"</span><span class="op">)</span>
+  <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reactive_tableau_data.html">reactive_tableau_data</a></span><span class="op">(</span><span class="st">"data_spec"</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>includeAllColumns <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
 
   <span class="va">output</span><span class="op">$</span><span class="va">summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderUI.html">renderUI</a></span><span class="op">(</span><span class="op">{</span>
     <span class="co"># From https://cran.r-project.org/web/packages/summarytools/vignettes/Introduction.html#creating-shiny-apps</span>
     <span class="fu"><a href="https://rdrr.io/r/stats/Fdist.html">df</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%...&gt;%</span>
       <span class="fu"><a href="https://rdrr.io/pkg/summarytools/man/dfSummary.html">dfSummary</a></span><span class="op">(</span>varnumbers <span class="op">=</span> <span class="cn">FALSE</span>, valid.col <span class="op">=</span> <span class="cn">FALSE</span>, graph.magnif <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">%...&gt;%</span>
-      <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"render"</span>, headings <span class="op">=</span> <span class="cn">TRUE</span>, bootstrap.css <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+      <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"render"</span>, headings <span class="op">=</span> <span class="cn">TRUE</span>, Data.frame <span class="op">=</span> <span class="cn">NULL</span>,
+        footnote <span class="op">=</span> <span class="cn">NA</span>, bootstrap.css <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
   <span class="op">}</span><span class="op">)</span>
 <span class="op">}</span>
 
@@ -310,9 +321,9 @@ p>img:first-child:last-child {
   options <span class="op">=</span> <span class="fu"><a href="../reference/ext_options.html">ext_options</a></span><span class="op">(</span>port <span class="op">=</span> <span class="fl">4567</span><span class="op">)</span>
 <span class="op">)</span></pre></div>
 <p>In order to understand how this example app works, we’ll first need to look at how Tableau data is organized.</p>
-<div id="categories-of-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#categories-of-data" class="anchor"></a>Categories of data</h3>
+<div id="categories-of-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#categories-of-data" class="anchor"></a>Categories of data</h2>
 <p>Tableau’s Extension API allows dashboard extensions, like the ones we’re creating, to access data from the workbook they’re embedded in. Actually, there’s one big caveat to that: we can’t access just <em>any</em> data, we can <em>only</em> access data via worksheets that are present in our same dashboard.</p>
 <p>This means you can’t start a new (empty) dashboard, put an extension object on it, and expect that extension object to be able to access any data. Instead, <strong>you need to add one or more worksheets to the dashboard first</strong>. Now, the extension object can access the data used by those worksheets.</p>
 <p>Each worksheet makes three categories of data available to us:</p>
@@ -344,9 +355,9 @@ summary &lt;- underlying %&gt;%
 <p>Don’t worry, you don’t need to remember all of that.</p>
 <p>Most shinytableau extensions are going to want to let the Tableau dashboard author choose the data they’re interested in. Constructing the UI to lead the user through the above chain of decisions is complicated; therefore, we’ve done it for you by providing a <code>choose_data</code> Shiny module that you can use in your config dialogs.</p>
 </div>
-<div id="the-choose_data-module" class="section level3">
-<h3 class="hasAnchor">
-<a href="#the-choose_data-module" class="anchor"></a>The <code>choose_data</code> module</h3>
+<div id="the-choose_data-module" class="section level2">
+<h2 class="hasAnchor">
+<a href="#the-choose_data-module" class="anchor"></a>The <code>choose_data</code> module</h2>
 <p>Like most <a href="https://shiny.rstudio.com/articles/modules.html">Shiny modules</a>, the <code>choose_data</code> module is actually two functions: a UI function, <code>choose_data_ui</code>; and a server function, <code>choose_data</code>. In the example above, they’re invoked like this in the <code>config_ui</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit">
 <span class="fu"><a href="../reference/choose_data_ui.html">choose_data_ui</a></span><span class="op">(</span><span class="st">"data_spec"</span>, <span class="st">"Choose data"</span><span class="op">)</span></pre></div>
@@ -369,14 +380,14 @@ summary &lt;- underlying %&gt;%
 <span class="op">}</span></pre></div>
 <p>Note that we want to persist the <em>value</em> of the <code>data_spec</code> reactive expression, so we call it like a function: <code>data_spec()</code>.</p>
 </div>
-<div id="accessing-a-data-table" class="section level3">
-<h3 class="hasAnchor">
-<a href="#accessing-a-data-table" class="anchor"></a>Accessing a data table</h3>
+<div id="accessing-a-data-table" class="section level2">
+<h2 class="hasAnchor">
+<a href="#accessing-a-data-table" class="anchor"></a>Accessing a data table</h2>
 <p>We turn our attention now to consuming data, using the <code><a href="../reference/reactive_tableau_data.html">reactive_tableau_data()</a></code> function. This function is called from the <code>server</code> and <code>config_server</code> functions, and returns a reactive expression that can be used to access the actual data (though there are complications in actually getting the data, more on this below).</p>
-<div id="calling-reactive_tableau_data" class="section level4">
-<h4 class="hasAnchor">
+<div id="calling-reactive_tableau_data" class="section level3">
+<h3 class="hasAnchor">
 <a href="#calling-reactive_tableau_data" class="anchor"></a>Calling <code>reactive_tableau_data()</code>
-</h4>
+</h3>
 <p>The first argument you need to pass to <code><a href="../reference/reactive_tableau_data.html">reactive_tableau_data()</a></code> is <code>spec</code>; it specifies what data you’re looking for, and you can provide it in a number of ways.</p>
 <ol style="list-style-type: decimal">
 <li>
@@ -396,9 +407,9 @@ summary &lt;- underlying %&gt;%
 <li><p>Finally, you can construct a spec object <strong>from scratch</strong> using one of the <code><a href="../reference/spec_summary.html">spec_summary()</a></code>, <code><a href="../reference/spec_summary.html">spec_underlying()</a></code>, or <code><a href="../reference/spec_summary.html">spec_datasource()</a></code> functions. You’ll need to provide the name of the worksheet/underlying table/etc. This could be useful for extensions that are created specifically for a particular dashboard.</p></li>
 </ol>
 </div>
-<div id="using-the-return-value" class="section level4">
-<h4 class="hasAnchor">
-<a href="#using-the-return-value" class="anchor"></a>Using the return value</h4>
+<div id="using-the-return-value" class="section level3">
+<h3 class="hasAnchor">
+<a href="#using-the-return-value" class="anchor"></a>Using the return value</h3>
 <p>The value returned by <code>reactive_tableau_data</code> has a couple of complications. Let’s look again at the <code>server</code> of our data summary example extension (where <code>df</code> is the <code>reactive_tableau_data</code> return value):</p>
 <div class="sourceCode" id="cb15"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/stats/Fdist.html">df</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%...&gt;%</span>
@@ -415,9 +426,9 @@ summary &lt;- underlying %&gt;%
 </div>
 </div>
 </div>
-<div id="full-ggviolin-example" class="section level2">
-<h2 class="hasAnchor">
-<a href="#full-ggviolin-example" class="anchor"></a>Full ggviolin example</h2>
+<div id="full-ggviolin-example" class="section level1">
+<h1 class="hasAnchor">
+<a href="#full-ggviolin-example" class="anchor"></a>Full ggviolin example</h1>
 <p>Armed with the knowledge from the previous sections, we can now build the ggviolin shinytableau extension. Structurally, this will be very close to the Data Summary extension from the previous section, but the ggviolin extension makes use of additional features from Shiny itself.</p>
 <p>The preamble is the same, with the addition of <code><a href="http://ggplot2.tidyverse.org">library(ggplot2)</a></code>:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit">
@@ -517,13 +528,13 @@ summary &lt;- underlying %&gt;%
   options <span class="op">=</span> <span class="fu"><a href="../reference/ext_options.html">ext_options</a></span><span class="op">(</span>config_width <span class="op">=</span> <span class="fl">600</span>, config_height <span class="op">=</span> <span class="fl">600</span>, port <span class="op">=</span> <span class="fl">2468</span><span class="op">)</span>
 <span class="op">)</span></pre></div>
 </div>
-<div id="ui-considerations-dashboard-view" class="section level2">
-<h2 class="hasAnchor">
-<a href="#ui-considerations-dashboard-view" class="anchor"></a>UI considerations: Dashboard view</h2>
+<div id="ui-considerations-dashboard-view" class="section level1">
+<h1 class="hasAnchor">
+<a href="#ui-considerations-dashboard-view" class="anchor"></a>UI considerations: Dashboard view</h1>
 <p>When creating the <code>ui</code> for an extension, you use the same technology and techniques as when creating the <code>ui</code> for a regular Shiny app. But unlike most Shiny apps, the entire UI will be embedded in a rectangle on a dashboard, so some different user experience considerations come into play.</p>
-<div id="filling-available-space" class="section level3">
-<h3 class="hasAnchor">
-<a href="#filling-available-space" class="anchor"></a>Filling available space</h3>
+<div id="filling-available-space" class="section level2">
+<h2 class="hasAnchor">
+<a href="#filling-available-space" class="anchor"></a>Filling available space</h2>
 <p>For one thing, it’s common for dashboard tiles to be 1/4 screen size, or even smaller. When screen real estate is in such short supply, it’s important for shinytableau extensions to make the most of the area they have. A typical <a href="http://shiny.rstudio-staging.com/tutorial/written-tutorial/lesson2/"><code>fluidPage</code>/<code>sidebarLayout</code> arrangement</a> is not going to be optimal here.</p>
 <p>If your extension’s purpose is to display a visualization that is amenable to fluid resizing—a plot or map, for instance—then you should generally fill the available space. You can achieve this by using <a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html"><code>fillPage</code></a> as your outermost UI element, and be sure to also set the height of your visualization to <code>height="100%"</code> (which is supported by <code>plotOutput</code> and most HTML widgets):</p>
 <div class="sourceCode" id="cb27"><pre class="downlit">
@@ -534,10 +545,10 @@ summary &lt;- underlying %&gt;%
 <span class="op">}</span></pre></div>
 <p>If you want to divide the space between multiple visualizations, while still filling the available space, you can use <a href="https://shiny.rstudio.com/articles/gadget-ui.html#fillrowfillcol"><code>fillRow</code> or <code>fillCol</code></a> as the direct child of <code>fillPage</code>.</p>
 </div>
-<div id="scrollable-extensions" class="section level3">
-<h3 class="hasAnchor">
-<a href="#scrollable-extensions" class="anchor"></a>Scrollable extensions</h3>
-<p>Some shinytableau extensions will not be suitable for filling the available space, as in our Data Summary example (TODO: link). This is because the extension’s UI does not have a naturally fluid height; it’s simply a table of data, that has its own strong opinion about what height it needs based on its content.</p>
+<div id="scrollable-extensions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#scrollable-extensions" class="anchor"></a>Scrollable extensions</h2>
+<p>Some shinytableau extensions will not be suitable for filling the available space, as in our <a href="#datasummary">Data Summary example</a>. This is because the extension’s UI does not have a naturally fluid height; it’s simply a table of data, that has its own strong opinion about what height it needs based on its content.</p>
 <p>For such situations, we go back to using <code>fluidPage</code> page, which will automatically display a vertical scrollbar if one is necessary.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit">
 <span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
@@ -548,9 +559,9 @@ summary &lt;- underlying %&gt;%
 <p>If your <code>fluidPage</code>-based layout includes <code>plotOutput</code> or HTML Widget outputs, you will not be able to use <code>height="100%"</code> as we did in the previous section; instead, you will need to either accept the default height or provide a number of pixels.</p>
 </div>
 </div>
-<div id="deployment-and-hosting" class="section level2">
-<h2 class="hasAnchor">
-<a href="#deployment-and-hosting" class="anchor"></a>Deployment and hosting</h2>
+<div id="deployment-and-hosting" class="section level1">
+<h1 class="hasAnchor">
+<a href="#deployment-and-hosting" class="anchor"></a>Deployment and hosting</h1>
 <p>So far, we’ve been running our shinytableau extensions locally from within RStudio. Needless to say, this isn’t a suitable deployment strategy for putting extensions into production—you don’t want Tableau dashboards to stop working just because you closed your laptop and went home!</p>
 <p>Deploying shinytableau extensions is <em>mostly</em> no different than deploying any other kind of Shiny app. The three main options offered by RStudio are:</p>
 <ol style="list-style-type: decimal">
@@ -558,14 +569,13 @@ summary &lt;- underlying %&gt;%
 <li><p><strong>Shiny Server</strong> is our open-source solution for on-premises deployment. A Linux server is required, and you’ll need to install R and any R packages used by your Shiny apps. Deployment of apps is performed by copying files to the server and editing config files (similar to Nginx or Apache).</p></li>
 <li><p><strong>RStudio Connect</strong> is our flagship publishing platform. With RStudio Connect, you can share Shiny applications, R Markdown reports, dashboards, plots, and more in one convenient place. Like ShinyApps.io, Shiny apps are deployed with push-button publishing from the RStudio IDE</p></li>
 </ol>
-<div id="authentication" class="section level3">
-<h3 class="hasAnchor">
-<a href="#authentication" class="anchor"></a>Authentication</h3>
+<div id="authentication" class="section level2">
+<h2 class="hasAnchor">
+<a href="#authentication" class="anchor"></a>Authentication</h2>
 <p>Authentication for shinytableau extensions is a bit more complicated than that of regular Shiny apps, and several different factors must be considered to balance your security needs with a smooth end-user experience. (Note that ShinyApps.io and RStudio Connect offer built-in support for authentication, but Shiny Server Open Source does not.)</p>
 <p>The first question to consider is <strong>whether your shinytableau extension needs authentication</strong> at all. We anticipate that many or most shinytableau extensions will not have direct access to their own data, but instead read the data from the Tableau dashboard’s worksheets. If that is the case, and there’s no danger in having an unauthorized or even malicious user embedding the shinytableau extension in their own Tableau dashboard, then consider allowing anonymous access to your deployed extension. This will sidestep most of the issues in this section.</p>
-<p>Second, it’s important to note that <strong>Safari 13.1 and newer prevent shinytableau authentication from working</strong> (this only affects Tableau Server and Tableau Online, not Tableau Desktop). This is because shinytableau extensions run within an <code>&lt;iframe&gt;</code>, and will generally run on a different domain than the enclosing page (the Tableau dashboard); this configuration results in our authentication cookies being considered <em>third-party cookies</em>, which Safari 13.1 <a href="https://webkit.org/blog/10218/full-third-party-cookie-blocking-and-more/">aggressively blocks</a>. At the time of this writing, we do not have a solution for this problem, other than to ask users to turn off Safari 13.1’s third-party cookie blocking by going into Preferences | Privacy and unchecking “Prevent cross-site tracking”. Unfortunately, this preference cannot be set on a per-site basis.</p>
-<p>Third, embedded auth flow TODO</p>
-<p>Fourth, load balancing cookie TODO</p>
+<p>Second, it’s important to note that <strong>Safari 13.1 and newer prevent shinytableau authentication from working</strong> (this only affects Tableau Server and Tableau Online, not Tableau Desktop). This is because shinytableau extensions run within an <code>&lt;iframe&gt;</code>, and will generally run on a different domain than the enclosing page (the Tableau dashboard); this configuration results in our authentication cookies being considered <em>third-party cookies</em>, which Safari 13.1 <a href="https://webkit.org/blog/10218/full-third-party-cookie-blocking-and-more/">aggressively blocks</a>. At the time of this writing, we do not have a solution for this problem, other than to ask users to turn off Safari 13.1’s third-party cookie blocking by going into Preferences | Privacy and unchecking the global “Prevent cross-site tracking” setting.</p>
+<p>Third, if you still want to use authentication after the above caveats, note that logging into an app that is hosted in an iframe is not a good idea<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> from a security perspective. An upcoming release of RStudio Connect <!--TODO: Update when released--> will have a special iframe authentication code path that will launch a new browser window/tab to authenticate. You can use ShinyApps.io and Shiny Server Pro for authenticated shinytableau extensions, but the user experience will be worse for users that have credentials for ShinyApps.io/Shiny Server Pro but are not logged in at the time that they visit the Tableau dashboard.</p>
 </div>
 </div>
 <div class="footnotes">
@@ -573,6 +583,7 @@ summary &lt;- underlying %&gt;%
 <ol>
 <li id="fn1"><p>Yes, it’s a <a href="https://en.wiktionary.org/wiki/greetee">real word</a>!<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>Although Shiny <em>module</em> server functions often do return objects to their callers.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Most well-designed login forms will not allow themselves to be presented when hosted in an iframe, as a preventative measure against <a href="https://owasp.org/www-community/attacks/Clickjacking">clickjacking</a> and phishing attacks.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>

@@ -120,7 +120,6 @@ Tableau extension. Pass the resulting value as the <code>options</code> argument
   config_width <span class='op'>=</span> <span class='fl'>600</span>,
   config_height <span class='op'>=</span> <span class='fl'>400</span>,
   prompt_for_config <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  standalone <span class='op'>=</span> <span class='cn'>FALSE</span>,
   use_theme <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
@@ -143,15 +142,6 @@ instead, a message instructing the Tableau user to use the configuration
 dialog is displayed instead.</p>
 <p>Use <code>prompt_for_config=FALSE</code> if the extension is able to run even without
 initial configuration.</p></td>
-    </tr>
-    <tr>
-      <th>standalone</th>
-      <td><p>Some shinytableau projects might not be extensions at all,
-but rather apps that can run both inside and outside of Tableau dashboards.
-Such apps should use <code>standalone=TRUE</code>. The default is <code>FALSE</code>, indicating
-that the app is a true Tableau extension and should not attempt to run
-outside of a Tableau dashboard.</p>
-<p>See the vignette on standalone apps for more information. TODO</p></td>
     </tr>
     <tr>
       <th>use_theme</th>
