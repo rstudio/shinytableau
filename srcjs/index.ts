@@ -62,7 +62,6 @@ function configure() {
         width, height
       });
     } catch (err) {
-      // TODO
       console.error(err);
     }
   })();

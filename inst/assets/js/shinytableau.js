@@ -113,7 +113,6 @@ function configure() {
             });
         }
         catch (err) {
-            // TODO
             console.error(err);
         }
     })();

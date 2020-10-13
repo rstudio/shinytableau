@@ -43,7 +43,7 @@ for prompting the user for these inputs in a consistent and usable way.
 \seealso{
 For an example, look at the \code{config_ui} and \code{config_server} defined
 in the
-\href{https://github.com/rstudio/shinytableau/blob/eed65cc8/inst/examples/tutorial-3/app.R}{\code{tutorial-3} example app},
+\href{https://github.com/rstudio/shinytableau/tree/master/inst/examples/datasummary/}{\code{datasummary} example app},
 as well as the "Accessing Data" section of the
 \href{https://rstudio.github.io/shinytableau/articles/shinytableau.html}{Getting Started guide}.
 }

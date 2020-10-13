@@ -1,6 +1,10 @@
 ---
 title: "shinytableau"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 2
+    number_sections: true
 vignette: >
   %\VignetteIndexEntry{shinytableau}
   %\VignetteEngine{knitr::rmarkdown}
@@ -33,13 +37,16 @@ video {
   width: 100%;
   box-sizing: border-box;
 }
+.header-section-number::after, .toc-section-number::after {
+  content: '.';
+}
 ```
 
 Tableau version 2020.3 introduced a new extensibility feature called Dashboard Extensions. This feature lets programmers use JavaScript to create custom objects that normal Tableau users can drop into their Tableau dashboard layouts, providing custom visualizations and interactive features beyond Tableau's native capabilities.
 
 The {shinytableau} package allows you to easily create Tableau dashboard extensions using the power of R and Shiny. In typical Shiny fashion, it's not necessary to know web technologies like HTML, JavaScript, and CSS to create compelling Tableau extensions.
 
-## Example: Violin plot
+# Motivating example: Violin plot
 
 At the time of this writing, Tableau doesn't have built-in support for [violin plots](https://en.wikipedia.org/wiki/Violin_plot), only [box plots](https://help.tableau.com/current/pro/desktop/en-us/buildexamples_boxplot.htm). While box plots are more familiar, violin plots are more informative because they show you the entire distribution instead of merely quartiles. For example, take a look at the same data drawn as a box plot (left) and a violin plot (right):
 
@@ -51,6 +58,7 @@ p1 <- ggplot(faithful, aes(x = 1, y = waiting)) + geom_boxplot() + xlab("") + no
 p2 <- ggplot(faithful, aes(x = 1, y = waiting)) + geom_violin(draw_quantiles = c(0.25, 0.5, 0.75)) + no_x_axis
 p1 + p2
 ```
+
 ![](box-vs-violin.png)
 
 The boxplot doesn't give any hint that these values follow a bimodal distribution, while the violin plot makes it clear.
@@ -68,10 +76,11 @@ With shinytableau, we can wrap this R code into an easy-to-use Tableau dashboard
 
 Take a look at what it's like to use a shinytableau extension:
 
+```{=html}
 <video controls>
 <source src="shinytableau-captioned.webm" type="video/webm"/>
 </video>
-
+```
 To recap:
 
 1.  Navigate to the shinytableau extension's info page and click Download to save a .trex file to your hard drive.
@@ -83,7 +92,7 @@ You (and other Tableau users) can use the same shinytableau extension across mul
 
 We'll come back to violin plots later, but let's look at some much simpler examples first.
 
-## Writing your first extension
+# Writing your first extension
 
 Put simply, a shinytableau extension is a specially structured Shiny app. (If you haven't written a Shiny app before, you're *definitely* going to want to go through the [Shiny tutorial](https://shiny.rstudio.com/tutorial/), at the very least, before attempting to go further with shinytableau.)
 
@@ -112,7 +121,7 @@ Now, press Ctrl+Shift+Enter (or Cmd+Shift+Return on Mac) and you should see the 
 
 ![](tutorial-1.png){width="573"}
 
-## Adding configuration settings
+# Adding configuration settings
 
 Now we'll see how configuration works by making our tiny extension only slightly more complex: instead of showing the hardcoded string "Hello, world!" we'll allow the dashboard author to specify who is being greeted.
 
@@ -137,7 +146,9 @@ Type in a value and click OK, and you should see the extension object instantly 
 
 ![](tutorial-2c.png){width="573"}
 
-Compared to the "Hello, World!" version, we've made a number of important changes.
+Compared to the "Hello, World!" version, we've made a number of important changes that accomplish two things: defining a configuration dialog, and reading settings that are set based on user input to that dialog.
+
+## Displaying configuration
 
 Most obviously, we now have `config_ui` and `config_server`, which together represent the configuration dialog. These two variables are passed to `tableau_extension` as the next two arguments after `ui` and `server`.
 
@@ -145,7 +156,7 @@ The job of `config_ui`/`config_server` is to take input about the user's prefere
 
 There are several essential requirements for `config_ui` and `config_server` that you need to know about.
 
-#### config\_ui
+### config\_ui
 
 As we said about `ui` above, `config_ui` needs to be a `function(req) { ... }` that returns some UI object, not just the UI object itself as you can do in a normal Shiny app.
 
@@ -159,7 +170,7 @@ config_ui <- function(req) {
 }
 ```
 
-#### config\_server
+### config\_server
 
 There are two new requirements for `config_server` versus a regular `server`. First, a normal Shiny `server` is a function that takes `input`, `output`, and `session` arguments; a `config_server` takes an additional `iv` argument. This represents an `InputValidator` object from the [shinyvalidate](https://rstudio.github.io/shinyvalidate/articles/shinyvalidate.html) package. You use `iv` to tell shinytableau which user inputs *must* be provided, and any validation rules that must be enforced. Any required inputs that are missing, or failing validation rules, will display errors in the form and prevent the OK and Apply buttons from taking effect.
 
@@ -190,7 +201,7 @@ The values you pass to `update_tableau_settings_async()` will be saved as JSON o
 
 Speaking of reading settings...
 
-### Reading settings
+## Reading settings
 
 Now that we've discussed how `config_ui` and `config_server` can let you write settings, we can talk about the much simpler topic of how to read settings from the extension object (i.e. `server`).
 
@@ -198,68 +209,20 @@ The main way you'll access settings is by calling `tableau_setting(setting_name)
 
 You can call `tableau_settings_all()` to retrieve all of the current settings as a list. Generally you should try to use `tableau_setting` in favor of `tableau_settings_all`, because the latter takes a reactive dependency on *all* of the settings, even if you're not actually interested in all of them.
 
-## Accessing data from Tableau
+# Accessing data from Tableau
 
-Now that we've created an app that reads/writes settings, we're ready to take a big step forward and actually access a data table from Tableau. Our next example app will ask the Tableau dashboard author to choose a data table, and it will show a rich summary of each column of data, using the [summarytools](https://github.com/dcomtois/summarytools) R package.
+<a name="datasummary"></a>Now that we've created an app that reads/writes settings, we're ready to take a big step forward and actually access a data table from Tableau. Our next example app will ask the Tableau dashboard author to choose a data table, and it will show a rich summary of each column of data, using the [summarytools](https://github.com/dcomtois/summarytools) R package.
 
-TODO screencast or screenshots
+```{r echo=FALSE,out.width="100%"}
+knitr::include_graphics(system.file("examples/datasummary/screenshot.png", package = "shinytableau"))
+```
 
-```{r eval=FALSE}
-# filetype: shinyApp
-
-library(shiny)
-library(shinytableau)
-library(promises)
-library(summarytools)
-
-manifest <- tableau_manifest_from_yaml()
-
-ui <- function(req) {
-  fluidPage(theme = shinytableau_theme(),
-    fluidRow(
-      column(12,
-        uiOutput("summary")
-      )
-    )
-  )
-}
-
-server <- function(input, output, session) {
-  df <- reactive_tableau_data("data_spec")
-
-  output$summary <- renderUI({
-    # From https://cran.r-project.org/web/packages/summarytools/vignettes/Introduction.html#creating-shiny-apps
-    df() %...>%
-      dfSummary(varnumbers = FALSE, valid.col = FALSE, graph.magnif = 0.8) %...>%
-      print(method = "render", headings = TRUE, bootstrap.css = FALSE)
-  })
-}
-
-config_ui <- function(req) {
-  tagList(
-    choose_data_ui("data_spec", "Choose data")
-  )
-}
-
-config_server <- function(input, output, session, iv) {
-  data_spec <- choose_data("data_spec", iv = iv)
-
-  save_settings <- function() {
-    update_tableau_settings_async(
-      data_spec = data_spec()
-    )
-  }
-  return(save_settings)
-}
-
-tableau_extension(manifest, ui, server, config_ui, config_server,
-  options = ext_options(port = 4567)
-)
+```{r code=readLines(system.file("examples/datasummary/app.R", package = "shinytableau")), eval=FALSE, results='hide'}
 ```
 
 In order to understand how this example app works, we'll first need to look at how Tableau data is organized.
 
-### Categories of data
+## Categories of data
 
 Tableau's Extension API allows dashboard extensions, like the ones we're creating, to access data from the workbook they're embedded in. Actually, there's one big caveat to that: we can't access just *any* data, we can *only* access data via worksheets that are present in our same dashboard.
 
@@ -301,7 +264,7 @@ Don't worry, you don't need to remember all of that.
 
 Most shinytableau extensions are going to want to let the Tableau dashboard author choose the data they're interested in. Constructing the UI to lead the user through the above chain of decisions is complicated; therefore, we've done it for you by providing a `choose_data` Shiny module that you can use in your config dialogs.
 
-### The `choose_data` module
+## The `choose_data` module
 
 Like most [Shiny modules](https://shiny.rstudio.com/articles/modules.html), the `choose_data` module is actually two functions: a UI function, `choose_data_ui`; and a server function, `choose_data`. In the example above, they're invoked like this in the `config_ui`:
 
@@ -339,11 +302,11 @@ save_settings <- function() {
 
 Note that we want to persist the *value* of the `data_spec` reactive expression, so we call it like a function: `data_spec()`.
 
-### Accessing a data table
+## Accessing a data table
 
 We turn our attention now to consuming data, using the `reactive_tableau_data()` function. This function is called from the `server` and `config_server` functions, and returns a reactive expression that can be used to access the actual data (though there are complications in actually getting the data, more on this below).
 
-#### Calling `reactive_tableau_data()`
+### Calling `reactive_tableau_data()`
 
 The first argument you need to pass to `reactive_tableau_data()` is `spec`; it specifies what data you're looking for, and you can provide it in a number of ways.
 
@@ -368,7 +331,7 @@ The first argument you need to pass to `reactive_tableau_data()` is `spec`; it s
 
 3.  Finally, you can construct a spec object **from scratch** using one of the `spec_summary()`, `spec_underlying()`, or `spec_datasource()` functions. You'll need to provide the name of the worksheet/underlying table/etc. This could be useful for extensions that are created specifically for a particular dashboard.
 
-#### Using the return value
+### Using the return value
 
 The value returned by `reactive_tableau_data` has a couple of complications. Let's look again at the `server` of our data summary example extension (where `df` is the `reactive_tableau_data` return value):
 
@@ -392,7 +355,7 @@ df() %>% then(function(actual_data_frame) {
 
 (Please change `actual_data_frame` to whatever variable name is suitable for your app.)
 
-## Full ggviolin example
+# Full ggviolin example
 
 Armed with the knowledge from the previous sections, we can now build the ggviolin shinytableau extension. Structurally, this will be very close to the Data Summary extension from the previous section, but the ggviolin extension makes use of additional features from Shiny itself.
 
@@ -528,11 +491,11 @@ tableau_extension(
 )
 ```
 
-## UI considerations: Dashboard view
+# UI considerations: Dashboard view
 
 When creating the `ui` for an extension, you use the same technology and techniques as when creating the `ui` for a regular Shiny app. But unlike most Shiny apps, the entire UI will be embedded in a rectangle on a dashboard, so some different user experience considerations come into play.
 
-### Filling available space
+## Filling available space
 
 For one thing, it's common for dashboard tiles to be 1/4 screen size, or even smaller. When screen real estate is in such short supply, it's important for shinytableau extensions to make the most of the area they have. A typical [`fluidPage`/`sidebarLayout` arrangement](http://shiny.rstudio-staging.com/tutorial/written-tutorial/lesson2/) is not going to be optimal here.
 
@@ -548,9 +511,9 @@ ui <- function(req) {
 
 If you want to divide the space between multiple visualizations, while still filling the available space, you can use [`fillRow` or `fillCol`](https://shiny.rstudio.com/articles/gadget-ui.html#fillrowfillcol) as the direct child of `fillPage`.
 
-### Scrollable extensions
+## Scrollable extensions
 
-Some shinytableau extensions will not be suitable for filling the available space, as in our Data Summary example (TODO: link). This is because the extension's UI does not have a naturally fluid height; it's simply a table of data, that has its own strong opinion about what height it needs based on its content.
+Some shinytableau extensions will not be suitable for filling the available space, as in our [Data Summary example](#datasummary). This is because the extension's UI does not have a naturally fluid height; it's simply a table of data, that has its own strong opinion about what height it needs based on its content.
 
 For such situations, we go back to using `fluidPage` page, which will automatically display a vertical scrollbar if one is necessary.
 
@@ -564,7 +527,7 @@ ui <- function(req) {
 
 If your `fluidPage`-based layout includes `plotOutput` or HTML Widget outputs, you will not be able to use `height="100%"` as we did in the previous section; instead, you will need to either accept the default height or provide a number of pixels.
 
-## Deployment and hosting
+# Deployment and hosting
 
 So far, we've been running our shinytableau extensions locally from within RStudio. Needless to say, this isn't a suitable deployment strategy for putting extensions into production---you don't want Tableau dashboards to stop working just because you closed your laptop and went home!
 
@@ -576,14 +539,14 @@ Deploying shinytableau extensions is *mostly* no different than deploying any ot
 
 3.  **RStudio Connect** is our flagship publishing platform. With RStudio Connect, you can share Shiny applications, R Markdown reports, dashboards, plots, and more in one convenient place. Like ShinyApps.io, Shiny apps are deployed with push-button publishing from the RStudio IDE
 
-### Authentication
+## Authentication
 
 Authentication for shinytableau extensions is a bit more complicated than that of regular Shiny apps, and several different factors must be considered to balance your security needs with a smooth end-user experience. (Note that ShinyApps.io and RStudio Connect offer built-in support for authentication, but Shiny Server Open Source does not.)
 
 The first question to consider is **whether your shinytableau extension needs authentication** at all. We anticipate that many or most shinytableau extensions will not have direct access to their own data, but instead read the data from the Tableau dashboard's worksheets. If that is the case, and there's no danger in having an unauthorized or even malicious user embedding the shinytableau extension in their own Tableau dashboard, then consider allowing anonymous access to your deployed extension. This will sidestep most of the issues in this section.
 
-Second, it's important to note that **Safari 13.1 and newer prevent shinytableau authentication from working** (this only affects Tableau Server and Tableau Online, not Tableau Desktop). This is because shinytableau extensions run within an `<iframe>`, and will generally run on a different domain than the enclosing page (the Tableau dashboard); this configuration results in our authentication cookies being considered *third-party cookies*, which Safari 13.1 [aggressively blocks](https://webkit.org/blog/10218/full-third-party-cookie-blocking-and-more/). At the time of this writing, we do not have a solution for this problem, other than to ask users to turn off Safari 13.1's third-party cookie blocking by going into Preferences \| Privacy and unchecking "Prevent cross-site tracking". Unfortunately, this preference cannot be set on a per-site basis.
+Second, it's important to note that **Safari 13.1 and newer prevent shinytableau authentication from working** (this only affects Tableau Server and Tableau Online, not Tableau Desktop). This is because shinytableau extensions run within an `<iframe>`, and will generally run on a different domain than the enclosing page (the Tableau dashboard); this configuration results in our authentication cookies being considered *third-party cookies*, which Safari 13.1 [aggressively blocks](https://webkit.org/blog/10218/full-third-party-cookie-blocking-and-more/). At the time of this writing, we do not have a solution for this problem, other than to ask users to turn off Safari 13.1's third-party cookie blocking by going into Preferences \| Privacy and unchecking the global "Prevent cross-site tracking" setting.
 
-Third, embedded auth flow TODO
+Third, if you still want to use authentication after the above caveats, note that logging into an app that is hosted in an iframe is not a good idea[^3] from a security perspective. An upcoming release of RStudio Connect <!--TODO: Update when released--> will have a special iframe authentication code path that will launch a new browser window/tab to authenticate. You can use ShinyApps.io and Shiny Server Pro for authenticated shinytableau extensions, but the user experience will be worse for users that have credentials for ShinyApps.io/Shiny Server Pro but are not logged in at the time that they visit the Tableau dashboard.
 
-Fourth, load balancing cookie TODO
+[^3]: Most well-designed login forms will not allow themselves to be presented when hosted in an iframe, as a preventative measure against [clickjacking](https://owasp.org/www-community/attacks/Clickjacking) and phishing attacks.

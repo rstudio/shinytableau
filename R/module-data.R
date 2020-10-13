@@ -72,7 +72,7 @@ choose_data_ui <- function(id, label = NULL) {
 #'
 #' @seealso For an example, look at the `config_ui` and `config_server` defined
 #' in the
-#' [`tutorial-3` example app](https://github.com/rstudio/shinytableau/blob/eed65cc8/inst/examples/tutorial-3/app.R),
+#' [`datasummary` example app](https://github.com/rstudio/shinytableau/tree/master/inst/examples/datasummary/),
 #' as well as the "Accessing Data" section of the
 #' [Getting Started guide](https://rstudio.github.io/shinytableau/articles/shinytableau.html).
 #'

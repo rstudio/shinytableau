@@ -1,11 +1,7 @@
 # TODO: Errors are thrown by Tableau if no worksheet has data
-# TODO: Show message on initial load if configuration is required
-# TODO: Show progress indicators on initial load and recalculation
+# TODO: Show progress indicators on recalculation
 # TODO: Remove miniUI dependency
-# TODO: reactive_tableau_data equivalent for accessing schemas; will let us get
-#   rid of async in ggviolin config_server
-# TODO: Allow opt-out of various features: config dialog boilerplate, "please
-#   configure" message, auto-bookmarkable state
+# TODO: Allow opt-out of various features: config dialog boilerplate, auto-bookmarkable state
 
 # Wraps manifest, ui, and config_ui, which are conceptually three totally
 # separate things, into a single ui function for shinyApp to consume. This
