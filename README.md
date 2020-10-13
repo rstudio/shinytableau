@@ -1,14 +1,8 @@
----
-editor_options:
-  markdown:
-    mode: gfm
----
-
 # shinytableau
 
 An R package that helps you create Tableau [dashboard extensions](https://help.tableau.com/current/pro/desktop/en-us/dashboard_extensions.htm), using the power of R and Shiny.
 
-<img src="screenshot.png" alt="A Tableau dashboard containing a ggplot2 plot" width="500"/>
+<img src="vignettes/screenshot.png" alt="A Tableau dashboard containing a ggplot2 plot" width="500"/>
 
 ## Motivation
 
