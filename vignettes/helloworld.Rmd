@@ -1,0 +1,68 @@
+---
+title: Writing your first extension
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Writing your first extension}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r include=FALSE}
+library(ggplot2)
+```
+
+```{css echo=FALSE}
+p>img:first-child:last-child {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border: none;
+}
+video {
+  display: block;
+  padding: 0;
+  border: 1px solid #AAA;
+  margin: 1em auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+```
+
+Put simply, a shinytableau extension is a specially structured Shiny app. (If you haven't written a Shiny app before, you're *definitely* going to want to go through the [Shiny tutorial](https://shiny.rstudio.com/tutorial/), at the very least, before attempting to go further with shinytableau.)
+
+Let's start by creating the simplest possible Tableau extension: one that will display the string `"Hello, world!"`. First, create a new, empty RStudio project (File \| New Project... \| New Directory \| New Project).
+
+Then call:
+
+``` {.r}
+shinytableau::yaml_skeleton()
+```
+
+This will create an example `manifest.yml` file in your project, which controls the metadata that is displayed to Tableau users when they install the extension.
+
+Besides the obvious fields like name, description, and author, you'll also want to change the `extension_id` to a value unlikely to be used by anyone else, e.g. replacing `com.example` with your company's [reverse domain name](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+
+Next, create a file called `app.R` in this directory, and make it look like the following:
+
+```{r code=readLines(system.file("examples/tutorial-1/app.R", package = "shinytableau")), eval=FALSE, results='hide'}
+```
+
+If you've written a Shiny app before, this code should look comfortingly familiar. The main differences are the `manifest` object, the `ui` being wrapped in `function(req) {...}` (optional in a regular Shiny app, but mandatory here), and where the last line is usually `shinyApp(ui, server)` we instead have `tableau_extension(manifest, ui, server)`.
+
+There are two other small differences worth noting. First, the file starts with the comment:
+
+``` {.r}
+# filetype: shinyApp
+```
+
+This is a hint to the RStudio IDE that even though the file doesn't look like a Shiny app (because it doesn't end with `shinyApp(ui, server)`), it actually is.
+
+Second, the call to `tableau_extension` includes a hardcoded port number. For local development purposes, it's a good idea to hardcode the port to a unique value (between 1025 and 49151) for each extension that you create.
+
+Now, press Ctrl+Shift+Enter (or Cmd+Shift+Return on Mac) and you should see the info page for this extension appear. Download the .trex file, drag an Extension onto a Tableau dashboard, choose the .trex file, and you should see "Hello, world!" in your dashboard.
+
+![](tutorial-1.png){width="573"}
+
+::: {.nextstep}
+**Next step:** [Adding configuration settings](config.html)
+:::

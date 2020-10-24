@@ -5,3 +5,32 @@ home:
 
 development:
   version_tooltip: "Development version"
+
+navbar:
+  type: default
+  left:
+  - text: Tutorial
+    menu:
+    - text: Introduction to shinytableau
+      href: articles/shinytableau.html
+    - text: Writing your first extension
+      href: articles/helloworld.html
+    - text: Adding configuration settings
+      href: articles/config.html
+    - text: Accessing data from Tableau
+      href: articles/data.html
+    - text: Full ggviolin example
+      href: articles/example.html
+  - text: Reference
+    href: reference/
+  - text: Articles
+    menu:
+    - text: UI considerations
+      href: articles/ui.html
+    - text: Deployment
+      href: articles/deployment.html
+  - text: Changelog
+    href: news/
+  right:
+  - icon: fa-github fa-lg
+    href: https://github.com/rstudio/shinytableau

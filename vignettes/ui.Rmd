@@ -1,0 +1,42 @@
+---
+title: "UI considerations"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{UI considerations}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+When creating the `ui` for an extension (i.e. the view that will be presented within the Tableau dashboard), you use the same technology and techniques as when creating the `ui` for a regular Shiny app. But unlike most Shiny apps, the entire UI will be embedded in a rectangle on a dashboard, so some different user experience considerations come into play.
+
+## Filling available space
+
+For one thing, it's common for dashboard tiles to be 1/4 screen size, or even smaller. When screen real estate is in such short supply, it's important for shinytableau extensions to make the most of the area they have. A typical [`fluidPage`/`sidebarLayout` arrangement](http://shiny.rstudio-staging.com/tutorial/written-tutorial/lesson2/) is not going to be optimal here.
+
+If your extension's purpose is to display a visualization that is amenable to fluid resizing---a plot or map, for instance---then you should generally fill the available space. You can achieve this by using [`fillPage`](https://shiny.rstudio.com/reference/shiny/latest/fillPage.html) as your outermost UI element, and be sure to also set the height of your visualization to `height="100%"` (which is supported by `plotOutput` and most HTML widgets):
+
+```{r eval=FALSE}
+ui <- function(req) {
+  fillPage(
+    plotOutput("plot", height = "100%")
+  )
+}
+```
+
+If you want to divide the space between multiple visualizations, while still filling the available space, you can use [`fillRow` or `fillCol`](https://shiny.rstudio.com/articles/gadget-ui.html#fillrowfillcol) as the direct child of `fillPage`.
+
+## Scrollable extensions
+
+Some shinytableau extensions will not be suitable for filling the available space, as in our [Data Summary example](#datasummary). This is because the extension's UI does not have a naturally fluid height; it's simply a table of data, that has its own strong opinion about what height it needs based on its content.
+
+For such situations, we go back to using `fluidPage` page, which will automatically display a vertical scrollbar if one is necessary.
+
+```{r eval=FALSE}
+ui <- function(req) {
+  fluidPage(
+    uiOutput("summary")
+  )
+}
+```
+
+If your `fluidPage`-based layout includes `plotOutput` or HTML Widget outputs, you will not be able to use `height="100%"` as we did in the previous section; instead, you will need to either accept the default height or provide a number of pixels.
