@@ -30,16 +30,36 @@ video {
 
 Now we'll see how configuration works by making our tiny extension only slightly more complex: instead of showing the hardcoded string "Hello, world!" we'll allow the dashboard author to specify who is being greeted.
 
-We will use a configuration dialog to prompt the dashboard author for the greetee[^1], save their input as a setting called `"greetee"`, and have the extension use that setting to dynamically render the greeting.
+We will use a configuration dialog to:
+
+1.  **Prompt** the dashboard author for the greetee[^1]
+2.  **Save** their input as a setting called `"greetee"`
+3.  **Read** that setting when dynamically rendering the greeting
 
 [^1]: Yes, it's a [real word](https://en.wiktionary.org/wiki/greetee)!
+
+## Full source code
+
+Replace the contents of your `app.R` file with this code:
 
 ```{r code=readLines(system.file("examples/tutorial-2/app.R", package = "shinytableau")), eval=FALSE, results='hide'}
 ```
 
-If your RStudio session is still running the previous version of the code we wrote, stop it now by either clicking in the Console pane and hitting Escape, or pressing the stop-sign icon in the Console toolbar. Then run the new code with Ctrl+Shift+Enter/Cmd+Shift+Return.
+If your RStudio session is still running the previous version of the code we wrote, stop it now by either clicking in the Console pane and hitting Escape, or pressing the stop-sign icon in the Console toolbar. Then run the new code with Ctrl+Shift+Enter/Cmd+Shift+Return. This will launch the extension's Info page again, but you can just ignore it.
 
-You should see something like the following screenshot: the extension object shows only the name of the extension, and a message that you need to configure the extension.
+## Reloading the extension
+
+If you now switch back to Tableau, you will see that your extension is greyed out. This is because when you stopped the app in RStudio, the connection between Tableau and the extension was broken. Now that the app is running again, you will need to reload the extension:
+
+-   If you're using Tableau Desktop, select the extension, and from the *More Options* menu (the triangle icon on the border of the extension, see the next screenshot) choose *Reload*.
+
+-   If you're using Tableau Server or Tableau Online, reload the browser.
+
+This will be our normal workflow whenever we make a change to our `app.R` file: restart the Shiny app in RStudio, then reload the extension (or page) in Tableau.
+
+## Invoking the config dialog
+
+Now you should see something like the following screenshot: the extension object shows only the name of the extension, and a message that you need to configure the extension.
 
 ![](tutorial-2a.png){width="573"}
 
@@ -51,9 +71,11 @@ Type in a value and click OK, and you should see the extension object instantly 
 
 ![](tutorial-2c.png){width="573"}
 
+------------------------------------------------------------------------
+
 Compared to the "Hello, World!" version, we've made a number of important changes that accomplish two things: defining a configuration dialog, and reading settings that are set based on user input to that dialog.
 
-## Displaying configuration
+## Creating the config dialog
 
 Most obviously, we now have `config_ui` and `config_server`, which together represent the configuration dialog. These two variables are passed to `tableau_extension` as the next two arguments after `ui` and `server`.
 

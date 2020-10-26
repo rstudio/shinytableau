@@ -30,17 +30,23 @@ video {
 
 Put simply, a shinytableau extension is a specially structured Shiny app. (If you haven't written a Shiny app before, you're *definitely* going to want to go through the [Shiny tutorial](https://shiny.rstudio.com/tutorial/), at the very least, before attempting to go further with shinytableau.)
 
-Let's start by creating the simplest possible Tableau extension: one that will display the string `"Hello, world!"`. First, create a new, empty RStudio project (File \| New Project... \| New Directory \| New Project).
+Let's start by creating the simplest possible Tableau extension: one that will display the string `"Hello, world!"`. First, create a new, empty RStudio project using _File > New Project... > New Directory > New Project_.
 
-Then call:
+## Create extension manifest
+
+Once RStudio has opened your new project, run this command from the R console:
 
 ``` {.r}
 shinytableau::yaml_skeleton()
 ```
 
-This will create an example `manifest.yml` file in your project, which controls the metadata that is displayed to Tableau users when they install the extension.
+This will create an example `manifest.yml` file in your project, which controls the metadata that is displayed to Tableau users when they install the extension. Take a moment to customize its contents to fit your extension.
+
+![](manifest.png){width="537"}
 
 Besides the obvious fields like name, description, and author, you'll also want to change the `extension_id` to a value unlikely to be used by anyone else, e.g. replacing `com.example` with your company's [reverse domain name](https://en.wikipedia.org/wiki/Reverse_domain_name_notation).
+
+## Create extension Shiny app
 
 Next, create a file called `app.R` in this directory, and make it look like the following:
 
@@ -59,9 +65,19 @@ This is a hint to the RStudio IDE that even though the file doesn't look like a 
 
 Second, the call to `tableau_extension` includes a hardcoded port number. For local development purposes, it's a good idea to hardcode the port to a unique value (between 1025 and 49151) for each extension that you create.
 
-Now, press Ctrl+Shift+Enter (or Cmd+Shift+Return on Mac) and you should see the info page for this extension appear. Download the .trex file, drag an Extension onto a Tableau dashboard, choose the .trex file, and you should see "Hello, world!" in your dashboard.
+## Running and using extensions
+
+Now, press Ctrl+Shift+Enter (or Cmd+Shift+Return on Mac) and you should see the info page for this extension appear.
+
+![](infopage.png){width="573"}
+
+Click the _Download_ button to download the .trex file.
+
+Next, go to your Tableau dashboard, and drag an Extension object onto it; from the dialog that appears, click _My Extensions_. This will launch a file chooser. Pick the .trex file you downloaded, and you should see "Hello, world!" in your dashboard.
 
 ![](tutorial-1.png){width="573"}
+
+Now that you've seen the basic structure of a shinytableau extension, we'll show you how you can add a configuration dialog to your extension so that Tableau users can customize it to their needs.
 
 ::: {.nextstep}
 **Next step:** [Adding configuration settings](config.html)
