@@ -132,7 +132,21 @@ video {
 }
 </style>
 <p>Now we’ll see how configuration works by making our tiny extension only slightly more complex: instead of showing the hardcoded string “Hello, world!” we’ll allow the dashboard author to specify who is being greeted.</p>
-<p>We will use a configuration dialog to prompt the dashboard author for the greetee<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>, save their input as a setting called <code>"greetee"</code>, and have the extension use that setting to dynamically render the greeting.</p>
+<p>We will use a configuration dialog to:</p>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Prompt</strong> the dashboard author for the greetee<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>
+</li>
+<li>
+<strong>Save</strong> their input as a setting called <code>"greetee"</code>
+</li>
+<li>
+<strong>Read</strong> that setting when dynamically rendering the greeting</li>
+</ol>
+<div id="full-source-code" class="section level2">
+<h2 class="hasAnchor">
+<a href="#full-source-code" class="anchor"></a>Full source code</h2>
+<p>Replace the contents of your <code>app.R</code> file with this code:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="co"># filetype: shinyApp</span>
 
@@ -178,17 +192,33 @@ video {
 <span class="fu"><a href="../reference/tableau_extension.html">tableau_extension</a></span><span class="op">(</span><span class="va">manifest</span>, <span class="va">ui</span>, <span class="va">server</span>, <span class="va">config_ui</span>, <span class="va">config_server</span>,
   options <span class="op">=</span> <span class="fu"><a href="../reference/ext_options.html">ext_options</a></span><span class="op">(</span>port <span class="op">=</span> <span class="fl">3456</span><span class="op">)</span>
 <span class="op">)</span></pre></div>
-<p>If your RStudio session is still running the previous version of the code we wrote, stop it now by either clicking in the Console pane and hitting Escape, or pressing the stop-sign icon in the Console toolbar. Then run the new code with Ctrl+Shift+Enter/Cmd+Shift+Return.</p>
-<p>You should see something like the following screenshot: the extension object shows only the name of the extension, and a message that you need to configure the extension.</p>
+<p>If your RStudio session is still running the previous version of the code we wrote, stop it now by either clicking in the Console pane and hitting Escape, or pressing the stop-sign icon in the Console toolbar. Then run the new code with Ctrl+Shift+Enter/Cmd+Shift+Return. This will launch the extension’s Info page again, but you can just ignore it.</p>
+</div>
+<div id="reloading-the-extension" class="section level2">
+<h2 class="hasAnchor">
+<a href="#reloading-the-extension" class="anchor"></a>Reloading the extension</h2>
+<p>If you now switch back to Tableau, you will see that your extension is greyed out. This is because when you stopped the app in RStudio, the connection between Tableau and the extension was broken. Now that the app is running again, you will need to reload the extension:</p>
+<ul>
+<li><p>If you’re using Tableau Desktop, select the extension, and from the <em>More Options</em> menu (the triangle icon on the border of the extension, see the next screenshot) choose <em>Reload</em>.</p></li>
+<li><p>If you’re using Tableau Server or Tableau Online, reload the browser.</p></li>
+</ul>
+<p>This will be our normal workflow whenever we make a change to our <code>app.R</code> file: restart the Shiny app in RStudio, then reload the extension (or page) in Tableau.</p>
+</div>
+<div id="invoking-the-config-dialog" class="section level2">
+<h2 class="hasAnchor">
+<a href="#invoking-the-config-dialog" class="anchor"></a>Invoking the config dialog</h2>
+<p>Now you should see something like the following screenshot: the extension object shows only the name of the extension, and a message that you need to configure the extension.</p>
 <p><img src="tutorial-2a.png" width="573"></p>
 <p>Clicking Configure shows a text input:</p>
 <p><img src="tutorial-2b.png" width="421"></p>
 <p>Type in a value and click OK, and you should see the extension object instantly update to reflect your change.</p>
 <p><img src="tutorial-2c.png" width="573"></p>
+<hr>
 <p>Compared to the “Hello, World!” version, we’ve made a number of important changes that accomplish two things: defining a configuration dialog, and reading settings that are set based on user input to that dialog.</p>
-<div id="displaying-configuration" class="section level2">
+</div>
+<div id="creating-the-config-dialog" class="section level2">
 <h2 class="hasAnchor">
-<a href="#displaying-configuration" class="anchor"></a>Displaying configuration</h2>
+<a href="#creating-the-config-dialog" class="anchor"></a>Creating the config dialog</h2>
 <p>Most obviously, we now have <code>config_ui</code> and <code>config_server</code>, which together represent the configuration dialog. These two variables are passed to <code>tableau_extension</code> as the next two arguments after <code>ui</code> and <code>server</code>.</p>
 <p>The job of <code>config_ui</code>/<code>config_server</code> is to take input about the user’s preferences (in this case, what message should be displayed), and save them as <em>settings</em>. Each extension instance has its own set of settings; that is, if the same extension is dropped on a dashboard three times, then there are three extension instances, each with their own completely independent config dialogs and settings.</p>
 <p>There are several essential requirements for <code>config_ui</code> and <code>config_server</code> that you need to know about.</p>
