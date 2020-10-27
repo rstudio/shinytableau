@@ -49,7 +49,11 @@ If your RStudio session is still running the previous version of the code we wro
 
 ## Reloading the extension
 
-If you now switch back to Tableau, you will see that your extension is greyed out. This is because when you stopped the app in RStudio, the connection between Tableau and the extension was broken. Now that the app is running again, you will need to reload the extension:
+If you now switch back to Tableau, you will see that your extension is greyed out.
+
+![](tutorial-1b.png){width="537"}
+
+That's because when you stopped the app in RStudio, the connection between Tableau and the extension was broken. Now that the app is running again, you will need to reload the extension:
 
 -   If you're using Tableau Desktop, select the extension, and from the *More Options* menu (the triangle icon on the border of the extension, see the next screenshot) choose *Reload*.
 

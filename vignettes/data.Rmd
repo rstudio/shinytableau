@@ -30,9 +30,7 @@ video {
 
 <a name="datasummary"></a>Now that we've created an app that reads/writes settings, we're ready to take a big step forward and actually access a data table from Tableau. Our next example app will ask the Tableau dashboard author to choose a data table, and it will show a rich summary of each column of data, using the [summarytools](https://github.com/dcomtois/summarytools) R package.
 
-```{r echo=FALSE,out.width="100%"}
-knitr::include_graphics(system.file("examples/datasummary/screenshot.png", package = "shinytableau"))
-```
+![](datasummary.png){width="537"}
 
 ```{r code=readLines(system.file("examples/datasummary/app.R", package = "shinytableau")), eval=FALSE, results='hide'}
 ```
@@ -77,11 +75,13 @@ The existence of these three levels of data granularity, plus the fact that the 
 
 First, you need to identify the worksheet you care about. Then, whether you want summary, underlying, or data source data. If underlying, there may be more than one table involved, in which case you'll need to specify which one. If data source, there may be multiple data sources to choose from, and potentially more than one logical table per data source.
 
-Don't worry, you don't need to remember all of that.
+Don't worry, you don't need to remember all of that, because most of the time you'll just use...
+
+## The `choose_data` module
 
 Most shinytableau extensions are going to want to let the Tableau dashboard author choose the data they're interested in. Constructing the UI to lead the user through the above chain of decisions is complicated; therefore, we've done it for you by providing a `choose_data` Shiny module that you can use in your config dialogs.
 
-## The `choose_data` module
+![](choose_data.png){width="450"}
 
 Like most [Shiny modules](https://shiny.rstudio.com/articles/modules.html), the `choose_data` module is actually two functions: a UI function, `choose_data_ui`; and a server function, `choose_data`. In the example above, they're invoked like this in the `config_ui`:
 
