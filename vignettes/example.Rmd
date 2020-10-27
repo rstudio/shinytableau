@@ -5,6 +5,9 @@ vignette: >
   %\VignetteIndexEntry{Putting it all together}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+resource_files:
+  - shinytableau-captioned.webm
+  - shinytableau-captioned.mp4
 ---
 
 ```{r include=FALSE}
@@ -44,6 +47,8 @@ library(ggplot2)
 manifest <- tableau_manifest_from_yaml()
 ```
 
+## Dashboard UI
+
 The dashboard view's UI differs in that it uses `fillPage`, and notice that the plot's height is explicitly set to 100%. We also define a brush.
 
 ```{r eval=FALSE}
@@ -55,6 +60,8 @@ ui <- function(req) {
   )
 }
 ```
+
+## Dashboard server
 
 The dashboard view's server function uses a function we haven't discussed before, `tableau_select_marks_by_brush_async`. This does exactly what the name implies: using the selection defined from a `plotOutput` brush, it drives selection on a Tableau worksheet. (This function has several limitations, including only working with ggplot2-based plots and only when the plot and the worksheet in question have their dimensions in common; see the `?tableau_select_marks_by_brush_async` help topic for more details.)
 
@@ -83,6 +90,8 @@ server <- function(input, output, session) {
 }
 ```
 
+## Config UI
+
 The ggviolin config dialog uses the `choose_data` module, just as the Data Summary example did. It also prompts the user for a title, creates a `uiOutput` (that we'll populate with xvar and yvar select inputs), and previews the selected data table using `tableOutput`.
 
 ```{r eval=FALSE}
@@ -96,7 +105,13 @@ config_ui <- function(req) {
 }
 ```
 
-The config dialog's server function is the most complicated piece. We'll take it a chunk at a time. In the beginning of the function, [shinyvalidate validation rules](https://rstudio.github.io/shinyvalidate/articles/shinyvalidate.html) are added, which ensure that the user provides these values before settings can be saved.
+## Config server
+
+The config dialog's server function is the most complicated piece. We'll take it a chunk at a time.
+
+### Validation rules
+
+In the beginning of the function, [shinyvalidate validation rules](https://rstudio.github.io/shinyvalidate/articles/shinyvalidate.html) are added, which ensure that the user provides these values before settings can be saved.
 
 ```{r eval=FALSE}
 config_server <- function(input, output, session, iv) {
@@ -104,6 +119,8 @@ config_server <- function(input, output, session, iv) {
   iv$add_rule("xvar", sv_required())
   iv$add_rule("yvar", sv_required())
 ```
+
+### Choosing and previewing data
 
 Next, we invoke the `choose_data()` module, passing in the same `"data"` id that we just passed to `choose_data_ui()` a few moments ago.
 
@@ -123,6 +140,8 @@ First, for preview purposes, we want the first five rows of the selected table, 
   })
 ```
 
+### Choosing data columns
+
 Second, for letting the user choose which of the selected table's columns should map to the x and y dimensions, we need the schema (which contains the fieldnames, among other things), and we use `reactive_tableau_schema` to get it.
 
 Like `reactive_tableau_data`, the return value for `reactive_tableau_schema` is a reactive expression; but unlike `reactive_tableau_data`, this reactive expression is not asynchronous (doesn't return a promise), so there's no need to worry about using `%...>%`.
@@ -137,6 +156,8 @@ Like `reactive_tableau_data`, the return value for `reactive_tableau_schema` is 
     )
   })
 ```
+
+### Save settings
 
 Finally, we fulfill the final basic requirement for config server functions: we define and return the function that saves the user's input to Tableau settings.
 
@@ -153,6 +174,8 @@ Finally, we fulfill the final basic requirement for config server functions: we 
 }
 ```
 
+### Putting it all together
+
 All that's left now is to hand all of these pieces over to `tableau_extension`.
 
 ```{r eval=FALSE}
@@ -161,3 +184,20 @@ tableau_extension(
   options = ext_options(config_width = 600, config_height = 600, port = 2468)
 )
 ```
+
+You can find the full source code, along with the manifest.yml file, [here](https://github.com/rstudio/shinytableau/tree/7790a566dcef9092863ad231fd58ba14596a6300/inst/examples/ggviolin).
+
+Here again is the video from the introduction, to remind you what it all looks like in action:
+
+```{=html}
+<video controls>
+<source src="shinytableau-captioned.webm" type="video/webm"/>
+<source src="shinytableau-captioned.mp4" type="video/mp4"/>
+</video>
+```
+
+## The end
+
+And that's it for our tutorial---thank you for sticking with it!
+
+To learn more, check out the Articles section, where we touch on [UI considerations](ui.html) and [deployment/hosting](deployment.html).
