@@ -53,7 +53,7 @@ Each worksheet makes three categories of data available to us:
 
 3.  **Data source:** You can also access the raw data from the data source(s) used by the worksheet. This data is unaffected by the worksheet settings. Tableau data sources are broken into one or more logical tables, like how a relational database has multiple tables.
 
-As an R user, you may find this analogy based on the examples from [dplyr::mutate-joins] to be helpful in explaining the relationship between data source, underlying, and summary data:
+As an R user, you may find this analogy based on the [examples from `?dplyr::mutate-joins`](https://dplyr.tidyverse.org/reference/mutate-joins.html#examples) to be helpful in explaining the relationship between data source, underlying, and summary data:
 
     # Data source
     logical1 <- band_members
