@@ -36,7 +36,7 @@ Imports:
     showtext
 Remotes:
     rstudio/shiny,
-    jcheng5/shinyvalidate,
+    rstudio/shinyvalidate,
     rstudio/bootstraplib,
     rstudio/thematic
 Encoding: UTF-8
