@@ -143,6 +143,9 @@ video {
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
 
 <span class="va">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yaml_skeleton.html">tableau_manifest_from_yaml</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<div id="dashboard-ui" class="section level2">
+<h2 class="hasAnchor">
+<a href="#dashboard-ui" class="anchor"></a>Dashboard UI</h2>
 <p>The dashboard view’s UI differs in that it uses <code>fillPage</code>, and notice that the plot’s height is explicitly set to 100%. We also define a brush.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit">
 <span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
@@ -152,6 +155,10 @@ video {
     <span class="op">)</span>
   <span class="op">)</span>
 <span class="op">}</span></pre></div>
+</div>
+<div id="dashboard-server" class="section level2">
+<h2 class="hasAnchor">
+<a href="#dashboard-server" class="anchor"></a>Dashboard server</h2>
 <p>The dashboard view’s server function uses a function we haven’t discussed before, <code>tableau_select_marks_by_brush_async</code>. This does exactly what the name implies: using the selection defined from a <code>plotOutput</code> brush, it drives selection on a Tableau worksheet. (This function has several limitations, including only working with ggplot2-based plots and only when the plot and the worksheet in question have their dimensions in common; see the <code><a href="../reference/tableau_select_marks_by_brush_async.html">?tableau_select_marks_by_brush_async</a></code> help topic for more details.)</p>
 <p>Note also that <code><a href="../reference/tableau_setting.html">tableau_setting()</a></code> is called to retrieve <code>plot_title</code>, <code>xvar</code>, and <code>yvar</code> settings; we’ll be saving those settings in the config dialog. When writing your own ggplot2 extensions that let the user select what column to map to certain aesthetics, you’ll want to follow the pattern shown below, where the character vector (e.g. <code>xvar</code>) is passed to <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code> using <code>!!as.symbol(...)</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
@@ -175,6 +182,10 @@ video {
     <span class="op">}</span>
   <span class="op">}</span><span class="op">)</span>
 <span class="op">}</span></pre></div>
+</div>
+<div id="config-ui" class="section level2">
+<h2 class="hasAnchor">
+<a href="#config-ui" class="anchor"></a>Config UI</h2>
 <p>The ggviolin config dialog uses the <code>choose_data</code> module, just as the Data Summary example did. It also prompts the user for a title, creates a <code>uiOutput</code> (that we’ll populate with xvar and yvar select inputs), and previews the selected data table using <code>tableOutput</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="va">config_ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
@@ -185,11 +196,23 @@ video {
     <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/tableOutput.html">tableOutput</a></span><span class="op">(</span><span class="st">"preview"</span><span class="op">)</span>
   <span class="op">)</span>
 <span class="op">}</span></pre></div>
-<p>The config dialog’s server function is the most complicated piece. We’ll take it a chunk at a time. In the beginning of the function, <a href="https://rstudio.github.io/shinyvalidate/articles/shinyvalidate.html">shinyvalidate validation rules</a> are added, which ensure that the user provides these values before settings can be saved.</p>
+</div>
+<div id="config-server" class="section level2">
+<h2 class="hasAnchor">
+<a href="#config-server" class="anchor"></a>Config server</h2>
+<p>The config dialog’s server function is the most complicated piece. We’ll take it a chunk at a time.</p>
+<div id="validation-rules" class="section level3">
+<h3 class="hasAnchor">
+<a href="#validation-rules" class="anchor"></a>Validation rules</h3>
+<p>In the beginning of the function, <a href="https://rstudio.github.io/shinyvalidate/articles/shinyvalidate.html">shinyvalidate validation rules</a> are added, which ensure that the user provides these values before settings can be saved.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>config_server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session, iv) {</span>
 <span id="cb5-2"><a href="#cb5-2"></a>  iv<span class="op">$</span><span class="kw">add_rule</span>(<span class="st">"title"</span>, <span class="kw">sv_required</span>())</span>
 <span id="cb5-3"><a href="#cb5-3"></a>  iv<span class="op">$</span><span class="kw">add_rule</span>(<span class="st">"xvar"</span>, <span class="kw">sv_required</span>())</span>
 <span id="cb5-4"><a href="#cb5-4"></a>  iv<span class="op">$</span><span class="kw">add_rule</span>(<span class="st">"yvar"</span>, <span class="kw">sv_required</span>())</span></code></pre></div>
+</div>
+<div id="choosing-and-previewing-data" class="section level3">
+<h3 class="hasAnchor">
+<a href="#choosing-and-previewing-data" class="anchor"></a>Choosing and previewing data</h3>
 <p>Next, we invoke the <code><a href="../reference/choose_data_ui.html">choose_data()</a></code> module, passing in the same <code>"data"</code> id that we just passed to <code><a href="../reference/choose_data_ui.html">choose_data_ui()</a></code> a few moments ago.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
   <span class="va">data_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/choose_data_ui.html">choose_data</a></span><span class="op">(</span><span class="st">"data"</span>, iv <span class="op">=</span> <span class="va">iv</span><span class="op">)</span></pre></div>
@@ -201,6 +224,10 @@ video {
   <span class="va">output</span><span class="op">$</span><span class="va">preview</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderTable.html">renderTable</a></span><span class="op">(</span><span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="op">)</span>
   <span class="op">}</span><span class="op">)</span></pre></div>
+</div>
+<div id="choosing-data-columns" class="section level3">
+<h3 class="hasAnchor">
+<a href="#choosing-data-columns" class="anchor"></a>Choosing data columns</h3>
 <p>Second, for letting the user choose which of the selected table’s columns should map to the x and y dimensions, we need the schema (which contains the fieldnames, among other things), and we use <code>reactive_tableau_schema</code> to get it.</p>
 <p>Like <code>reactive_tableau_data</code>, the return value for <code>reactive_tableau_schema</code> is a reactive expression; but unlike <code>reactive_tableau_data</code>, this reactive expression is not asynchronous (doesn’t return a promise), so there’s no need to worry about using <code><a href="https://rstudio.github.io/promises/reference/pipes.html">%...&gt;%</a></code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
@@ -212,6 +239,10 @@ video {
       <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/selectInput.html">selectInput</a></span><span class="op">(</span><span class="st">"yvar"</span>, <span class="st">"Measure"</span>, <span class="fu">schema</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">columns</span><span class="op">$</span><span class="va">fieldName</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">}</span><span class="op">)</span></pre></div>
+</div>
+<div id="save-settings" class="section level3">
+<h3 class="hasAnchor">
+<a href="#save-settings" class="anchor"></a>Save settings</h3>
 <p>Finally, we fulfill the final basic requirement for config server functions: we define and return the function that saves the user’s input to Tableau settings.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>  save_settings &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
 <span id="cb9-2"><a href="#cb9-2"></a>    <span class="kw">update_tableau_settings_async</span>(</span>
@@ -223,17 +254,34 @@ video {
 <span id="cb9-8"><a href="#cb9-8"></a>  }</span>
 <span id="cb9-9"><a href="#cb9-9"></a>  <span class="kw">return</span>(save_settings)</span>
 <span id="cb9-10"><a href="#cb9-10"></a><span class="er">}</span></span></code></pre></div>
+</div>
+<div id="putting-it-all-together" class="section level3">
+<h3 class="hasAnchor">
+<a href="#putting-it-all-together" class="anchor"></a>Putting it all together</h3>
 <p>All that’s left now is to hand all of these pieces over to <code>tableau_extension</code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit">
 <span class="fu"><a href="../reference/tableau_extension.html">tableau_extension</a></span><span class="op">(</span>
   <span class="va">manifest</span>, <span class="va">ui</span>, <span class="va">server</span>, <span class="va">config_ui</span>, <span class="va">config_server</span>,
   options <span class="op">=</span> <span class="fu"><a href="../reference/ext_options.html">ext_options</a></span><span class="op">(</span>config_width <span class="op">=</span> <span class="fl">600</span>, config_height <span class="op">=</span> <span class="fl">600</span>, port <span class="op">=</span> <span class="fl">2468</span><span class="op">)</span>
 <span class="op">)</span></pre></div>
+<p>You can find the full source code, along with the manifest.yml file, <a href="https://github.com/rstudio/shinytableau/tree/7790a566dcef9092863ad231fd58ba14596a6300/inst/examples/ggviolin">here</a>.</p>
+<p>Here again is the video from the introduction, to remind you what it all looks like in action:</p>
+<video controls><source src="shinytableau-captioned.webm" type="video/webm"></source><source src="shinytableau-captioned.mp4" type="video/mp4"></source></video>
+</div>
+</div>
+<div id="the-end" class="section level2">
+<h2 class="hasAnchor">
+<a href="#the-end" class="anchor"></a>The end</h2>
+<p>And that’s it for our tutorial—thank you for sticking with it!</p>
+<p>To learn more, check out the Articles section, where we touch on <a href="ui.html">UI considerations</a> and <a href="deployment.html">deployment/hosting</a>.</p>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-      </div>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
+</div>
 
 </div>
 
