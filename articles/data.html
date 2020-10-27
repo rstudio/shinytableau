@@ -132,7 +132,7 @@ video {
 }
 </style>
 <p><a name="datasummary"></a>Now that we’ve created an app that reads/writes settings, we’re ready to take a big step forward and actually access a data table from Tableau. Our next example app will ask the Tableau dashboard author to choose a data table, and it will show a rich summary of each column of data, using the <a href="https://github.com/dcomtois/summarytools">summarytools</a> R package.</p>
-<p><img src="../../../_temp/Library/shinytableau/examples/datasummary/screenshot.png" width="100%"></p>
+<p><img src="datasummary.png" width="537"></p>
 <div class="sourceCode" id="cb1"><pre class="downlit">
 <span class="co"># filetype: shinyApp</span>
 
@@ -196,7 +196,7 @@ video {
 </li>
 <li><p><strong>Data source:</strong> You can also access the raw data from the data source(s) used by the worksheet. This data is unaffected by the worksheet settings. Tableau data sources are broken into one or more logical tables, like how a relational database has multiple tables.</p></li>
 </ol>
-<p>As an R user, you may find this analogy based on the examples from [dplyr::mutate-joins] to be helpful in explaining the relationship between data source, underlying, and summary data:</p>
+<p>As an R user, you may find this analogy based on the <a href="https://dplyr.tidyverse.org/reference/mutate-joins.html#examples">examples from <code>?dplyr::mutate-joins</code></a> to be helpful in explaining the relationship between data source, underlying, and summary data:</p>
 <pre><code># Data source
 logical1 &lt;- band_members
 logical2 &lt;- band_instruments
@@ -213,12 +213,13 @@ summary &lt;- underlying %&gt;%
 <p>The existence of these three levels of data granularity, plus the fact that the underlying and data source levels need additional specification to narrow down which of the multiple data tables at each level are desired, means that it’s surprisingly complicated to specify what data you want:</p>
 <p>(Deep breath…)</p>
 <p>First, you need to identify the worksheet you care about. Then, whether you want summary, underlying, or data source data. If underlying, there may be more than one table involved, in which case you’ll need to specify which one. If data source, there may be multiple data sources to choose from, and potentially more than one logical table per data source.</p>
-<p>Don’t worry, you don’t need to remember all of that.</p>
-<p>Most shinytableau extensions are going to want to let the Tableau dashboard author choose the data they’re interested in. Constructing the UI to lead the user through the above chain of decisions is complicated; therefore, we’ve done it for you by providing a <code>choose_data</code> Shiny module that you can use in your config dialogs.</p>
+<p>Don’t worry, you don’t need to remember all of that, because most of the time you’ll just use…</p>
 </div>
 <div id="the-choose_data-module" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-choose_data-module" class="anchor"></a>The <code>choose_data</code> module</h2>
+<p>Most shinytableau extensions are going to want to let the Tableau dashboard author choose the data they’re interested in. Constructing the UI to lead the user through the above chain of decisions is complicated; therefore, we’ve done it for you by providing a <code>choose_data</code> Shiny module that you can use in your config dialogs.</p>
+<p><img src="choose_data.png" width="450"></p>
 <p>Like most <a href="https://shiny.rstudio.com/articles/modules.html">Shiny modules</a>, the <code>choose_data</code> module is actually two functions: a UI function, <code>choose_data_ui</code>; and a server function, <code>choose_data</code>. In the example above, they’re invoked like this in the <code>config_ui</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit">
 <span class="fu"><a href="../reference/choose_data_ui.html">choose_data_ui</a></span><span class="op">(</span><span class="st">"data_spec"</span>, <span class="st">"Choose data"</span><span class="op">)</span></pre></div>
