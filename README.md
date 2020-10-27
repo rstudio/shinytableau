@@ -4,6 +4,14 @@ An R package that helps you create Tableau [dashboard extensions](https://help.t
 
 <img src="vignettes/screenshot.png" alt="A Tableau dashboard containing a ggplot2 plot" width="500"/>
 
+## Installation
+
+```r
+remotes::install_github("rstudio/shinytableau")
+```
+
+Note that shinytableau relies on a version of the {shiny} package that's currently newer than the most recent CRAN release, so installing shinytableau will also install {shiny} from GitHub.
+
 ## Motivation
 
 Many organizations rely on [Tableau](https://www.tableau.com/) to provide day-to-day insights from their data. Thanks to Tableau's point-and-click interface and focused feature set, almost anyone can produce attractive and useful visualizations and dashboards.
