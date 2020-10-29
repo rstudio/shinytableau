@@ -18,15 +18,14 @@ tableau_extensions_api_lib <- function() {
 #'
 #' @export
 shinytableau_theme <- function() {
-  theme <- bootstraplib::bs_theme("4+3")
-  theme <- bootstraplib::bs_add_layers(theme,
-    sass::sass_layer(
+  bootstraplib::bs_bundle(
+    bootstraplib::bs_theme(version = "4+3"),
+    shinytableau = sass::sass_layer(
       defaults = sass::sass_file(system.file("theme/defaults.scss", package = "shinytableau")),
       declarations = sass::sass_file(system.file("theme/declarations.scss", package = "shinytableau")),
       rules = sass::sass_file(system.file("theme/rules.scss", package = "shinytableau"))
     )
   )
-  theme
 }
 
 shinytableau_lib <- function() {
