@@ -56,8 +56,6 @@ As of this writing, Tableau's support for R is limited to calculated fields and 
 
 #### Why wouldn't I just build the whole dashboard in Shiny?
 
-You definitely could---in fact, we'd prefer it!
-
-But there are lots of organizations where Tableau is deeply entrenched, both technically and culturally, and embedding a little bit of Shiny into a lot of Tableau might be an easier sell than replacing a Tableau dashboard that's otherwise doing a fine job.
+You definitely could, and almost all of our community members do. However, there are many organizations where Tableau is deeply entrenched, both technically and culturally, and embedding a little bit of Shiny into a lot of Tableau might be an easier sell than replacing a Tableau dashboard that's otherwise doing a fine job.
 
 And while it's certainly more work to design and build shinytableau extensions than Shiny dashboards, the fact that they can be reused by non-coders could be a significant benefit.
