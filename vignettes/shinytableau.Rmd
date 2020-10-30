@@ -44,7 +44,7 @@ ggplot(mtcars, aes(x = factor(cyl), y = hp)) +
   geom_violin()
 ```
 
-With shinytableau, we can wrap this R code into an easy-to-use Tableau dashboard extension that can be used by Tableau users that don't even know what R is. They don't need to modify the code to point to the data source and variables they want to plot, because you're going to provide them with a GUI for that. They don't need to think about how to configure R on their server, because you can deploy it just once for all users of the extension.
+With shinytableau, we can wrap this R code into an easy-to-use Tableau dashboard extension that can be used by Tableau users that don't even know what R is. They don't need to modify the code to point to the data source and variables they want to plot, because you're going to provide them with a GUI for that. They don't need to think about how to configure R on their server, because you can [deploy](deployment.html) it just once for all users of the extension.
 
 ![](screenshot.png){width="573"}
 
