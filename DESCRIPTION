@@ -29,7 +29,7 @@ Imports:
     miniUI,
     tibble,
     mime,
-    bootstraplib (>= 0.2.1.9000),
+    bslib (>= 0.2.1.9000),
     sass,
     thematic,
     ragg,
@@ -37,7 +37,7 @@ Imports:
 Remotes:
     rstudio/shiny,
     rstudio/shinyvalidate,
-    rstudio/bootstraplib,
+    rstudio/bslib,
     rstudio/thematic
 Encoding: UTF-8
 LazyData: true
