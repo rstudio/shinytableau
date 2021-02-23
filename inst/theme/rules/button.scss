@@ -30,17 +30,17 @@ $outline-fg: #666;
 }
 
 .btn-primary {
-  color: color-yiq($primary);
+  color: color-contrast($primary);
   border-color: $primary;
 
   &:hover {
     background-color: $primary-light;
-    color: color-yiq($primary-light);
+    color: color-contrast($primary-light);
     border-color: $primary-light;
   }
   &:not(:disabled):not(.disabled):active {
     background-color: $primary-dark;
-    color: color-yiq($primary-dark);
+    color: color-contrast($primary-dark);
     border-color: $primary-dark;
   }
 }

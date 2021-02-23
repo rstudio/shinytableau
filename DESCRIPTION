@@ -22,23 +22,20 @@ Imports:
     jsonlite (>= 1.7.0),
     promises,
     rlang (>= 0.4.6),
-    shiny (>= 1.5.0.9004),
+    shiny (>= 1.6.0),
     uuid (>= 0.1-4),
     yaml (>= 2.2.1),
     shinyvalidate,
     miniUI,
     tibble,
     mime,
-    bslib (>= 0.2.1.9000),
+    bslib (>= 0.2.4),
     sass,
-    thematic,
+    thematic (>= 0.1.1),
     ragg,
     showtext
 Remotes:
-    rstudio/shiny,
-    rstudio/shinyvalidate,
-    rstudio/bslib,
-    rstudio/thematic
+    rstudio/shinyvalidate
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1
