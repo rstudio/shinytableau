@@ -56,7 +56,7 @@ tableau_extension <- function(manifest, ui, server, config_ui = NULL,
   options <- merge_defaults(options, ext_options())
 
   if (isTRUE(options[["use_theme"]])) {
-    thematic::thematic_on(font = "Open Sans", bg = "white", fg = "black")
+    thematic::thematic_on(font = c("Benton Sans", "Open Sans"), bg = "white", fg = "black")
   }
 
   if (!is.null(config_ui) && !is.function(config_ui)) {
