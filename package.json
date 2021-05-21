@@ -25,7 +25,7 @@
     "@types/jquery": "^3.5.0",
     "@types/react": "^16.9.41",
     "@types/react-dom": "^16.9.8",
-    "browserify": "^16.5.1",
+    "browserify": "^17.0.0",
     "browserify-global-shim": "^1.0.3",
     "tsc-watch": "^4.2.9",
     "typescript": "^3.9.6"

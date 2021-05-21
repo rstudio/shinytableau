@@ -17,4 +17,7 @@
 ^codecov\.yml$
 ^.github$
 ^screenshot.png$
-^vignettes/$
+^vignettes/
+^rsconnect$
+^docs$
+
