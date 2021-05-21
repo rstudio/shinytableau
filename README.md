@@ -1,5 +1,9 @@
 # shinytableau
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/rstudio/shinytableau/workflows/R-CMD-check/badge.svg)](https://github.com/rstudio/shinytableau/actions)
+<!-- badges: end -->
+
 An R package that helps you create Tableau [dashboard extensions](https://help.tableau.com/current/pro/desktop/en-us/dashboard_extensions.htm), using the power of R and Shiny.
 
 <img src="vignettes/screenshot.png" alt="A Tableau dashboard containing a ggplot2 plot" width="500"/>
