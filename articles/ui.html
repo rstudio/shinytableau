@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -86,8 +88,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/rstudio/shinytableau">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/rstudio/shinytableau" class="external-link">
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -101,8 +103,7 @@
 
       
 
-      </header><script src="ui_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="ui_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="ui_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="ui_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>UI considerations</h1>
@@ -118,28 +119,28 @@
 <p>When creating the <code>ui</code> for an extension (i.e. the view that will be presented within the Tableau dashboard), you use the same technology and techniques as when creating the <code>ui</code> for a regular Shiny app. But unlike most Shiny apps, the entire UI will be embedded in a rectangle on a dashboard, so some different user experience considerations come into play.</p>
 <div id="filling-available-space" class="section level2">
 <h2 class="hasAnchor">
-<a href="#filling-available-space" class="anchor"></a>Filling available space</h2>
-<p>For one thing, it’s common for dashboard tiles to be 1/4 screen size, or even smaller. When screen real estate is in such short supply, it’s important for shinytableau extensions to make the most of the area they have. A typical <a href="http://shiny.rstudio-staging.com/tutorial/written-tutorial/lesson2/"><code>fluidPage</code>/<code>sidebarLayout</code> arrangement</a> is not going to be optimal here.</p>
-<p>If your extension’s purpose is to display a visualization that is amenable to fluid resizing—a plot or map, for instance—then you should generally fill the available space. You can achieve this by using <a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html"><code>fillPage</code></a> as your outermost UI element, and be sure to also set the height of your visualization to <code>height="100%"</code> (which is supported by <code>plotOutput</code> and most HTML widgets):</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"plot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>
+<a href="#filling-available-space" class="anchor" aria-hidden="true"></a>Filling available space</h2>
+<p>For one thing, it’s common for dashboard tiles to be 1/4 screen size, or even smaller. When screen real estate is in such short supply, it’s important for shinytableau extensions to make the most of the area they have. A typical <a href="http://shiny.rstudio-staging.com/tutorial/written-tutorial/lesson2/" class="external-link"><code>fluidPage</code>/<code>sidebarLayout</code> arrangement</a> is not going to be optimal here.</p>
+<p>If your extension’s purpose is to display a visualization that is amenable to fluid resizing—a plot or map, for instance—then you should generally fill the available space. You can achieve this by using <a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html" class="external-link"><code>fillPage</code></a> as your outermost UI element, and be sure to also set the height of your visualization to <code>height="100%"</code> (which is supported by <code>plotOutput</code> and most HTML widgets):</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fillPage.html" class="external-link">fillPage</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"plot"</span>, height <span class="op">=</span> <span class="st">"100%"</span><span class="op">)</span>
   <span class="op">)</span>
-<span class="op">}</span></pre></div>
-<p>If you want to divide the space between multiple visualizations, while still filling the available space, you can use <a href="https://shiny.rstudio.com/articles/gadget-ui.html#fillrowfillcol"><code>fillRow</code> or <code>fillCol</code></a> as the direct child of <code>fillPage</code>.</p>
+<span class="op">}</span></code></pre></div>
+<p>If you want to divide the space between multiple visualizations, while still filling the available space, you can use <a href="https://shiny.rstudio.com/articles/gadget-ui.html#fillrowfillcol" class="external-link"><code>fillRow</code> or <code>fillCol</code></a> as the direct child of <code>fillPage</code>.</p>
 </div>
 <div id="scrollable-extensions" class="section level2">
 <h2 class="hasAnchor">
-<a href="#scrollable-extensions" class="anchor"></a>Scrollable extensions</h2>
+<a href="#scrollable-extensions" class="anchor" aria-hidden="true"></a>Scrollable extensions</h2>
 <p>Some shinytableau extensions will not be suitable for filling the available space, as in our <a href="#datasummary">Data Summary example</a>. This is because the extension’s UI does not have a naturally fluid height; it’s simply a table of data, that has its own strong opinion about what height it needs based on its content.</p>
 <p>For such situations, we go back to using <code>fluidPage</code> page, which will automatically display a vertical scrollbar if one is necessary.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fluidPage.html">fluidPage</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/htmlOutput.html">uiOutput</a></span><span class="op">(</span><span class="st">"summary"</span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/htmlOutput.html" class="external-link">uiOutput</a></span><span class="op">(</span><span class="st">"summary"</span><span class="op">)</span>
   <span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>If your <code>fluidPage</code>-based layout includes <code>plotOutput</code> or HTML Widget outputs, you will not be able to use <code>height="100%"</code> as we did in the previous section; instead, you will need to either accept the default height or provide a number of pixels.</p>
 </div>
   </div>
@@ -155,11 +156,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi,  RStudio.</p>
+  <p></p>
+<p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi, RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>
@@ -167,6 +170,8 @@
 
   
 
+
+  
 
   </body>
 </html>

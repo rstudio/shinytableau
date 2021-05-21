@@ -22,6 +22,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -89,7 +91,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/rstudio/shinytableau">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -107,26 +109,26 @@
   <div class="contents col-md-9">
 <div id="shinytableau" class="section level1">
 
-<p>An R package that helps you create Tableau <a href="https://help.tableau.com/current/pro/desktop/en-us/dashboard_extensions.htm">dashboard extensions</a>, using the power of R and Shiny.</p>
+<p>An R package that helps you create Tableau <a href="https://help.tableau.com/current/pro/desktop/en-us/dashboard_extensions.htm" class="external-link">dashboard extensions</a>, using the power of R and Shiny.</p>
 <p><img src="articles/screenshot.png" alt="A Tableau dashboard containing a ggplot2 plot" width="500"></p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"rstudio/shinytableau"</span><span class="op">)</span></pre></div>
+<a href="#installation" class="anchor" aria-hidden="true"></a>Installation</h2>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"rstudio/shinytableau"</span><span class="op">)</span></code></pre></div>
 <p>Note that shinytableau relies on a version of the {shiny} package that’s currently newer than the most recent CRAN release, so installing shinytableau will also install {shiny} from GitHub.</p>
 </div>
 <div id="motivation" class="section level2">
 <h2 class="hasAnchor">
-<a href="#motivation" class="anchor"></a>Motivation</h2>
-<p>Many organizations rely on <a href="https://www.tableau.com/">Tableau</a> to provide day-to-day insights from their data. Thanks to Tableau’s point-and-click interface and focused feature set, almost anyone can produce attractive and useful visualizations and dashboards.</p>
+<a href="#motivation" class="anchor" aria-hidden="true"></a>Motivation</h2>
+<p>Many organizations rely on <a href="https://www.tableau.com/" class="external-link">Tableau</a> to provide day-to-day insights from their data. Thanks to Tableau’s point-and-click interface and focused feature set, almost anyone can produce attractive and useful visualizations and dashboards.</p>
 <p>On the other hand, tasks that are routine to R users can sometimes be difficult or impossible to achieve with Tableau alone. So it’s common to use R to preprocess data that is then fed to Tableau, or use Tableau’s R integration features to fortify their data tables with columns calculated by R.</p>
 <p><strong>But there hasn’t been an obvious way to let Tableau take advantage of R’s powerful visualization and reporting capabilities.</strong> The R platform has a capable plotting system in base, powerful grammar-of-graphics frameworks in ggplot2 and plotly, and hundreds of bespoke visualization libraries for specific types of analysis or domains.</p>
 <p><strong>The goal of shinytableau is to let R users create reusable Tableau dashboard extensions, using the power of R and Shiny to generate visualizations that are not achievable with Tableau alone.</strong></p>
 </div>
 <div id="what-can-you-do-with-shinytableau" class="section level2">
 <h2 class="hasAnchor">
-<a href="#what-can-you-do-with-shinytableau" class="anchor"></a>What can you do with shinytableau?</h2>
+<a href="#what-can-you-do-with-shinytableau" class="anchor" aria-hidden="true"></a>What can you do with shinytableau?</h2>
 <p>shinytableau makes it possible for a Tableau user to open up a rectangle in their dashboard, which we can then fill with a Shiny app. This Shiny app can do anything a normal Shiny app can do:</p>
 <ul>
 <li><p>Present input controls like sliders, drop-downs, and text boxes.</p></li>
@@ -142,22 +144,22 @@
 </div>
 <div id="how-can-i-get-started" class="section level2">
 <h2 class="hasAnchor">
-<a href="#how-can-i-get-started" class="anchor"></a>How can I get started?</h2>
-<p>First, this package isn’t for everyone! If you’re a Tableau user with no experience writing code for R and/or Shiny, this is not a great place to start. Instead, we’d suggest checking out <a href="https://r4ds.had.co.nz/"><em>R for Data Science</em></a> and then <a href="https://mastering-shiny.org/"><em>Mastering Shiny</em></a>.</p>
-<p>If you do know R and have written Shiny apps before, welcome! The <a href="https://rstudio.github.io/shinytableau/articles/shinytableau.html">overview tutorial</a> is the place to start. You’ll need a copy of Tableau Desktop, or access to Tableau Server or Tableau Online and an admin friendly enough to whitelist your extensions.</p>
-<p><strong>Note that this package is new and fairly experimental.</strong> At the time of this writing, we are mostly interested in feedback from R/Tableau users. If you’re running into problems, or aren’t sure if your use case is supported, please <a href="https://github.com/rstudio/shinytableau/issues">file an issue</a>!</p>
+<a href="#how-can-i-get-started" class="anchor" aria-hidden="true"></a>How can I get started?</h2>
+<p>First, this package isn’t for everyone! If you’re a Tableau user with no experience writing code for R and/or Shiny, this is not a great place to start. Instead, we’d suggest checking out <a href="https://r4ds.had.co.nz/" class="external-link"><em>R for Data Science</em></a> and then <a href="https://mastering-shiny.org/" class="external-link"><em>Mastering Shiny</em></a>.</p>
+<p>If you do know R and have written Shiny apps before, welcome! The <a href="https://rstudio.github.io/shinytableau/articles/shinytableau.html" class="external-link">overview tutorial</a> is the place to start. You’ll need a copy of Tableau Desktop, or access to Tableau Server or Tableau Online and an admin friendly enough to whitelist your extensions.</p>
+<p><strong>Note that this package is new and fairly experimental.</strong> At the time of this writing, we are mostly interested in feedback from R/Tableau users. If you’re running into problems, or aren’t sure if your use case is supported, please <a href="https://github.com/rstudio/shinytableau/issues" class="external-link">file an issue</a>!</p>
 </div>
 <div id="faq" class="section level2">
 <h2 class="hasAnchor">
-<a href="#faq" class="anchor"></a>FAQ</h2>
+<a href="#faq" class="anchor" aria-hidden="true"></a>FAQ</h2>
 <div id="i-thought-tableau-already-supports-r" class="section level4">
 <h4 class="hasAnchor">
-<a href="#i-thought-tableau-already-supports-r" class="anchor"></a>I thought Tableau already supports R?</h4>
+<a href="#i-thought-tableau-already-supports-r" class="anchor" aria-hidden="true"></a>I thought Tableau already supports R?</h4>
 <p>As of this writing, Tableau’s support for R is limited to calculated fields and Tableau Prep scripts. Neither of those entry points are useful for embedding R-based visualizations and user interfaces within Tableau dashboards, which is shinytableau’s goal.</p>
 </div>
 <div id="why-wouldnt-i-just-build-the-whole-dashboard-in-shiny" class="section level4">
 <h4 class="hasAnchor">
-<a href="#why-wouldnt-i-just-build-the-whole-dashboard-in-shiny" class="anchor"></a>Why wouldn’t I just build the whole dashboard in Shiny?</h4>
+<a href="#why-wouldnt-i-just-build-the-whole-dashboard-in-shiny" class="anchor" aria-hidden="true"></a>Why wouldn’t I just build the whole dashboard in Shiny?</h4>
 <p>You definitely could, and almost all of our community members do. However, there are many organizations where Tableau is deeply entrenched, both technically and culturally, and embedding a little bit of Shiny into a lot of Tableau might be an easier sell than replacing a Tableau dashboard that’s otherwise doing a fine job.</p>
 <p>And while it’s certainly more work to design and build shinytableau extensions than Shiny dashboards, the fact that they can be reused by non-coders could be a significant benefit.</p>
 </div>
@@ -167,33 +169,39 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
 <li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
+
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Joe Cheng <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Richard Iannone <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-3925-190X" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Javier Luraschi <br><small class="roles"> Author </small>  </li>
 <li> RStudio <br><small class="roles"> Copyright holder, funder </small>  </li>
-<li><a href="authors.html">All authors...</a></li>
+<li><a href="authors.html">More on authors...</a></li>
 </ul>
 </div>
+
+
 
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi,  RStudio.</p>
+  <p></p>
+<p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi, RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>
@@ -201,6 +209,8 @@
 
   
 
+
+  
 
   </body>
 </html>

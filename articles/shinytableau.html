@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -86,8 +88,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/rstudio/shinytableau">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/rstudio/shinytableau" class="external-link">
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -101,8 +103,7 @@
 
       
 
-      </header><script src="shinytableau_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="shinytableau_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="shinytableau_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="shinytableau_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to shinytableau</h1>
@@ -119,15 +120,15 @@
 <p>Tableau version 2020.3 introduced a new extensibility feature called Dashboard Extensions. This feature lets programmers use JavaScript to create custom objects that normal Tableau users can drop into their Tableau dashboard layouts, providing custom visualizations and interactive features beyond Tableau’s native capabilities. The shinytableau package is a bridge between the JavaScript-based Tableau Dashboard Extension API, and Shiny code that you as an R practitioner will write. The resulting app can be used easily by Tableau dashboard authors, who don’t need to know anything about R or Shiny.</p>
 <div id="motivating-example-violin-plot" class="section level2">
 <h2 class="hasAnchor">
-<a href="#motivating-example-violin-plot" class="anchor"></a>Motivating example: Violin plot</h2>
-<p>Tableau doesn’t have built-in support for <a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">violin plots</a>, only <a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">boxplots</a>. While boxplots are more familiar, violin plots are more informative because they show you the entire distribution instead of merely quartiles. For example, take a look at the same data drawn as a boxplot (left) and a violin plot (right):</p>
+<a href="#motivating-example-violin-plot" class="anchor" aria-hidden="true"></a>Motivating example: Violin plot</h2>
+<p>Tableau doesn’t have built-in support for <a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">violin plots</a>, only <a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">boxplots</a>. While boxplots are more familiar, violin plots are more informative because they show you the entire distribution instead of merely quartiles. For example, take a look at the same data drawn as a boxplot (left) and a violin plot (right):</p>
 <p><img src="box-vs-violin.png"></p>
 <p>The boxplot doesn’t give any hint that these values follow a bimodal distribution, while the violin plot makes it clear.</p>
-<p>I would be remiss not to mention the heroics that Tableau consultant Gwilym Lockwood went through to <a href="https://gwilymlockwood.com/2018/07/03/language-sex-violins-other-how-to-create-violin-plots-in-tableau/">create a violin plot in Tableau</a>. The blog post is worth a read, but the takeaway is that you’d have to <em>really</em> want a violin plot to go through all of those steps.</p>
-<p>In R, on the other hand, there are several packages that provide violin plots; a cursory search turned up <a href="https://cran.r-project.org/web/packages/vioplot/vignettes/violin_customisation.html">vioplot</a>, <a href="https://plotly.com/r/violin/">plotly</a>, <a href="https://rpkgs.datanovia.com/ggpubr/reference/ggviolin.html">ggpubr</a>, and <a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">ggplot2</a>. Here’s how you might create a violin plot in ggplot2, using the <code>mtcars</code> data set, showing the horsepower (<code>hp</code>) distribution for each cylinder count (<code>cyl</code>):</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">hp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<p>I would be remiss not to mention the heroics that Tableau consultant Gwilym Lockwood went through to <a href="https://gwilymlockwood.com/2018/07/03/language-sex-violins-other-how-to-create-violin-plots-in-tableau/" class="external-link">create a violin plot in Tableau</a>. The blog post is worth a read, but the takeaway is that you’d have to <em>really</em> want a violin plot to go through all of those steps.</p>
+<p>In R, on the other hand, there are several packages that provide violin plots; a cursory search turned up <a href="https://cran.r-project.org/web/packages/vioplot/vignettes/violin_customisation.html" class="external-link">vioplot</a>, <a href="https://plotly.com/r/violin/" class="external-link">plotly</a>, <a href="https://rpkgs.datanovia.com/ggpubr/reference/ggviolin.html" class="external-link">ggpubr</a>, and <a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">ggplot2</a>. Here’s how you might create a violin plot in ggplot2, using the <code>mtcars</code> data set, showing the horsepower (<code>hp</code>) distribution for each cylinder count (<code>cyl</code>):</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mtcars</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">hp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="shinytableau_files/figure-html/unnamed-chunk-3-1.png" width="480"></p>
 <p>With shinytableau, we can wrap this R code into an easy-to-use Tableau dashboard extension that can be used by Tableau users that don’t even know what R is. They don’t need to modify the code to point to the data source and variables they want to plot, because you’re going to provide them with a GUI for that. They don’t need to think about how to configure R on their server, because you can <a href="deployment.html">deploy</a> it just once for all users of the extension.</p>
 <p><img src="screenshot.png" width="573"></p>
@@ -158,11 +159,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi,  RStudio.</p>
+  <p></p>
+<p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi, RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>
@@ -170,6 +173,8 @@
 
   
 
+
+  
 
   </body>
 </html>

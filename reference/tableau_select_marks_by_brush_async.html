@@ -55,6 +55,8 @@ represented in the summary data of the target worksheet." />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -66,9 +68,16 @@ represented in the summary data of the target worksheet." />
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -137,7 +146,7 @@ represented in the summary data of the target worksheet." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/rstudio/shinytableau">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -164,18 +173,18 @@ represented in the summary data of the target worksheet." />
 <a href='https://shiny.rstudio.com/articles/plot-interaction.html'>this</a> and
 <a href='https://shiny.rstudio.com/articles/selecting-rows-of-data.html'>this</a> to get
 started). The <code>tableau_select_marks_by_brush_async</code> function lets you take a
-brush input from a <code><a href='https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html'>shiny::plotOutput()</a></code> and, if anything is selected, use it
+brush input from a <code><a href='https://rdrr.io/pkg/shiny/man/plotOutput.html'>shiny::plotOutput()</a></code> and, if anything is selected, use it
 to drive the selection of a Tableau worksheet within the same dashboard. Note
 that because Tableau's selection model operates on marks, not rows in the
 underlying data, <strong>the x and y dimensions in the originating plot must be
 represented in the summary data of the target worksheet.</strong></p>
     </div>
 
-    <pre class="usage"><span class='fu'>tableau_select_marks_by_brush_async</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>tableau_select_marks_by_brush_async</span><span class='op'>(</span>
   <span class='va'>worksheet</span>,
   <span class='va'>brush</span>,
-  session <span class='op'>=</span> <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>)</span></pre>
+  session <span class='op'>=</span> <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/domains.html'>getDefaultReactiveDomain</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -184,7 +193,7 @@ represented in the summary data of the target worksheet.</strong></p>
       <th>worksheet</th>
       <td><p>Single-element character vector naming the worksheet whose
 selection we want to set. If your extension's configuration dialog uses
-<code><a href='choose_data_ui.html'>choose_data()</a></code> to allow the user to choose data, then use the
+<code><a href='choose_data.html'>choose_data()</a></code> to allow the user to choose data, then use the
 <code>tableau_setting(YOUR_SETTING_ID)$worksheet</code> slot to access the worksheet
 name.</p></td>
     </tr>
@@ -192,7 +201,7 @@ name.</p></td>
       <th>brush</th>
       <td><p><code>input$YOUR_BRUSH_ID</code>, where <code>YOUR_BRUSH_ID</code> is the identifier
 passed as <code>plotOutput</code>'s <code>brush</code> argument (or passed to
-<code><a href='https://shiny.rstudio.com/reference/shiny/latest/brushOpts.html'>shiny::brushOpts()</a></code>, if you did it that way).</p></td>
+<code><a href='https://rdrr.io/pkg/shiny/man/brushOpts.html'>shiny::brushOpts()</a></code>, if you did it that way).</p></td>
     </tr>
     <tr>
       <th>session</th>
@@ -203,7 +212,7 @@ default.)</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <a href='https://rstudio.github.io/promises/reference/promise.html'>promises::promise</a> object. The promise object will not resolve to
+    <p>A <a href='https://rstudio.github.io/promises//reference/promise.html'>promises::promise</a> object. The promise object will not resolve to
 a useful value, but you can use it to handle errors.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
@@ -223,11 +232,11 @@ base plots as well.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi,  RStudio.</p>
+  <p><p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi, RStudio.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -235,6 +244,8 @@ base plots as well.</p>
 
   
 
+
+  
 
   </body>
 </html>

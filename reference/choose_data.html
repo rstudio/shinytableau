@@ -51,6 +51,8 @@ for prompting the user for these inputs in a consistent and usable way." />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -62,9 +64,16 @@ for prompting the user for these inputs in a consistent and usable way." />
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -133,7 +142,7 @@ for prompting the user for these inputs in a consistent and usable way." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/rstudio/shinytableau">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -163,14 +172,14 @@ tables, which logical table. This Shiny module provides a drop-in component
 for prompting the user for these inputs in a consistent and usable way.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>choose_data_ui</span><span class='op'>(</span><span class='va'>id</span>, label <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>choose_data_ui</span><span class='op'>(</span><span class='va'>id</span>, label <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span>
 
 <span class='fu'>choose_data</span><span class='op'>(</span>
   <span class='va'>id</span>,
   options <span class='op'>=</span> <span class='fu'><a href='choose_data_options.html'>choose_data_options</a></span><span class='op'>(</span><span class='op'>)</span>,
   iv <span class='op'>=</span> <span class='cn'>NULL</span>,
-  session <span class='op'>=</span> <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>)</span></pre>
+  session <span class='op'>=</span> <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/domains.html'>getDefaultReactiveDomain</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -224,11 +233,11 @@ as well as the "Accessing Data" section of the
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi,  RStudio.</p>
+  <p><p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi, RStudio.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -236,6 +245,8 @@ as well as the "Accessing Data" section of the
 
   
 
+
+  
 
   </body>
 </html>

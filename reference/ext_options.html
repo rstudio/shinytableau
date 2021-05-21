@@ -49,6 +49,8 @@ tableau_extension()." />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -60,9 +62,16 @@ tableau_extension()." />
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -131,7 +140,7 @@ tableau_extension()." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/rstudio/shinytableau">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -159,13 +168,13 @@ Tableau extension. Pass the resulting value as the <code>options</code> argument
 <code><a href='tableau_extension.html'>tableau_extension()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>ext_options</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>ext_options</span><span class='op'>(</span>
   config_width <span class='op'>=</span> <span class='fl'>600</span>,
   config_height <span class='op'>=</span> <span class='fl'>400</span>,
   prompt_for_config <span class='op'>=</span> <span class='cn'>TRUE</span>,
   use_theme <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -196,7 +205,7 @@ to omit shinytableau's styles and just use your own.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Options to pass through to <a href='https://shiny.rstudio.com/reference/shiny/latest/runApp.html'>shiny::runApp</a> (e.g. <code>port</code>,
+      <td><p>Options to pass through to <a href='https://rdrr.io/pkg/shiny/man/runApp.html'>shiny::runApp</a> (e.g. <code>port</code>,
 <code>launch.browser</code>, <code>host</code>, <code>quiet</code>). For local development purposes, it's a
 good idea to assign <code>port</code> to a hardcoded number between 1025 and 49151
 that is unique for each extension.</p></td>
@@ -205,7 +214,7 @@ that is unique for each extension.</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list object, suitable for passing to <code><a href='tableau_extension.html'>tableau_extension(options = ...)</a></code>.</p>
+    <p>A list object, suitable for passing to <code>tableau_extension(options = ...)</code>.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -218,11 +227,11 @@ that is unique for each extension.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi,  RStudio.</p>
+  <p><p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi, RStudio.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -230,6 +239,8 @@ that is unique for each extension.</p></td>
 
   
 
+
+  
 
   </body>
 </html>

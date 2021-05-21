@@ -58,6 +58,8 @@ tableau_manifest_from_yaml() (in place of the tableau_manifest() call)." />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -69,9 +71,16 @@ tableau_manifest_from_yaml() (in place of the tableau_manifest() call)." />
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -140,7 +149,7 @@ tableau_manifest_from_yaml() (in place of the tableau_manifest() call)." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/rstudio/shinytableau">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -177,7 +186,7 @@ to a <strong>shinytableau</strong> extension app by using the
 <code><a href='yaml_skeleton.html'>tableau_manifest_from_yaml()</a></code> (in place of the <code>tableau_manifest()</code> call).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tableau_manifest</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>tableau_manifest</span><span class='op'>(</span>
   extension_id <span class='op'>=</span> <span class='st'>"com.example.extensions.name"</span>,
   extension_version <span class='op'>=</span> <span class='st'>"0.1.0"</span>,
   name <span class='op'>=</span> <span class='st'>"My extension"</span>,
@@ -191,7 +200,7 @@ to a <strong>shinytableau</strong> extension app by using the
   icon_file <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"default_icon.png"</span>, package <span class='op'>=</span> <span class='st'>"shinytableau"</span><span class='op'>)</span>,
   permissions <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"full data"</span><span class='op'>)</span>,
   min_api_version <span class='op'>=</span> <span class='st'>"1.4"</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -259,37 +268,38 @@ Tableau Extension Manifest XML: <code><a href='yaml_skeleton.html'>yaml_skeleton
 <code><a href='yaml_skeleton.html'>tableau_manifest_from_yaml()</a></code>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Create a Tableau Manifest via the</span>
-<span class='co'># `tableau_manifest()` function</span>
-<span class='fu'>tableau_manifest</span><span class='op'>(</span>
-  extension_id <span class='op'>=</span> <span class='st'>"com.example.ggvoronoi"</span>,
-  extension_version <span class='op'>=</span> <span class='st'>"1.1.3"</span>,
-  name <span class='op'>=</span> <span class='st'>"Voronoi Plot"</span>,
-  description <span class='op'>=</span> <span class='st'>"Insert a Voronoi plot using ggvoronoi"</span>,
-  author_name <span class='op'>=</span> <span class='st'>"Jane Doe"</span>,
-  author_email <span class='op'>=</span> <span class='st'>"jane_doe@example.com"</span>,
-  website <span class='op'>=</span> <span class='st'>"https://example.com/tableau/extensions/ggvoronoi"</span>
-<span class='op'>)</span>
-</div><div class='output co'>#&gt; &lt;?xml version="1.0" encoding="utf-8"?&gt;
-#&gt; 
-#&gt; &lt;manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest"&gt;
-#&gt;   &lt;dashboard-extension id="com.example.ggvoronoi" extension-version="1.1.3"&gt;
-#&gt;     &lt;default-locale&gt;en_US&lt;/default-locale&gt;
-#&gt;     &lt;name&gt;Voronoi Plot&lt;/name&gt;
-#&gt;     &lt;description&gt;Insert a Voronoi plot using ggvoronoi&lt;/description&gt;
-#&gt;     &lt;author name="Jane Doe" email="jane_doe@example.com" organization="Example Organization" website="https://example.com/tableau/extensions/ggvoronoi"&gt;&lt;/author&gt;
-#&gt;     &lt;min-api-version&gt;1.4&lt;/min-api-version&gt;
-#&gt;     &lt;source-location&gt;
-#&gt;       &lt;url&gt;&lt;/url&gt;
-#&gt;     &lt;/source-location&gt;
-#&gt;     &lt;icon&gt;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&lt;/icon&gt;
-#&gt;     &lt;permissions&gt;
-#&gt;       &lt;permission&gt;full data&lt;/permission&gt;
-#&gt;     &lt;/permissions&gt;
-#&gt;     &lt;context-menu&gt;&lt;/context-menu&gt;
-#&gt;   &lt;/dashboard-extension&gt;
-#&gt; &lt;/manifest&gt;</div><div class='input'>
-</div></pre>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># Create a Tableau Manifest via the</span></span>
+<span class='r-in'><span class='co'># `tableau_manifest()` function</span></span>
+<span class='r-in'><span class='fu'>tableau_manifest</span><span class='op'>(</span></span>
+<span class='r-in'>  extension_id <span class='op'>=</span> <span class='st'>"com.example.ggvoronoi"</span>,</span>
+<span class='r-in'>  extension_version <span class='op'>=</span> <span class='st'>"1.1.3"</span>,</span>
+<span class='r-in'>  name <span class='op'>=</span> <span class='st'>"Voronoi Plot"</span>,</span>
+<span class='r-in'>  description <span class='op'>=</span> <span class='st'>"Insert a Voronoi plot using ggvoronoi"</span>,</span>
+<span class='r-in'>  author_name <span class='op'>=</span> <span class='st'>"Jane Doe"</span>,</span>
+<span class='r-in'>  author_email <span class='op'>=</span> <span class='st'>"jane_doe@example.com"</span>,</span>
+<span class='r-in'>  website <span class='op'>=</span> <span class='st'>"https://example.com/tableau/extensions/ggvoronoi"</span></span>
+<span class='r-in'><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;manifest manifest-version="0.1" xmlns="http://www.tableau.com/xml/extension_manifest"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;dashboard-extension id="com.example.ggvoronoi" extension-version="1.1.3"&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;default-locale&gt;en_US&lt;/default-locale&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;name&gt;Voronoi Plot&lt;/name&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;description&gt;Insert a Voronoi plot using ggvoronoi&lt;/description&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;author name="Jane Doe" email="jane_doe@example.com" organization="Example Organization" website="https://example.com/tableau/extensions/ggvoronoi"&gt;&lt;/author&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;min-api-version&gt;1.4&lt;/min-api-version&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;source-location&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;url&gt;&lt;/url&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/source-location&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;icon&gt;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&lt;/icon&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;permissions&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>       &lt;permission&gt;full data&lt;/permission&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;/permissions&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     &lt;context-menu&gt;&lt;/context-menu&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   &lt;/dashboard-extension&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> &lt;/manifest&gt;</span>
+<span class='r-in'></span>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -301,11 +311,11 @@ Tableau Extension Manifest XML: <code><a href='yaml_skeleton.html'>yaml_skeleton
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi,  RStudio.</p>
+  <p><p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi, RStudio.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -313,6 +323,8 @@ Tableau Extension Manifest XML: <code><a href='yaml_skeleton.html'>yaml_skeleton
 
   
 
+
+  
 
   </body>
 </html>

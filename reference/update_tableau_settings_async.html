@@ -49,6 +49,8 @@ tableau_setting()." />
 
 
 
+
+
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -60,9 +62,16 @@ tableau_setting()." />
 
 
 
+
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -131,7 +140,7 @@ tableau_setting()." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/rstudio/shinytableau">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -159,11 +168,11 @@ function to write settings that can be read, now and in the future, by
 <code><a href='tableau_setting.html'>tableau_setting()</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>update_tableau_settings_async</span><span class='op'>(</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>update_tableau_settings_async</span><span class='op'>(</span>
   <span class='va'>...</span>,
   add. <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  session. <span class='op'>=</span> <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://shiny.rstudio.com/reference/shiny/latest/domains.html'>getDefaultReactiveDomain</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='op'>)</span></pre>
+  session. <span class='op'>=</span> <span class='fu'>shiny</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/shiny/man/domains.html'>getDefaultReactiveDomain</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,7 +180,7 @@ function to write settings that can be read, now and in the future, by
     <tr>
       <th>...</th>
       <td><p>Settings to be persisted, as named arguments. The value should be
-suitable for encoding as JSON using <code><a href='https://rdrr.io/pkg/jsonlite/man/fromJSON.html'>jsonlite::toJSON(auto_unbox = TRUE)</a></code>.</p></td>
+suitable for encoding as JSON using <code>jsonlite::toJSON(auto_unbox = TRUE)</code>.</p></td>
     </tr>
     <tr>
       <th>add.</th>
@@ -189,7 +198,7 @@ default.)</p></td>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <a href='https://rstudio.github.io/promises/reference/promise.html'>promises::promise</a> object. See Details.</p>
+    <p>A <a href='https://rstudio.github.io/promises//reference/promise.html'>promises::promise</a> object. See Details.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>While the settings reading functions---<code><a href='tableau_setting.html'>tableau_setting()</a></code> and
@@ -216,11 +225,11 @@ the <code>update_tableau_settings_async()</code> task is completely finished.)</
 
       <footer>
       <div class="copyright">
-  <p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi,  RStudio.</p>
+  <p><p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi, RStudio.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
 </div>
 
       </footer>
@@ -228,6 +237,8 @@ the <code>update_tableau_settings_async()</code> task is completely finished.)</
 
   
 
+
+  
 
   </body>
 </html>

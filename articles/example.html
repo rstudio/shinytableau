@@ -20,6 +20,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -86,8 +88,8 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/rstudio/shinytableau">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/rstudio/shinytableau" class="external-link">
+    <span class="fas fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -101,8 +103,7 @@
 
       
 
-      </header><script src="example_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="example_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="example_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="example_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Putting it all together</h1>
@@ -132,79 +133,79 @@ video {
 }
 </style>
 <p>Armed with the knowledge from the previous sections, we can now build the ggviolin shinytableau extension. Structurally, this will be very close to the Data Summary extension from the previous section, but the ggviolin extension makes use of additional features from Shiny itself.</p>
-<p>The preamble is the same, with the addition of <code><a href="http://ggplot2.tidyverse.org">library(ggplot2)</a></code>:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="co"># filetype: shinyApp</span>
+<p>The preamble is the same, with the addition of <code><a href="https://ggplot2.tidyverse.org" class="external-link">library(ggplot2)</a></code>:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># filetype: shinyApp</span>
 
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://shiny.rstudio.com">shiny</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">shinytableau</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/promises">promises</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/shinyvalidate/">shinyvalidate</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://shiny.rstudio.com/" class="external-link">shiny</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">shinytableau</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/promises/" class="external-link">promises</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rstudio.github.io/shinyvalidate/" class="external-link">shinyvalidate</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 
-<span class="va">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yaml_skeleton.html">tableau_manifest_from_yaml</a></span><span class="op">(</span><span class="op">)</span></pre></div>
+<span class="va">manifest</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/yaml_skeleton.html">tableau_manifest_from_yaml</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <div id="dashboard-ui" class="section level2">
 <h2 class="hasAnchor">
-<a href="#dashboard-ui" class="anchor"></a>Dashboard UI</h2>
+<a href="#dashboard-ui" class="anchor" aria-hidden="true"></a>Dashboard UI</h2>
 <p>The dashboard view’s UI differs in that it uses <code>fillPage</code>, and notice that the plot’s height is explicitly set to 100%. We also define a brush.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/fillPage.html">fillPage</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/plotOutput.html">plotOutput</a></span><span class="op">(</span><span class="st">"plot"</span>, height <span class="op">=</span> <span class="st">"100%"</span>,
-      brush <span class="op">=</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/brushOpts.html">brushOpts</a></span><span class="op">(</span><span class="st">"plot_brush"</span>, resetOnNew <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fillPage.html" class="external-link">fillPage</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/plotOutput.html" class="external-link">plotOutput</a></span><span class="op">(</span><span class="st">"plot"</span>, height <span class="op">=</span> <span class="st">"100%"</span>,
+      brush <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/brushOpts.html" class="external-link">brushOpts</a></span><span class="op">(</span><span class="st">"plot_brush"</span>, resetOnNew <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
     <span class="op">)</span>
   <span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 </div>
 <div id="dashboard-server" class="section level2">
 <h2 class="hasAnchor">
-<a href="#dashboard-server" class="anchor"></a>Dashboard server</h2>
+<a href="#dashboard-server" class="anchor" aria-hidden="true"></a>Dashboard server</h2>
 <p>The dashboard view’s server function uses a function we haven’t discussed before, <code>tableau_select_marks_by_brush_async</code>. This does exactly what the name implies: using the selection defined from a <code>plotOutput</code> brush, it drives selection on a Tableau worksheet. (This function has several limitations, including only working with ggplot2-based plots and only when the plot and the worksheet in question have their dimensions in common; see the <code><a href="../reference/tableau_select_marks_by_brush_async.html">?tableau_select_marks_by_brush_async</a></code> help topic for more details.)</p>
-<p>Note also that <code><a href="../reference/tableau_setting.html">tableau_setting()</a></code> is called to retrieve <code>plot_title</code>, <code>xvar</code>, and <code>yvar</code> settings; we’ll be saving those settings in the config dialog. When writing your own ggplot2 extensions that let the user select what column to map to certain aesthetics, you’ll want to follow the pattern shown below, where the character vector (e.g. <code>xvar</code>) is passed to <code><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes()</a></code> using <code>!!as.symbol(...)</code>.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
+<p>Note also that <code><a href="../reference/tableau_setting.html">tableau_setting()</a></code> is called to retrieve <code>plot_title</code>, <code>xvar</code>, and <code>yvar</code> settings; we’ll be saving those settings in the config dialog. When writing your own ggplot2 extensions that let the user select what column to map to certain aesthetics, you’ll want to follow the pattern shown below, where the character vector (e.g. <code>xvar</code>) is passed to <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> using <code>!!as.symbol(...)</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">server</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span>
   <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reactive_tableau_data.html">reactive_tableau_data</a></span><span class="op">(</span><span class="st">"data_spec"</span><span class="op">)</span>
 
-  <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/observeEvent.html">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">plot_brush</span>, <span class="op">{</span>
-    <span class="va">worksheet</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/req.html">req</a></span><span class="op">(</span><span class="fu"><a href="../reference/tableau_setting.html">tableau_setting</a></span><span class="op">(</span><span class="st">"data_spec"</span><span class="op">)</span><span class="op">$</span><span class="va">worksheet</span><span class="op">)</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/observeEvent.html" class="external-link">observeEvent</a></span><span class="op">(</span><span class="va">input</span><span class="op">$</span><span class="va">plot_brush</span>, <span class="op">{</span>
+    <span class="va">worksheet</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/req.html" class="external-link">req</a></span><span class="op">(</span><span class="fu"><a href="../reference/tableau_setting.html">tableau_setting</a></span><span class="op">(</span><span class="st">"data_spec"</span><span class="op">)</span><span class="op">$</span><span class="va">worksheet</span><span class="op">)</span>
     <span class="fu"><a href="../reference/tableau_select_marks_by_brush_async.html">tableau_select_marks_by_brush_async</a></span><span class="op">(</span><span class="va">worksheet</span>, <span class="va">input</span><span class="op">$</span><span class="va">plot_brush</span><span class="op">)</span>
   <span class="op">}</span><span class="op">)</span>
 
-  <span class="va">output</span><span class="op">$</span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderPlot.html">renderPlot</a></span><span class="op">(</span><span class="op">{</span>
+  <span class="va">output</span><span class="op">$</span><span class="va">plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderPlot.html" class="external-link">renderPlot</a></span><span class="op">(</span><span class="op">{</span>
     <span class="va">plot_title</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tableau_setting.html">tableau_setting</a></span><span class="op">(</span><span class="st">"plot_title"</span><span class="op">)</span>
     <span class="va">xvar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tableau_setting.html">tableau_setting</a></span><span class="op">(</span><span class="st">"xvar"</span><span class="op">)</span>
     <span class="va">yvar</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tableau_setting.html">tableau_setting</a></span><span class="op">(</span><span class="st">"yvar"</span><span class="op">)</span>
 
-    <span class="fu"><a href="https://rdrr.io/r/stats/Fdist.html">df</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%...&gt;%</span> <span class="op">{</span>
-      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">.</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/name.html">as.symbol</a></span><span class="op">(</span><span class="va">xvar</span><span class="op">)</span>, y <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/name.html">as.symbol</a></span><span class="op">(</span><span class="va">yvar</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span>draw_quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="va">plot_title</span><span class="op">)</span>
+    <span class="fu"><a href="https://rdrr.io/r/stats/Fdist.html" class="external-link">df</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rstudio.github.io/promises//reference/pipes.html" class="external-link">%...&gt;%</a></span> <span class="op">{</span>
+      <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">.</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.symbol</a></span><span class="op">(</span><span class="va">xvar</span><span class="op">)</span>, y <span class="op">=</span> <span class="op">!</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/name.html" class="external-link">as.symbol</a></span><span class="op">(</span><span class="va">yvar</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span>draw_quantiles <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+        <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="va">plot_title</span><span class="op">)</span>
     <span class="op">}</span>
   <span class="op">}</span><span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 </div>
 <div id="config-ui" class="section level2">
 <h2 class="hasAnchor">
-<a href="#config-ui" class="anchor"></a>Config UI</h2>
+<a href="#config-ui" class="anchor" aria-hidden="true"></a>Config UI</h2>
 <p>The ggviolin config dialog uses the <code>choose_data</code> module, just as the Data Summary example did. It also prompts the user for a title, creates a <code>uiOutput</code> (that we’ll populate with xvar and yvar select inputs), and previews the selected data table using <code>tableOutput</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="va">config_ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tag.html">tagList</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/textInput.html">textInput</a></span><span class="op">(</span><span class="st">"title"</span>, <span class="st">"Title"</span><span class="op">)</span>,
-    <span class="fu"><a href="../reference/choose_data_ui.html">choose_data_ui</a></span><span class="op">(</span><span class="st">"data"</span>, <span class="st">"Choose data"</span><span class="op">)</span>,
-    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/htmlOutput.html">uiOutput</a></span><span class="op">(</span><span class="st">"var_selection_ui"</span><span class="op">)</span>,
-    <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/tableOutput.html">tableOutput</a></span><span class="op">(</span><span class="st">"preview"</span><span class="op">)</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">config_ui</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tag.html" class="external-link">tagList</a></span><span class="op">(</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/textInput.html" class="external-link">textInput</a></span><span class="op">(</span><span class="st">"title"</span>, <span class="st">"Title"</span><span class="op">)</span>,
+    <span class="fu"><a href="../reference/choose_data.html">choose_data_ui</a></span><span class="op">(</span><span class="st">"data"</span>, <span class="st">"Choose data"</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/htmlOutput.html" class="external-link">uiOutput</a></span><span class="op">(</span><span class="st">"var_selection_ui"</span><span class="op">)</span>,
+    <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/tableOutput.html" class="external-link">tableOutput</a></span><span class="op">(</span><span class="st">"preview"</span><span class="op">)</span>
   <span class="op">)</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 </div>
 <div id="config-server" class="section level2">
 <h2 class="hasAnchor">
-<a href="#config-server" class="anchor"></a>Config server</h2>
+<a href="#config-server" class="anchor" aria-hidden="true"></a>Config server</h2>
 <p>The config dialog’s server function is the most complicated piece. We’ll take it a chunk at a time.</p>
 <div id="validation-rules" class="section level3">
 <h3 class="hasAnchor">
-<a href="#validation-rules" class="anchor"></a>Validation rules</h3>
-<p>In the beginning of the function, <a href="https://rstudio.github.io/shinyvalidate/articles/shinyvalidate.html">shinyvalidate validation rules</a> are added, which ensure that the user provides these values before settings can be saved.</p>
+<a href="#validation-rules" class="anchor" aria-hidden="true"></a>Validation rules</h3>
+<p>In the beginning of the function, <a href="https://rstudio.github.io/shinyvalidate/articles/shinyvalidate.html" class="external-link">shinyvalidate validation rules</a> are added, which ensure that the user provides these values before settings can be saved.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>config_server &lt;-<span class="st"> </span><span class="cf">function</span>(input, output, session, iv) {</span>
 <span id="cb5-2"><a href="#cb5-2"></a>  iv<span class="op">$</span><span class="kw">add_rule</span>(<span class="st">"title"</span>, <span class="kw">sv_required</span>())</span>
 <span id="cb5-3"><a href="#cb5-3"></a>  iv<span class="op">$</span><span class="kw">add_rule</span>(<span class="st">"xvar"</span>, <span class="kw">sv_required</span>())</span>
@@ -212,37 +213,37 @@ video {
 </div>
 <div id="choosing-and-previewing-data" class="section level3">
 <h3 class="hasAnchor">
-<a href="#choosing-and-previewing-data" class="anchor"></a>Choosing and previewing data</h3>
-<p>Next, we invoke the <code><a href="../reference/choose_data_ui.html">choose_data()</a></code> module, passing in the same <code>"data"</code> id that we just passed to <code><a href="../reference/choose_data_ui.html">choose_data_ui()</a></code> a few moments ago.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-  <span class="va">data_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/choose_data_ui.html">choose_data</a></span><span class="op">(</span><span class="st">"data"</span>, iv <span class="op">=</span> <span class="va">iv</span><span class="op">)</span></pre></div>
+<a href="#choosing-and-previewing-data" class="anchor" aria-hidden="true"></a>Choosing and previewing data</h3>
+<p>Next, we invoke the <code><a href="../reference/choose_data.html">choose_data()</a></code> module, passing in the same <code>"data"</code> id that we just passed to <code><a href="../reference/choose_data.html">choose_data_ui()</a></code> a few moments ago.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R">  <span class="va">data_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/choose_data.html">choose_data</a></span><span class="op">(</span><span class="st">"data"</span>, iv <span class="op">=</span> <span class="va">iv</span><span class="op">)</span></code></pre></div>
 <p>For the ggviolin extension, not only do we want to save this data spec to the settings, we actually need to use it immediately:</p>
 <p>First, for preview purposes, we want the first five rows of the selected table, and we use <code>reactive_tableau_data</code> for this.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reactive_tableau_data.html">reactive_tableau_data</a></span><span class="op">(</span><span class="va">data_spec</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>maxRows <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R">  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reactive_tableau_data.html">reactive_tableau_data</a></span><span class="op">(</span><span class="va">data_spec</span>, options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>maxRows <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span>
 
-  <span class="va">output</span><span class="op">$</span><span class="va">preview</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderTable.html">renderTable</a></span><span class="op">(</span><span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span></pre></div>
+  <span class="va">output</span><span class="op">$</span><span class="va">preview</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderTable.html" class="external-link">renderTable</a></span><span class="op">(</span><span class="op">{</span>
+    <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="op">)</span>
+  <span class="op">}</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="choosing-data-columns" class="section level3">
 <h3 class="hasAnchor">
-<a href="#choosing-data-columns" class="anchor"></a>Choosing data columns</h3>
+<a href="#choosing-data-columns" class="anchor" aria-hidden="true"></a>Choosing data columns</h3>
 <p>Second, for letting the user choose which of the selected table’s columns should map to the x and y dimensions, we need the schema (which contains the fieldnames, among other things), and we use <code>reactive_tableau_schema</code> to get it.</p>
-<p>Like <code>reactive_tableau_data</code>, the return value for <code>reactive_tableau_schema</code> is a reactive expression; but unlike <code>reactive_tableau_data</code>, this reactive expression is not asynchronous (doesn’t return a promise), so there’s no need to worry about using <code><a href="https://rstudio.github.io/promises/reference/pipes.html">%...&gt;%</a></code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-  <span class="va">schema</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reactive_tableau_schema.html">reactive_tableau_schema</a></span><span class="op">(</span><span class="va">data_spec</span><span class="op">)</span>
+<p>Like <code>reactive_tableau_data</code>, the return value for <code>reactive_tableau_schema</code> is a reactive expression; but unlike <code>reactive_tableau_data</code>, this reactive expression is not asynchronous (doesn’t return a promise), so there’s no need to worry about using <code>%...&gt;%</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R">  <span class="va">schema</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reactive_tableau_schema.html">reactive_tableau_schema</a></span><span class="op">(</span><span class="va">data_spec</span><span class="op">)</span>
 
-  <span class="va">output</span><span class="op">$</span><span class="va">var_selection_ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/renderUI.html">renderUI</a></span><span class="op">(</span><span class="op">{</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tag.html">tagList</a></span><span class="op">(</span>
-      <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/selectInput.html">selectInput</a></span><span class="op">(</span><span class="st">"xvar"</span>, <span class="st">"Dimension"</span>, <span class="fu">schema</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">columns</span><span class="op">$</span><span class="va">fieldName</span><span class="op">)</span>,
-      <span class="fu"><a href="https://shiny.rstudio.com/reference/shiny/latest/selectInput.html">selectInput</a></span><span class="op">(</span><span class="st">"yvar"</span>, <span class="st">"Measure"</span>, <span class="fu">schema</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">columns</span><span class="op">$</span><span class="va">fieldName</span><span class="op">)</span>
+  <span class="va">output</span><span class="op">$</span><span class="va">var_selection_ui</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/renderUI.html" class="external-link">renderUI</a></span><span class="op">(</span><span class="op">{</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/htmltools/man/tag.html" class="external-link">tagList</a></span><span class="op">(</span>
+      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="st">"xvar"</span>, <span class="st">"Dimension"</span>, <span class="fu">schema</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">columns</span><span class="op">$</span><span class="va">fieldName</span><span class="op">)</span>,
+      <span class="fu"><a href="https://rdrr.io/pkg/shiny/man/selectInput.html" class="external-link">selectInput</a></span><span class="op">(</span><span class="st">"yvar"</span>, <span class="st">"Measure"</span>, <span class="fu">schema</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="va">columns</span><span class="op">$</span><span class="va">fieldName</span><span class="op">)</span>
     <span class="op">)</span>
-  <span class="op">}</span><span class="op">)</span></pre></div>
+  <span class="op">}</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="save-settings" class="section level3">
 <h3 class="hasAnchor">
-<a href="#save-settings" class="anchor"></a>Save settings</h3>
+<a href="#save-settings" class="anchor" aria-hidden="true"></a>Save settings</h3>
 <p>Finally, we fulfill the final basic requirement for config server functions: we define and return the function that saves the user’s input to Tableau settings.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>  save_settings &lt;-<span class="st"> </span><span class="cf">function</span>() {</span>
 <span id="cb9-2"><a href="#cb9-2"></a>    <span class="kw">update_tableau_settings_async</span>(</span>
@@ -257,21 +258,21 @@ video {
 </div>
 <div id="putting-it-all-together" class="section level3">
 <h3 class="hasAnchor">
-<a href="#putting-it-all-together" class="anchor"></a>Putting it all together</h3>
+<a href="#putting-it-all-together" class="anchor" aria-hidden="true"></a>Putting it all together</h3>
 <p>All that’s left now is to hand all of these pieces over to <code>tableau_extension</code>.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="fu"><a href="../reference/tableau_extension.html">tableau_extension</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/tableau_extension.html">tableau_extension</a></span><span class="op">(</span>
   <span class="va">manifest</span>, <span class="va">ui</span>, <span class="va">server</span>, <span class="va">config_ui</span>, <span class="va">config_server</span>,
   options <span class="op">=</span> <span class="fu"><a href="../reference/ext_options.html">ext_options</a></span><span class="op">(</span>config_width <span class="op">=</span> <span class="fl">600</span>, config_height <span class="op">=</span> <span class="fl">600</span>, port <span class="op">=</span> <span class="fl">2468</span><span class="op">)</span>
-<span class="op">)</span></pre></div>
-<p>You can find the full source code, along with the manifest.yml file, <a href="https://github.com/rstudio/shinytableau/tree/7790a566dcef9092863ad231fd58ba14596a6300/inst/examples/ggviolin">here</a>.</p>
+<span class="op">)</span></code></pre></div>
+<p>You can find the full source code, along with the manifest.yml file, <a href="https://github.com/rstudio/shinytableau/tree/7790a566dcef9092863ad231fd58ba14596a6300/inst/examples/ggviolin" class="external-link">here</a>.</p>
 <p>Here again is the video from the introduction, to remind you what it all looks like in action:</p>
 <video controls><source src="shinytableau-captioned.webm" type="video/webm"></source><source src="shinytableau-captioned.mp4" type="video/mp4"></source></video>
 </div>
 </div>
 <div id="the-end" class="section level2">
 <h2 class="hasAnchor">
-<a href="#the-end" class="anchor"></a>The end</h2>
+<a href="#the-end" class="anchor" aria-hidden="true"></a>The end</h2>
 <p>And that’s it for our tutorial—thank you for sticking with it!</p>
 <p>To learn more, check out the Articles section, where we touch on <a href="ui.html">UI considerations</a> and <a href="deployment.html">deployment/hosting</a>.</p>
 </div>
@@ -288,11 +289,13 @@ video {
 
 
       <footer><div class="copyright">
-  <p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi,  RStudio.</p>
+  <p></p>
+<p>Developed by Joe Cheng, Richard Iannone, Javier Luraschi, RStudio.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>
@@ -300,6 +303,8 @@ video {
 
   
 
+
+  
 
   </body>
 </html>
