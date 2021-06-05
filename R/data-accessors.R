@@ -239,7 +239,7 @@ reactive_tableau_data <- function(spec, options = list(),
 
     tableau_get_data_async(spec(), options) %...>% {
       if (isTRUE(.$isTotalRowCountLimited)) {
-        if (options[["truncate"]] == "warn") {
+        if (options[["truncation"]] == "warn") {
           shiny::showNotification(
             htmltools::tagList(
               htmltools::strong("Warning:"),
@@ -251,12 +251,12 @@ reactive_tableau_data <- function(spec, options = list(),
             session = session
           )
           warning("Tableau data was limited to first ", nrow(.$data), " rows")
-        } else if (options[["truncate"]] == "error") {
+        } else if (options[["truncation"]] == "error") {
           stop("The data requested contains too many rows (limit: ", nrow(.$data), ")")
-        } else if (options[["truncate"]] == "ignore") {
+        } else if (options[["truncation"]] == "ignore") {
           # Do nothing
         } else {
-          warning("Unknown value for `truncate` option: ", options[["truncate"]])
+          warning("Unknown value for `truncation` option: ", options[["truncation"]])
         }
       }
       .$data
