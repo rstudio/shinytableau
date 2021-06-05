@@ -32,7 +32,9 @@ programmatically determined or hardcoded. (This should not be common.)
 Tableau. Default is \code{FALSE}.
 \item \code{ignoreSelection} - If \code{FALSE} (the default), only return data for the
 currently selected marks. Does not apply for datasource tables, only
-summary and underlying.
+summary and underlying. If \code{"never"}, then if no marks are selected,
+\code{NULL} is returned. If \code{TRUE}, all data is returned, regardless of
+selection.
 \item \code{includeAllColumns} - Return all the columns for the table. Default is
 \code{FALSE}. Does not apply for datasource and summary tables, only underlying.
 \item \code{maxRows} - The maximum number of rows to return. \strong{Tableau will not,

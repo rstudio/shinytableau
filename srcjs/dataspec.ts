@@ -5,6 +5,23 @@ export interface DataSpec {
   readonly source: "summary" | "underlying" | "datasource";
 }
 export async function getData(spec: DataSpec, options: any): Promise<DataTable | null> {
+  if (options.ignoreSelection === "never") {
+    // Clone options so we don't mutate it
+    options = Object.assign({}, options);
+    options.ignoreSelection = false;
+
+    if (isSummaryDataSpec(spec) || isUnderlyingDataSpec(spec)) {
+      const ws = tableau.extensions.dashboardContent.dashboard.worksheets.find(ws => ws.name === spec.worksheet);
+      if (!ws) {
+        return null;
+      }
+      const selected = await ws.getSelectedMarksAsync();
+      if (selected.data.length === 0 || selected.data[0].totalRowCount === 0) {
+        return null;
+      }
+    }
+  }
+
   if (isSummaryDataSpec(spec)) {
     return await getSummaryData(spec, options);
   } else if (isUnderlyingDataSpec(spec)) {

@@ -3,6 +3,21 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getData = void 0;
 async function getData(spec, options) {
+    if (options.ignoreSelection === "never") {
+        // Clone options so we don't mutate it
+        options = Object.assign({}, options);
+        options.ignoreSelection = false;
+        if (isSummaryDataSpec(spec) || isUnderlyingDataSpec(spec)) {
+            const ws = tableau.extensions.dashboardContent.dashboard.worksheets.find(ws => ws.name === spec.worksheet);
+            if (!ws) {
+                return null;
+            }
+            const selected = await ws.getSelectedMarksAsync();
+            if (selected.data.length === 0 || selected.data[0].totalRowCount === 0) {
+                return null;
+            }
+        }
+    }
     if (isSummaryDataSpec(spec)) {
         return await getSummaryData(spec, options);
     }
@@ -224,6 +239,10 @@ const dataspec_1 = require("./dataspec");
 class RPCHandler {
     async getData(spec, options) {
         const dt = await dataspec_1.getData(spec, options);
+        if (!dt) {
+            // Can return null if spec is invalid, or if options.ignoreSelection:"never"
+            return dt;
+        }
         return Object.assign(Object.assign({}, schema_1.dataTableToInfo(dt)), { data: dataTableData(dt), isTotalRowCountLimited: dt.isTotalRowCountLimited, isSummaryData: dt.isSummaryData });
     }
     async saveSettings(settings, { save, add }) {

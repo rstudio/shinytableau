@@ -173,7 +173,9 @@ tableau_worksheet_info <- function(name, session = shiny::getDefaultReactiveDoma
 #'
 #'   * `ignoreSelection` - If `FALSE` (the default), only return data for the
 #'   currently selected marks. Does not apply for datasource tables, only
-#'   summary and underlying.
+#'   summary and underlying. If `"never"`, then if no marks are selected,
+#'   `NULL` is returned. If `TRUE`, all data is returned, regardless of
+#'   selection.
 #'
 #'   * `includeAllColumns` - Return all the columns for the table. Default is
 #'   `FALSE`. Does not apply for datasource and summary tables, only underlying.
@@ -238,6 +240,9 @@ reactive_tableau_data <- function(spec, options = list(),
     }
 
     tableau_get_data_async(spec(), options) %...>% {
+      if (is.null(.)) {
+        return(NULL)
+      }
       if (isTRUE(.$isTotalRowCountLimited)) {
         if (options[["truncation"]] == "warn") {
           shiny::showNotification(

@@ -5,6 +5,10 @@ import { DataSpec, getData } from "./dataspec";
 export class RPCHandler {
   async getData(spec: DataSpec, options?: any) {
     const dt = await getData(spec, options);
+    if (!dt) {
+      // Can return null if spec is invalid, or if options.ignoreSelection:"never"
+      return dt;
+    }
     return {
       ...dataTableToInfo(dt),
       data: dataTableData(dt),
