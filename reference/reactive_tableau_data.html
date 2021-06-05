@@ -63,7 +63,6 @@ read.csv(). See the Details section for a more detailed introduction." />
 
 
 
-
   
 
   
@@ -202,7 +201,9 @@ programmatically determined or hardcoded. (This should not be common.)</p></li>
 Tableau. Default is <code>FALSE</code>.</p></li>
 <li><p><code>ignoreSelection</code> - If <code>FALSE</code> (the default), only return data for the
 currently selected marks. Does not apply for datasource tables, only
-summary and underlying.</p></li>
+summary and underlying. If <code>"never"</code>, then if no marks are selected,
+<code>NULL</code> is returned. If <code>TRUE</code>, all data is returned, regardless of
+selection.</p></li>
 <li><p><code>includeAllColumns</code> - Return all the columns for the table. Default is
 <code>FALSE</code>. Does not apply for datasource and summary tables, only underlying.</p></li>
 <li><p><code>maxRows</code> - The maximum number of rows to return. <strong>Tableau will not,
