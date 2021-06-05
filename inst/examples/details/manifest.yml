@@ -1,0 +1,33 @@
+extension_id: com.rstudio.shinytableau.details
+extension_version: 0.1.0
+name: Show mark details
+description: A port of the Tableau Extension API tutorial sample extension.
+extended_description: |
+    Demonstrates getting the selected marks and responding to user input.
+author_name: Joe Cheng
+author_email: joe@rstudio.com
+author_organization: RStudio PBC
+website: https://www.rstudio.com
+
+# The icon should be a 70x70 PNG file. It can be provided as a reference to
+# a path within a package's inst directory, as in the example here; or use
+# `icon: filename.png` to point to a path relative to your manifest.yml.
+icon:
+  file: default_icon.png
+  package: shinytableau
+
+# You can optionally provide one or more screenshots. Each screenshot may be
+# specified in the same way as described in the icon comment, above. They will
+# be displayed at up to 400px width.
+#
+# screenshots:
+#   - screenshot1.png
+#   - file: screenshot2.png
+#     package: yourpackage
+
+# This should always be 'full data' if requiring Tableau data,
+# otherwise, remove the `permissions` key-value line
+permissions: full data
+
+min_api_version: '1.4'
+
