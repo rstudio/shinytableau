@@ -1,3 +1,6 @@
+> [!NOTE]
+> This package is no longer actively maintained. See the [Posit blog](https://posit.co/blog/ending-active-maintenance-fastapitableau-plumbertableau-and-shinytableau) for more information.
+
 # shinytableau
 
 <!-- badges: start -->
